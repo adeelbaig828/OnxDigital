@@ -39,7 +39,6 @@ const PlusPageScreen = ({navigation}) => {
       text: 'Earn silver coins at 2X rate',
     },
   ];
-  console.log(modalRef.current);
   return (
     <View style={styles.container}>
       <PlansModal
