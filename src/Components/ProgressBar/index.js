@@ -16,8 +16,9 @@ const MultiColorProgressBar = ({number}) => {
         width: '100%',
         flexDirection: 'row',
       }}>
-      {ProgressBarData.map(i => (
+      {ProgressBarData.map((i, index) => (
         <View
+          key={index + 'multiColor'}
           style={{
             flexDirection: 'row',
             backgroundColor: i.id <= number ? OnxGreen : fontColorLight,

@@ -23,7 +23,7 @@ const VideoPlayer = () => {
       onEnterFullscreen={() => fullScreen()}
       disableBack
       // repeat={true}
-      source={require('../../assets/pexelsVideo.mp4')}
+      source={require('../../assets/hd1722.mov')}
     />
   );
 };
@@ -38,36 +38,3 @@ const styles = StyleSheet.create({
 });
 
 export default VideoPlayer;
-
-{
-  /* <Video
-        fullscreenAutorotate={true}
-        resizeMode={'cover'}
-        repeat={true}
-        source={require('src/assets/hd1722.mov')}
-        controls={true}
-        ref={ref => {
-          videoPlayer.current = ref;
-        }}
-        style={styles.video}
-      /> */
-}
-{
-  /* {orientation === 'portrait' ? null : (
-        <View
-          style={{
-            position: 'absolute',
-            zIndex: 1000,
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: 39,
-            width: 30,
-            backgroundColor: 'red',
-          }}>
-          {console.log('bottom hgufgghvoew')}
-          <Text style={{color: 'white'}}>usahkjdha</Text>
-        </View>
-      )} */
-}

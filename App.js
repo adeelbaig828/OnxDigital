@@ -6,22 +6,26 @@
  * @flow strict-local
  */
 
-import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import Route from './src/Routes/routes';
-import {Dimensions, StatusBar, useWindowDimensions} from 'react-native';
-import View from 'src/Components/View';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {BgColor} from 'src/assets/Colors/colors';
-import {LogBox} from 'react-native';
+import * as React from 'react';
+import {LogBox, StatusBar, useWindowDimensions} from 'react-native';
+import Toast from 'react-native-toast-message';
 import {Provider} from 'react-redux';
-import {persistor, store} from 'src/Redux/Store';
 import {PersistGate} from 'redux-persist/es/integration/react';
-
+import {BgColor} from 'src/assets/Colors/colors';
+import View from 'src/Components/View';
+import {persistor, store} from 'src/Redux/Store';
+import Route from './src/Routes/routes';
 LogBox.ignoreAllLogs();
 function App() {
+  //this is used to detect network status
+
+  // const unsubscribe = NetInfo.addEventListener(state => {
+  //   console.log('Connection type', state.type);
+  //   console.log('Is connected?', state.isConnected);
+  // });
+  // unsubscribe();
   let d = useWindowDimensions();
-  // const inset = useSafeAreaInsets();
   return (
     <>
       <Provider store={store}>
@@ -41,6 +45,7 @@ function App() {
           <NavigationContainer>
             <Route />
           </NavigationContainer>
+          <Toast visibilityTime={1000} bottomOffset={140} />
         </PersistGate>
       </Provider>
     </>

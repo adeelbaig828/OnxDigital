@@ -14,10 +14,16 @@ export default styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   container2: {
-    flex: 0.75,
+    flex: 0.95,
     backgroundColor: BgColor,
     paddingHorizontal: 14 * widthRef,
     justifyContent: 'space-between',
+  },
+  contentStyle: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    height: '100%',
+    width: '100%',
   },
   slide1: {
     height: 390 * heightRef,
@@ -43,7 +49,7 @@ export default styles = StyleSheet.create({
     width: '100%',
   },
   bottomContainer: {
-    paddingHorizontal: 15 * heightRef,
+    height: '100%',
   },
   coinView: {
     justifyContent: 'center',

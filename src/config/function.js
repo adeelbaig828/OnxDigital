@@ -1,7 +1,4 @@
-import {LayoutAnimation, PermissionsAndroid, ToastAndroid} from 'react-native';
-import {EventRegister} from 'react-native-event-listeners';
-import {ENV} from './env';
-import globalStyles from './globalStyles';
+import {LayoutAnimation} from 'react-native';
 
 export const LayoutAnimate = (time = 500) => {
   LayoutAnimation.configureNext({
@@ -14,53 +11,18 @@ export const LayoutAnimate = (time = 500) => {
   });
 };
 
-export const handleColorOpacity = (c, o = 100) => {
-  let opacity = o % 100;
-  opacity = opacity > 9 ? opacity : opacity + '0';
-  return `${c}${o === 100 ? '' : opacity === 0 ? '00' : opacity}`;
+export const Validations = {
+  Phone: val => {
+    //Pakistan Mobile Number Validator
+    // let regex = /^((\\+92)?(0092)?(92)?(0)?)(3)([0-9]{9})$/;
+
+    return val !== '03001234567';
+  },
 };
 
-export const objectClone = data => {
-  try {
-    return JSON.parse(JSON.stringify(data));
-  } catch (e) {
-    console.error(e);
-    return null;
-  }
+export const validateEmail = email => {
+  let regex =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+  return regex.test(String(email));
 };
-
-export const prettierJSON = (...arg) => {
-  console.log(
-    arg
-      .map(item =>
-        typeof item === 'object' ? JSON.stringify(item, null, 2) : item,
-      )
-      .join(',  '),
-  );
-};
-
-export const EnableSnackBar = ({data, config}, success = true) => {
-  let snackConfig = {
-    ...config,
-    backgroundColor: success ? globalStyles.Theme.PrimaryColor : 'red',
-  };
-  EventRegister.emit('snackbar', {
-    data,
-    config: snackConfig,
-  });
-};
-
-export const hasAndroidPermission = async () => {
-  const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
-
-  const hasPermission = await PermissionsAndroid.check(permission);
-  if (hasPermission) {
-    return true;
-  }
-
-  const status = await PermissionsAndroid.request(permission);
-  return status === 'granted';
-};
-
-export const GetArray = arr => (Array.isArray(arr) ? arr : [arr]);
-export const assetsURL = url => ({uri: ENV.resourceURL + '/' + url});

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import {pureWhiteColor} from 'src/assets/Colors/colors';
+import {OnxGreen, pureWhiteColor} from 'src/assets/Colors/colors';
+import OnxLoading from '../OnxLoading';
 import {styles} from './style';
 
 export function CustomButton({
@@ -26,6 +27,7 @@ export function CustomButton({
   onPress,
   margin,
   alignSelf,
+  disabled,
 }) {
   return (
     <TouchableOpacity
@@ -48,11 +50,20 @@ export function CustomButton({
         margin,
         alignSelf: alignSelf ? alignSelf : null,
       }}
+      disabled={disabled}
       onPress={onPress}>
-      <Text
-        style={{color: textColor, fontSize: textSize, fontWeight: fontWeight}}>
-        {text}
-      </Text>
+      {disabled ? (
+        <OnxLoading Button BackGroundColor={'transparent'} />
+      ) : (
+        <Text
+          style={{
+            color: textColor,
+            fontSize: textSize,
+            fontWeight: fontWeight,
+          }}>
+          {text}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 }

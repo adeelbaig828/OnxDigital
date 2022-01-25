@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   fontColorDark,
   fontColorLight,
@@ -10,32 +11,45 @@ import {CustomButton} from 'src/Components/CustomButton';
 import {CustomCard} from 'src/Components/customCard';
 import OnxHeader from 'src/Components/Header';
 import OnxIcon from 'src/Components/OnxIcons';
+import OnxLoading from 'src/Components/OnxLoading';
 import Text from 'src/Components/Text';
 import TextIcon from 'src/Components/TextIcon';
 import View from 'src/Components/View';
 import {heightRef, widthRef} from 'src/config/screenSize';
+import {GET_PAYMENT_METHODS} from 'src/Redux/Reducers/Payments/PaymentActions';
 import styles from './style';
 const PaymentGatewayScreen = ({navigation}) => {
   const [selectIndex, setSelectIndex] = useState(null);
   const inset = useSafeAreaInsets();
-  const paymentsMethods = [
-    {
-      Methods: 'Net Banking',
-    },
-    {
-      Methods: 'Credit/Debit Card',
-    },
-    {
-      Methods: 'Easy Paisa',
-    },
-    {
-      Methods: 'Jazz Cash',
-    },
-    {
-      Methods: 'UPI',
-    },
-  ];
-  return (
+  const [loading, setloading] = useState(false);
+  const [paymentsMethod, setpaymentsMethod] = useState([]);
+  useEffect(() => {
+    setloading(true);
+    getAllPaymentmethods();
+  }, []);
+  const dispatch = useDispatch();
+  const OtpResponce = useSelector(state => state.auth.verifyData);
+  const barearToken = OtpResponce.data.access_token;
+  const getAllPaymentmethods = () => {
+    GET_PAYMENT_METHODS(barearToken)(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+          setpaymentsMethod(res.data.data);
+          console.log('object', JSON.stringify(res.data.data, null, 3));
+          setTimeout(() => {
+            setloading(false);
+          }, 500);
+        } else {
+          console.log('then res', res);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+      });
+  };
+  return loading ? (
+    <OnxLoading />
+  ) : (
     <View style={styles.root}>
       <View style={{width: '100%'}}>
         <OnxHeader
@@ -56,7 +70,7 @@ const PaymentGatewayScreen = ({navigation}) => {
           }
         />
         <View style={styles.mainContainr}>
-          {paymentsMethods.map((data, index) => (
+          {paymentsMethod.map((data, index) => (
             <CustomCard
               onPress={() => setSelectIndex(index)}
               marginV={5}
@@ -69,6 +83,7 @@ const PaymentGatewayScreen = ({navigation}) => {
               style={{borderBottomWidth: 0.2}}
               borderColor={fontColorLight}>
               <>
+                {console.log('object', data)}
                 <View style={styles.innerCard}>
                   <TextIcon
                     onPress={() => setSelectIndex(index)}
@@ -83,7 +98,7 @@ const PaymentGatewayScreen = ({navigation}) => {
                       index === selectIndex ? OnxGreen : fontColorLight
                     }
                     fontSize={12}>
-                    {data.Methods}
+                    {data.name}
                   </TextIcon>
                   {index === selectIndex ? (
                     <Text
@@ -93,7 +108,7 @@ const PaymentGatewayScreen = ({navigation}) => {
                       fontSize={12}
                       color={fontColorDark}
                       backColor={textBackColor}>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      {data.description}
                     </Text>
                   ) : null}
                 </View>

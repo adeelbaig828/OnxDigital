@@ -16,10 +16,21 @@ import {fullWidth, heightRef, widthRef} from 'src/config/screenSize';
 import styles from './style';
 import {Grade_3, Grade_4} from 'src/utils/JSON';
 import TextFeild from 'src/Components/TextFeild';
+import Toast from 'react-native-toast-message';
+
 const OnBoarding_104 = ({navigation}) => {
   const [selectIndex, setSelectIndex] = useState(null);
-
+  const [school, setSchool] = useState(null);
+  const [Buttonloading, setButtonloading] = useState(false);
   const inset = useSafeAreaInsets();
+  const showToast = ({type, text1, text2}) => {
+    Toast.show({
+      position: 'bottom',
+      type,
+      text1,
+      text2,
+    });
+  };
   return (
     <>
       <MultiColorProgressBar number={3} />
@@ -41,7 +52,7 @@ const OnBoarding_104 = ({navigation}) => {
             Description={'Please select which school you are going'}
           />
           <TextFeild
-            onChangeText={() => {}}
+            onChangeText={text => setSchool(text)}
             borderRadius={30}
             password
             paddingLeft
@@ -56,8 +67,21 @@ const OnBoarding_104 = ({navigation}) => {
         </View>
         <View style={styles.bottomConta}>
           <CustomButton
+            disabled={Buttonloading}
             onPress={() => {
-              navigation.navigate('OnBoarding_105');
+              setButtonloading(true);
+              if (!school) {
+                showToast({
+                  type: 'error',
+                  text2: 'Please select which school you are going.',
+                });
+                setButtonloading(false);
+              } else {
+                navigation.navigate('OnBoarding_105', {
+                  school: school,
+                });
+                setButtonloading(false);
+              }
             }}
             backColor={OnxGreen}
             textSize={16}

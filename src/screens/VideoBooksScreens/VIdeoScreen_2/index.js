@@ -1,11 +1,9 @@
 import BottomSheet from '@gorhom/bottom-sheet';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {useNavigation} from '@react-navigation/native';
-import Orientation from 'react-native-orientation';
-import VP from 'react-native-video-controls';
-import React, {useCallback, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
-  Dimensions,
   FlatList,
   I18nManager,
   Image,
@@ -13,6 +11,10 @@ import {
   StatusBar,
   TouchableOpacity,
 } from 'react-native';
+import Orientation from 'react-native-orientation';
+import RNRestart from 'react-native-restart';
+import VP from 'react-native-video-controls';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   BgColor,
   BlackColorSheet,
@@ -30,23 +32,18 @@ import OnxHeader from 'src/Components/Header';
 import MultiColorText from 'src/Components/HighlightedColorText';
 import OnxIcon from 'src/Components/OnxIcons';
 import PlansModal from 'src/Components/PlansModal';
-import RNRestart from 'react-native-restart';
 import Separator from 'src/Components/separator';
 import Text from 'src/Components/Text';
 import TextHeader from 'src/Components/TextHeader';
-import VideoPlayer from 'src/Components/VideoPlayer';
 import View from 'src/Components/View';
+import {heightRef, widthRef} from 'src/config/screenSize';
 import {
-  fullHeight,
-  fullWidth,
-  heightRef,
-  widthRef,
-} from 'src/config/screenSize';
-import {languageData, Videos} from 'src/utils/JSON';
-import styles from './style';
-import {FlatListItem} from 'src/Components/FlatList';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+  GET_LANGUAGES,
+  ZONES_BY_ARENAS,
+} from 'src/Redux/Reducers/Books/BooksActions';
 import {changelanguage, strings} from 'src/services/translation';
+import {languageData} from 'src/utils/JSON';
+import styles from './style';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -72,9 +69,57 @@ const VideoScreen_2 = () => {
   const refRBSheet = useRef();
   const modalRef = useRef();
   const [language, setlanguage] = useState(null);
+  const [languageDataState, setlanguageData] = useState(null);
   const [fullScreenMode, setfullScreenMode] = useState(null);
   const [selectedIndex, setselectedIndex] = useState(null);
+  const [loading, setloading] = useState(false);
+  const [allzones, setAllzones] = useState([]);
   const [oops, setOops] = useState(false);
+  const [headerData, setheaderData] = useState(null);
+  const [discriptionData, setdiscriptionData] = useState(null);
+  useEffect(() => {
+    setloading(true);
+    getAllZonesbyArenas();
+  }, []);
+  const dispatch = useDispatch();
+  const token = useSelector(state => state.auth.token);
+  const getLanguages = () => {
+    GET_LANGUAGES(token)(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+          setlanguageData(res.data.data);
+        } else {
+          console.log('then res', res);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+      });
+  };
+  const assignData = res =>
+    res.map(
+      response => (
+        setheaderData(response.name), setdiscriptionData(response.description)
+      ),
+    );
+  const getAllZonesbyArenas = () => {
+    ZONES_BY_ARENAS(token)(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+          // setAllzones(res.data.data);
+          assignData(res.data.data);
+          // console.log('object', JSON.stringify(res, null, 3));
+          setTimeout(() => {
+            setloading(false);
+          }, 500);
+        } else {
+          console.log('then res', res);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+      });
+  };
   const Subs = () => (
     <View style={styles.ooops}>
       <OnxIcon
@@ -123,7 +168,7 @@ const VideoScreen_2 = () => {
       <>
         <View style={styles.scndCont}>
           <View style={styles.date}>
-            <Image style={styles.imageleft} source={item.item.image} />
+            <Image style={styles.imageleft} source={item.item.image_url} />
             <View style={styles.lock}>
               <OnxIcon
                 left={1}
@@ -149,8 +194,8 @@ const VideoScreen_2 = () => {
               fontWeight={'600'}
               fontSizeHeader={11}
               marginTop={6 * heightRef}
-              Header={strings['Chemsitry Chapter 1']}
-              Description={strings['Other Info']}
+              Header={item.item.name}
+              Description={item.item.description}
             />
           </View>
         </View>
@@ -161,7 +206,7 @@ const VideoScreen_2 = () => {
     <FlatList
       style={{backgroundColor: BgColor}}
       contentContainerStyle={{backgroundColor: BgColor}}
-      data={Videos}
+      data={allzones}
       keyExtractor={item => item.id}
       renderItem={renderItem}
     />
@@ -170,7 +215,7 @@ const VideoScreen_2 = () => {
     <FlatList
       style={{backgroundColor: BgColor}}
       contentContainerStyle={{backgroundColor: BgColor}}
-      data={Videos}
+      data={allzones}
       keyExtractor={item => item.id}
       renderItem={renderItem}
     />
@@ -179,7 +224,7 @@ const VideoScreen_2 = () => {
     <FlatList
       style={{backgroundColor: BgColor}}
       contentContainerStyle={{backgroundColor: BgColor}}
-      data={Videos}
+      data={allzones}
       keyExtractor={item => item.id}
       renderItem={renderItem}
     />
@@ -207,9 +252,7 @@ const VideoScreen_2 = () => {
             <View style={styles.header}>
               <OnxIcon
                 onPress={() => {
-                  navigation.navigate('BottomNavigation', {
-                    screen: 'VideoScreen_1',
-                  });
+                  navigation.pop();
                 }}
                 colorIcon={fontColorLight}
                 name={'arrow-left'}
@@ -260,17 +303,13 @@ const VideoScreen_2 = () => {
                 marginbtm={5 * heightRef}
                 color={fontColorLight}
                 textAlign={selectedIndex ? 'right' : 'left'}>
-                {strings['Chemistry Chapters']}
+                {headerData}
               </Text>
               <Text
                 fontSize={12}
                 textAlign={selectedIndex ? 'right' : 'left'}
                 marginbtm={5 * heightRef}>
-                {
-                  strings[
-                    'The branch of science concerned with the substances of which matter is composed, the investigation of their properties and reactions, and the use of such reactions to form new substances... Read more'
-                  ]
-                }
+                {discriptionData}
               </Text>
             </View>
             <View style={styles.tabs}>
@@ -292,8 +331,26 @@ const VideoScreen_2 = () => {
                   tabBarStyle: {backgroundColor: BgColor},
                 }}>
                 <Tab.Screen name="Chapters" component={Chapters1} />
-                <Tab.Screen name="Quizzes" component={Chapters2} />
-                <Tab.Screen name="Games" component={Chapters3} />
+                <Tab.Screen
+                  listeners={{
+                    tabPress: e => {
+                      // Prevent default press
+                      e.preventDefault();
+                    },
+                  }}
+                  name="Quizzes"
+                  component={Chapters2}
+                />
+                <Tab.Screen
+                  listeners={{
+                    tabPress: e => {
+                      // Prevent default press
+                      e.preventDefault();
+                    },
+                  }}
+                  name="Games"
+                  component={Chapters3}
+                />
               </Tab.Navigator>
             </View>
             <View style={styles.button}>
@@ -401,7 +458,10 @@ const VideoScreen_2 = () => {
                       marginHorizontal: 10 * heightRef,
                     },
                   ]}>
-                  <TouchableOpacity onPress={() => setlanguage(true)}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setlanguage(true), getLanguages();
+                    }}>
                     <MultiColorText
                       color={BottomNavColor}
                       highlightedColor={fontColorGray}

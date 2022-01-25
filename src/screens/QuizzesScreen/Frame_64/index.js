@@ -13,7 +13,6 @@ import OnxHeader from 'src/Components/Header';
 import OnxIcon from 'src/Components/OnxIcons';
 import Text from 'src/Components/Text';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-
 import View from 'src/Components/View';
 import {fullWidth, heightRef, widthRef} from 'src/config/screenSize';
 import styles from './style';

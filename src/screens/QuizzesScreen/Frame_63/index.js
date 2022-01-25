@@ -37,12 +37,6 @@ const QuizzesMainScreen = () => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: BgColor}}>
-      <AppHeader
-        onPressCoins={() => navigation.navigate('CoinsPageScreen')}
-        onPressSearch={() => navigation.navigate('SearchScreen_1')}
-        onPressGetPlus={() => navigation.navigate('PlusPageScreen')}
-        onPressDrawer={() => navigation.openDrawer()}
-      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.mainContainer}>
           <View>

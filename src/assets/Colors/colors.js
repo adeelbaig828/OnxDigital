@@ -31,6 +31,9 @@ export const QuizColor = '#E2E1E1';
 export const QuizTExtColor = '#252525';
 export const GrayIConColorDArk = '#505A64';
 export const BlackColorSheet = '#2D2D32';
+export const GradientGreen = '#3b845c';
+export const GradientMIDGreen = '#1e402f';
+export const GradientBlack = 'black';
 
 export const headerSizeFont = 16 * fontRef;
 export const normalSizeFont = 12 * fontRef;

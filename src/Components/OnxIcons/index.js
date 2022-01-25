@@ -18,10 +18,11 @@ const OnxIcon = ({
   backRoundBorder,
   backRoundBorderColor,
   left,
+  style,
 }) => {
   return (
     <View
-      style={
+      style={[
         backRoundBorder
           ? {
               borderRadius: (56 / 2) * heightRef,
@@ -33,9 +34,10 @@ const OnxIcon = ({
               alignItems: 'center',
               justifyContent: 'center',
             }
-          : null
-      }>
-      <TouchableOpacity onPress={onPress}>
+          : null,
+        style,
+      ]}>
+      <TouchableOpacity disabled={!onPress} onPress={onPress}>
         <Icon
           style={{
             position: position ? position : null,

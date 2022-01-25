@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -22,17 +22,47 @@ import {heightRef} from 'src/config/screenSize';
 import {interactiveBook} from 'src/utils/JSON';
 import styles from './style';
 import AppHeader from 'src/Components/AppHeader';
+import OnxLoading from 'src/Components/OnxLoading';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  GET_ARENA_BY_GRADE,
+  GET_ARENA_DETAIL,
+} from 'src/Redux/Reducers/Books/BooksActions';
 const VideoScreen_1 = props => {
   const navigation = useNavigation();
-  const Percentage = videoProgress => (100 * videoProgress) / 100;
-  return (
+  const [loading, setloading] = useState(false);
+  const [Books, setBooks] = useState([]);
+  useEffect(() => {
+    setloading(true);
+    getBooksByGrade();
+  }, []);
+  const dispatch = useDispatch();
+  const token = useSelector(state => state.auth.token);
+  const getBooksByGrade = () => {
+    //change the hardcoded grade when api working fine
+    GET_ARENA_BY_GRADE(
+      3,
+      token,
+    )(dispatch)
+      .then(res => {
+        // console.log('res', JSON.stringify(res, null, 3));
+        if (res.code === 200) {
+          setBooks(res?.data?.data);
+          setTimeout(() => {
+            setloading(false);
+          }, 100);
+        } else {
+          console.log('then res', res);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+      });
+  };
+  return loading ? (
+    <OnxLoading />
+  ) : (
     <SafeAreaView style={styles.mainContainer}>
-      <AppHeader
-        onPressCoins={() => navigation.navigate('CoinsPageScreen')}
-        onPressSearch={() => navigation.navigate('SearchScreen_1')}
-        onPressGetPlus={() => navigation.navigate('PlusPageScreen')}
-        onPressDrawer={() => navigation.openDrawer()}
-      />
       <ScrollView style={styles.mainRoot} showsVerticalScrollIndicator={false}>
         <TextHeader
           colorheader={fontColorLight}
@@ -42,77 +72,77 @@ const VideoScreen_1 = props => {
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
           }
         />
-        {interactiveBook.map(item => (
-          <ImageBackground source={item.img2} style={styles.imageStyleScnd}>
-            <View
-              style={{
-                backgroundColor: OnxGreen,
-                width: `${item.progress}%`,
-                height: 10,
-                position: 'absolute',
-                left: 0,
-                bottom: 0,
-              }}
-            />
-            <View style={styles.locker}>
-              {item.videodone ? (
+        {Books ? (
+          Books.map(item => {
+            return (
+              <ImageBackground
+                // source={require('src/assets/wholebacl.png')}
+                source={{uri: item.image_url}}
+                style={styles.imageStyleScnd}>
                 <View
                   style={{
-                    marginTop: 10 * heightRef,
-                    borderRadius: (40 / 2) * heightRef,
-                    justifyContent: 'center',
-                    borderWidth: 2,
-                    borderColor: OnxGreen,
-                    alignItems: 'center',
-                    width: 40 * heightRef,
-                    height: 40 * heightRef,
-                    // backgroundColor: OnxGreen,
-                  }}>
-                  <Text color={'white'}>18%</Text>
+                    backgroundColor: OnxGreen,
+                    // width: `${item.progress}%`,
+                    height: 10,
+                    position: 'absolute',
+                    left: 0,
+                    bottom: 0,
+                  }}
+                />
+                <View style={styles.locker}>
+                  {item.videodone ? (
+                    <View style={styles.videoDone}>
+                      <Text color={'white'}>18%</Text>
+                    </View>
+                  ) : item.unlocked ? null : (
+                    <OnxIcon
+                      right={1}
+                      top={15}
+                      size={35}
+                      colorIcon={fontColorDark}
+                      position={'absolute'}
+                      type={'MaterialIcons'}
+                      name={'lock'}
+                    />
+                  )}
                 </View>
-              ) : item.unlocked ? null : (
-                <OnxIcon
-                  right={1}
-                  top={15}
-                  onPress={() => navigation.navigate('ChapterComplete')}
-                  size={35}
-                  colorIcon={fontColorDark}
-                  position={'absolute'}
-                  type={'MaterialIcons'}
-                  name={'lock'}
-                />
-              )}
-            </View>
-            <View style={styles.innerIMage}>
-              <View style={styles.headerMain}>
-                <TextHeader
-                  fontWeightDes={'300'}
-                  fontWeight={'400'}
-                  fontSizeDesc={10}
-                  colorDesc={fontColorLight}
-                  fontSizeHeader={14}
-                  Header={item.title}
-                  Description={item.disc}
-                />
-              </View>
-              <View style={styles.now}>
-                <Text
-                  onPress={() => navigation.navigate('VideoScreen_2')}
-                  paddingRight={5}
-                  color={fontColorLight}
-                  fontSize={10}>
-                  {item.videodone ? 'Play Book' : 'Play Sample'}
-                </Text>
-                <OnxIcon
-                  colorIcon={fontColorLight}
-                  size={15}
-                  type={'AntDesign'}
-                  name={'right'}
-                />
-              </View>
-            </View>
-          </ImageBackground>
-        ))}
+                <View style={styles.innerIMage}>
+                  <View style={styles.headerMain}>
+                    <TextHeader
+                      fontWeightDes={'300'}
+                      fontWeight={'400'}
+                      fontSizeDesc={10}
+                      colorDesc={fontColorLight}
+                      colorheader={fontColorLight}
+                      fontSizeHeader={14}
+                      Header={item.name}
+                      Description={item.description}
+                    />
+                  </View>
+                  <View style={styles.now}>
+                    <Text
+                      onPress={() => navigation.navigate('VideoScreen_2')}
+                      paddingRight={5}
+                      color={fontColorLight}
+                      fontSize={10}>
+                      {item.videodone ? 'Play Book' : 'Play Sample'}
+                    </Text>
+                    <OnxIcon
+                      colorIcon={fontColorLight}
+                      size={15}
+                      type={'AntDesign'}
+                      name={'right'}
+                    />
+                  </View>
+                </View>
+              </ImageBackground>
+            );
+          })
+        ) : (
+          <View style={styles.noData}>
+            <Text>No Data</Text>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

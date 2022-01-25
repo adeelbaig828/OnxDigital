@@ -9,6 +9,7 @@ import {
   Platform,
 } from 'react-native';
 import {heightRef, widthRef} from 'src/config/screenSize';
+import Icon from 'react-native-dynamic-vector-icons';
 // import globalStyles from '../../config/globalStyle';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {
@@ -16,8 +17,10 @@ import {
   eyeColor,
   fontColorDark,
   fontColorLight,
+  PickWatch,
 } from 'src/assets/Colors/colors';
 import OnxIcon from '../OnxIcons';
+import {validateEmail} from 'src/config/function';
 const InputField = (
   {
     title, /// Defines the title above text field.
@@ -37,6 +40,9 @@ const InputField = (
     multiline, /// Defines text field for multiline input.
     fontWeight,
     paddingLeft,
+    validateMessage,
+    validateType,
+    emailValid,
     SearchIcon, // add search icon on right side
     password, /// Defines if the text field is for password.
     editable = true, ///Defines if the field is editable or not.
@@ -54,156 +60,180 @@ const InputField = (
   ref,
 ) => {
   const [showPassword, setShowPassword] = React.useState(true);
-  const [messageText, setMessageText] = React.useState(' ');
+  const [messageText, setMessageText] = React.useState('');
+  let error = validateEmail(emailValid);
   React.useImperativeHandle(ref, () => ({
     validate: messageText === '',
   }));
 
   return (
-    <TouchableOpacity
-      disabled={onPress === undefined}
-      onPress={onPress}
-      activeOpacity={1}
-      style={[
-        styles.container,
-        {
-          minHeight: title !== undefined ? 93 * heightRef : 66 * heightRef,
-        },
-        style,
-      ]}>
-      {inner === undefined && title !== undefined ? (
-        <Text
-          style={{
-            fontSize: titleSize || 11 * heightRef,
-            color: titleColor,
-            fontWeight: fontWeight ? fontWeight : 'bold',
-            marginVertical: 15 * heightRef,
-          }}>
-          {title}
-        </Text>
-      ) : null}
-      <View
+    <>
+      <TouchableOpacity
+        disabled={messageText}
+        onPress={onPress}
+        activeOpacity={1}
         style={[
-          styles.textView(inner !== undefined),
-          inner !== undefined
-            ? {
-                borderColor: borderColor,
-                borderRadius: borderRadius,
-                borderWidth: borderWidth,
-              }
-            : {},
+          styles.container,
+          {
+            minHeight: title !== undefined ? 113 * heightRef : 66 * heightRef,
+          },
+          style,
         ]}>
-        {inner !== undefined && title !== undefined ? (
+        {inner === undefined && title !== undefined ? (
           <Text
             style={{
-              fontSize: 11 * heightRef,
-              width: '100%',
+              fontSize: titleSize || 11 * heightRef,
               color: titleColor,
+              fontWeight: fontWeight ? fontWeight : 'bold',
+              marginVertical: 15 * heightRef,
             }}>
             {title}
           </Text>
         ) : null}
-        <TextInput
+        <View
           style={[
-            styles.textField(inner !== undefined),
-            {
-              height:
-                multiline !== undefined ? 100 * heightRef : 48 * heightRef,
-              textAlignVertical: multiline !== undefined ? 'top' : 'center',
-              paddingVertical: multiline !== undefined ? 20 : 0,
-              textAlign,
-              paddingLeft: paddingLeft ? 53 * widthRef : null,
-            },
-            textFieldStyle,
+            styles.textView(inner !== undefined),
             inner !== undefined
-              ? {}
-              : {
+              ? {
                   borderColor: borderColor,
                   borderRadius: borderRadius,
-                  borderWidth: 0.5,
-                },
-          ]}
-          {...{
-            value,
-            onChangeText: Text => {
-              onChangeText(Text);
-              if (emailValidation == true) {
-                if (Text === '') {
-                  setMessageText(`${title} cannot be empty`);
-                } else {
-                  (reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/),
-                    reg.test(Text) == false
-                      ? setMessageText(`${title} is in invalid format`)
-                      : setMessageText('');
+                  borderWidth: borderWidth,
                 }
-              } else {
-                Text === ''
-                  ? setMessageText(`${title} cannot be empty`)
-                  : Text.length <= minLengthValidation
-                  ? setMessageText(
-                      `${title} cannot be less than ${minLengthValidation} characters`,
-                    )
-                  : Text.length >= maxLengthValidation
-                  ? setMessageText(
-                      `${title} cannot be more than ${maxLengthValidat} characters`,
-                    )
-                  : setMessageText('');
-              }
-            },
-            placeholder,
-          }}
-          enablesReturnKeyAutomatically
-          secureTextEntry={
-            password === undefined || paddingLeft ? false : showPassword
-          }
-          editable={onPress !== undefined ? false : editable}
-          numberOfLines={multiline !== undefined ? 5 : 1}
-          multiline={multiline || false}
-          placeholderTextColor={placeholderColor}
-          onFocus={() => {
-            Focus();
-          }}
-          onBlur={() => {
-            Blur();
-          }}
-        />
-        {password === true ? (
-          <TouchableOpacity
-            onPress={() => setShowPassword(state => !state)}
-            style={
-              paddingLeft
-                ? {
-                    position: 'absolute',
-                    left: 20 * widthRef,
-                  }
+              : {},
+          ]}>
+          {inner !== undefined && title !== undefined ? (
+            <Text
+              style={{
+                fontSize: 11 * heightRef,
+                width: '100%',
+                color: titleColor,
+              }}>
+              {title}
+            </Text>
+          ) : null}
+          <TextInput
+            style={[
+              styles.textField(inner !== undefined),
+              {
+                height:
+                  multiline !== undefined ? 100 * heightRef : 48 * heightRef,
+                textAlignVertical: multiline !== undefined ? 'top' : 'center',
+                paddingVertical: multiline !== undefined ? 20 : 0,
+                textAlign,
+                paddingLeft: paddingLeft ? 53 * widthRef : null,
+              },
+              textFieldStyle,
+              inner !== undefined
+                ? {}
                 : {
-                    position: 'absolute',
-                    right: 20 * widthRef,
+                    borderColor: borderColor,
+                    borderRadius: borderRadius,
+                    borderWidth: 0.5,
+                  },
+            ]}
+            {...{
+              value,
+              onChangeText: Text => {
+                onChangeText(Text);
+                if (emailValidation == true) {
+                  if (Text === '') {
+                    setMessageText(`${title} cannot be empty`);
+                  } else {
+                    (reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/),
+                      reg.test(Text) == false
+                        ? setMessageText(`${title} is in invalid format`)
+                        : setMessageText('');
                   }
-            }>
-            {SearchIcon ? (
-              <OnxIcon
-                name={'search'}
-                type={'Fontisto'}
-                colorIcon={eyeColor}
-                size={12 * heightRef}
-              />
-            ) : (
-              <Entypo
-                name={!showPassword ? 'eye' : 'eye-with-line'}
-                size={20 * heightRef}
-                color={eyeColor}
-              />
-            )}
-          </TouchableOpacity>
-        ) : null}
-      </View>
+                } else {
+                  Text === ''
+                    ? setMessageText(`${title} cannot be empty`)
+                    : Text.length <= minLengthValidation
+                    ? setMessageText(
+                        `${title} cannot be less than ${minLengthValidation} characters`,
+                      )
+                    : Text.length >= maxLengthValidation
+                    ? setMessageText(
+                        `${title} cannot be more than ${maxLengthValidat} characters`,
+                      )
+                    : setMessageText('');
+                }
+              },
+              placeholder,
+            }}
+            enablesReturnKeyAutomatically
+            secureTextEntry={
+              password === undefined || paddingLeft ? false : showPassword
+            }
+            editable={onPress !== undefined ? false : editable}
+            numberOfLines={multiline !== undefined ? 5 : 1}
+            multiline={multiline || false}
+            placeholderTextColor={placeholderColor}
+            onFocus={() => {
+              Focus();
+            }}
+            onBlur={() => {
+              Blur();
+            }}
+          />
+          {password === true ? (
+            <TouchableOpacity
+              onPress={() => setShowPassword(state => !state)}
+              style={
+                paddingLeft
+                  ? {
+                      position: 'absolute',
+                      left: 20 * widthRef,
+                    }
+                  : {
+                      position: 'absolute',
+                      right: 20 * widthRef,
+                    }
+              }>
+              {SearchIcon ? (
+                <OnxIcon
+                  name={'search'}
+                  type={'Fontisto'}
+                  colorIcon={eyeColor}
+                  size={12 * heightRef}
+                />
+              ) : (
+                <Entypo
+                  name={!showPassword ? 'eye' : 'eye-with-line'}
+                  size={20 * heightRef}
+                  color={eyeColor}
+                />
+              )}
+            </TouchableOpacity>
+          ) : null}
+        </View>
+      </TouchableOpacity>
       {!hideValidation && (
-        <Text style={{fontSize: 10 * heightRef, paddingVertical: 5}}>
-          {messageText}
-        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          {messageText != '' ? (
+            <Icon
+              color={PickWatch}
+              type={'MaterialIcons'}
+              size={25}
+              name={'info'}
+            />
+          ) : null}
+          {messageText != '' ? (
+            <Text
+              style={{
+                color: PickWatch,
+              }}
+              marginLeft={5 * widthRef}
+              fontSize={11.5}>
+              {messageText}
+            </Text>
+          ) : null}
+        </View>
       )}
-    </TouchableOpacity>
+    </>
   );
 };
 const styles = StyleSheet.create({

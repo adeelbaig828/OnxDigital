@@ -145,13 +145,7 @@ const AddAdressScreen2 = ({navigation}) => {
                   </View>
                 </View>
 
-                <View
-                  style={{
-                    width: '50%',
-                    height: 90 * heightRef,
-                    alignItems: 'flex-end',
-                    justifyContent: 'space-between',
-                  }}>
+                <View style={styles.dropdownmain}>
                   <Image source={require('src/assets/cardPic.png')} />
                   <View>
                     <DropDownPicker
@@ -160,25 +154,13 @@ const AddAdressScreen2 = ({navigation}) => {
                       arrowIconStyle={{
                         tintColor: fontColorLight,
                       }}
-                      labelStyle={{
-                        fontWeight: 'bold',
-                        color: fontColorLight,
-                      }}
+                      labelStyle={styles.dropdown3}
                       textStyle={{
                         fontSize: 12 * heightRef,
                         color: fontColorLight,
                       }}
-                      style={{
-                        borderRadius: 2,
-                        borderColor: BorderColor,
-                        backgroundColor: 'transparent',
-                        alignSelf: 'flex-end',
-                        width: '60%',
-                      }}
-                      dropDownContainerStyle={{
-                        backgroundColor: 'transparent',
-                        borderColor: 'transparent',
-                      }}
+                      style={styles.dropdown1}
+                      dropDownContainerStyle={styles.dropdown2}
                       labelProps={'Last Week'}
                       open={open}
                       value={value}
@@ -190,29 +172,6 @@ const AddAdressScreen2 = ({navigation}) => {
                   </View>
                 </View>
               </View>
-              {/* <View
-                style={{
-                  flexDirection: 'row',
-                }}>
-                <Text
-                  fontSize={16}
-                  paddingVertical={10}
-                  paddingRight={10}
-                  color={fontColorLight}
-                  bold={'600'}>
-                  $260
-                </Text>
-                <Text
-                  fontSize={12}
-                  marginTop={15}
-                  paddingRight={10}
-                  textDecorationLine={'line-through'}>
-                  $5000
-                </Text>
-                <Text fontSize={12} marginTop={15} color={sliderColorOrange}>
-                  Save 60%
-                </Text>
-              </View> */}
               <View
                 style={{
                   flexDirection: 'row',
@@ -262,25 +221,9 @@ const AddAdressScreen2 = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          backgroundColor: textBackColor,
-          height: 60 * heightRef,
-        }}>
-        <View
-          style={{
-            // flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
+      <View style={styles.discountouter}>
+        <View style={styles.discountinner}>
+          <View style={styles.discountinner1}>
             <Text paddingLeft={10} fontSize={14} color={OnxGreen} bold={'600'}>
               $270
             </Text>

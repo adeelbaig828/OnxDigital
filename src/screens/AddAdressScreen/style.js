@@ -1,5 +1,9 @@
 import {StatusBar, StyleSheet} from 'react-native';
-import {BgColor, sliderColorOrange} from 'src/assets/Colors/colors';
+import {
+  BgColor,
+  sliderColorOrange,
+  textBackColor,
+} from 'src/assets/Colors/colors';
 import {fullHeight, heightRef, widthRef} from 'src/config/screenSize';
 export default styles = StyleSheet.create({
   container: {
@@ -40,6 +44,12 @@ export default styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+  },
+  textBack: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: textBackColor,
+    height: 60 * heightRef,
   },
   gpsText: {
     color: BgColor,

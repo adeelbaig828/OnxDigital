@@ -1,19 +1,44 @@
 import {
   API_PENDING,
-  API_SUCCESS,
   API_ERROR,
   USER_LOGIN,
   EDIT_USER_PROFILE,
   LOG_OUT,
   ROLE,
+  OTP_GENERATE,
+  OTP_VERIFY,
+  GRADE_SELECTION,
+  FAV_SUBJECT,
+  ALL_SCHOOL,
+  SELECT_SCHOOL,
+  ALL_GRADES,
+  ALL_SUBJECT,
+  LOGIN_EMAIL,
+  ALL_SECTIONS,
+  SELECT_SECTION,
+  ALL_BRANCHES,
+  BRANCH_SELECTION,
+  REGISTER_EMAIL,
 } from './AuthActions';
 
 const initialState = {
   loading: false,
   data: '',
-  error: '',
+  verifyData: '',
+  emailRegister: '',
+  selectsectionData: '',
+  favSubject: '',
+  sectionsData: '',
+  branchesData: '',
+  selectBranches: '',
+  loginData: '',
   userProfile: null,
   userRole: null,
+  allschool: null,
+  allgrades: null,
+  allSubject: null,
+  selectschool: null,
+  token: null,
 };
 
 const apiReducer = (state = initialState, action) => {
@@ -23,10 +48,90 @@ const apiReducer = (state = initialState, action) => {
         ...state,
         loading: true,
       };
-    case API_SUCCESS:
+    case OTP_GENERATE:
       return {
         ...state,
         data: action.payload,
+        loading: false,
+      };
+    case OTP_VERIFY:
+      return {
+        ...state,
+        verifyData: action.payload,
+        token: action.payload.data.access_token,
+        loading: false,
+      };
+    case REGISTER_EMAIL:
+      return {
+        ...state,
+        emailRegister: action.payload,
+        loading: false,
+      };
+    case SELECT_SECTION:
+      return {
+        ...state,
+        selectsectionData: action.payload,
+        loading: false,
+      };
+    case LOGIN_EMAIL:
+      return {
+        ...state,
+        loginData: action.payload,
+        token: action.token,
+        loading: false,
+      };
+    case ALL_SECTIONS:
+      return {
+        ...state,
+        sectionsData: action.payload,
+        loading: false,
+      };
+    case ALL_BRANCHES:
+      return {
+        ...state,
+        branchesData: action.payload,
+        loading: false,
+      };
+    case BRANCH_SELECTION:
+      return {
+        ...state,
+        selectBranches: action.payload,
+        loading: false,
+      };
+    case FAV_SUBJECT:
+      return {
+        ...state,
+        favSubject: action.payload,
+        loading: false,
+      };
+    case ALL_SUBJECT:
+      return {
+        ...state,
+        allSubject: action.payload,
+        loading: false,
+      };
+    case GRADE_SELECTION:
+      return {
+        ...state,
+        gradeSelection: action.payload,
+        loading: false,
+      };
+    case ALL_SCHOOL:
+      return {
+        ...state,
+        allschool: action.payload,
+        loading: false,
+      };
+    case ALL_GRADES:
+      return {
+        ...state,
+        allgrades: action.payload,
+        loading: false,
+      };
+    case SELECT_SCHOOL:
+      return {
+        ...state,
+        selectschool: action.payload,
         loading: false,
       };
     case API_ERROR:

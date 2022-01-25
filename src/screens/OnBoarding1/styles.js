@@ -22,6 +22,13 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
+  upperTextView: {
+    width: '100%',
+    marginRight: '10%',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+  },
   SplashImg: {
     height: 64 * heightRef,
     width: 64 * heightRef,
@@ -86,13 +93,13 @@ export const styles = StyleSheet.create({
     color: fontColorDark,
     fontSize: mediumSizeFont,
   },
-  upperTextView: {
-    width: '100%',
-    marginRight: '10%',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-  },
+  // upperTextView: {
+  //   width: '100%',
+  //   marginRight: '10%',
+  //   flexDirection: 'row',
+  //   justifyContent: 'flex-end',
+  //   alignItems: 'flex-end',
+  // },
   textSliderNormal: {
     marginTop: 5,
     textAlign: 'center',

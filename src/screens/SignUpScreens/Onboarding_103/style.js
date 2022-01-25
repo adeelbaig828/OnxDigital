@@ -14,7 +14,7 @@ export default styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   container2: {
-    flex: 0.75,
+    flex: 0.95,
     backgroundColor: BgColor,
     paddingHorizontal: 14 * widthRef,
     justifyContent: 'space-between',
@@ -43,11 +43,17 @@ export default styles = StyleSheet.create({
     width: '100%',
   },
   bottomContainer: {
-    paddingHorizontal: 15 * heightRef,
+    flexDirection: 'row',
   },
   grid: {
     flexDirection: 'row',
     // width: '100%',
     justifyContent: 'center',
+  },
+  contentStyle: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignSelf: 'center',
+    width: '100%',
   },
 });

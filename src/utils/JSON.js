@@ -48,71 +48,71 @@ export const SocialMedia = [
 ];
 export const Grade_3 = [
   {
-    id: '1',
+    id: '2',
     name: '2nd',
   },
   {
-    id: '2',
+    id: '3',
     name: '3rd',
   },
   {
-    id: '3',
+    id: '4',
     name: '4th',
   },
 ];
 export const Grade_4 = [
   {
-    id: '1',
+    id: '5',
     name: '5th',
   },
   {
-    id: '2',
+    id: '6',
     name: '6th',
   },
   {
-    id: '3',
+    id: '7',
     name: '7th',
   },
 ];
 export const Grade = [
   {
-    id: '1',
+    id: 1,
     name: 'Math',
   },
   {
-    id: '2',
+    id: 2,
     name: 'Chem',
   },
   {
-    id: '3',
+    id: 3,
     name: 'Phy',
   },
 ];
 export const Grade1 = [
   {
-    id: '1',
+    id: 4,
     name: 'Soc',
   },
   {
-    id: '2',
+    id: 5,
     name: 'CN',
   },
   {
-    id: '3',
+    id: 6,
     name: 'Hci',
   },
 ];
 export const Grade2 = [
   {
-    id: '1',
+    id: 7,
     name: 'Eng',
   },
   {
-    id: '2',
+    id: 8,
     name: 'Calcu',
   },
   {
-    id: '3',
+    id: 9,
     name: 'Stat',
   },
 ];
@@ -217,35 +217,35 @@ export const Drawer2 = [
 export const NoonSchool = [
   {
     id: '1',
-    name: 'Noon academy shool',
+    name: 'Noon academy School',
   },
   {
     id: '2',
-    name: 'Noon academy shool',
+    name: 'Kips School',
   },
   {
     id: '3',
-    name: 'Noon academy shool',
+    name: 'Educator School',
   },
   {
     id: '4',
-    name: 'Noon academy shool',
+    name: 'Shaheen School',
   },
   {
     id: '5',
-    name: 'Noon academy shool',
+    name: 'Falcon School',
   },
   {
     id: '6',
-    name: 'Noon academy shool',
+    name: 'Beacon House School',
   },
   {
     id: '7',
-    name: 'Noon academy shool',
+    name: 'Johar Town School',
   },
   {
     id: '8',
-    name: 'Noon academy shool',
+    name: 'Star Academy School',
   },
 ];
 export const Muqablas = [

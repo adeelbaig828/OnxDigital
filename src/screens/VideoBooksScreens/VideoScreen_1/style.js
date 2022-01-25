@@ -23,6 +23,10 @@ export default styles = StyleSheet.create({
     width: 20 * heightRef,
     height: 20 * heightRef,
   },
+  noData: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   GetButton: {
     height: 24 * heightRef,
     width: 62 * widthRef,
@@ -40,6 +44,17 @@ export default styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     resizeMode: 'contain',
+  },
+  videoDone: {
+    marginTop: 10 * heightRef,
+    borderRadius: (40 / 2) * heightRef,
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: OnxGreen,
+    alignItems: 'center',
+    width: 40 * heightRef,
+    height: 40 * heightRef,
+    // backgroundColor: OnxGreen,
   },
   SearchContainer: {
     height: 30,

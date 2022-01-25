@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, Image, ImageBackground} from 'react-native';
 import {
   BgColor,
@@ -26,37 +26,50 @@ import {fontRef, fullWidth, heightRef, widthRef} from 'src/config/screenSize';
 import styles from './style';
 import {AttemptPersons, AttemptsPersons, Prizes, Videos} from 'src/utils/JSON';
 import {CustomCard} from 'src/Components/customCard';
+import {GET_ALL_PRIZES} from 'src/Redux/Reducers/Tournaments/TournamentsActions';
+import {useDispatch, useSelector} from 'react-redux';
+import OnxLoading from 'src/Components/OnxLoading';
 
 const Tab = createMaterialTopTabNavigator();
 
 const Muqabla_2 = (props, {navigation}) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('last week');
+  const [loading, setloading] = useState(false);
+  const [prizes, setprizes] = useState([]);
   const [items, setItems] = useState([
     {label: 'Last Week', value: 'Last Week'},
     {label: 'Last Month', value: 'Last Month'},
   ]);
-  const textData = [
-    {
-      text: 'Lorem ipsum dolor sit amet, consectetur',
-    },
-    {
-      text: 'Lorem ipsum dolor sit amet, consectetur',
-    },
-    {
-      text: 'Lorem ipsum dolor sit amet, consectetur',
-    },
-    {
-      text: 'Lorem ipsum dolor sit amet, consectetur',
-    },
-  ];
+  const dispatch = useDispatch();
+  const OtpResponce = useSelector(state => state.auth.verifyData);
+  const barearToken = OtpResponce.data.access_token;
+  useEffect(() => {
+    setloading(true);
+    getAllPrizes();
+  }, []);
+  const getAllPrizes = () => {
+    GET_ALL_PRIZES(barearToken)(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+          setprizes(res.data.data);
+          setTimeout(() => {
+            setloading(false);
+          }, 100);
+        } else {
+          console.log('then res', res);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+      });
+  };
   const renderItem = (item, index) => (
-    // console.log(item, 'item'),
     <CustomCard
       marginT={13 * heightRef}
       backColor={textBackColor}
       btnRadius={5}
-      onPress={() => console.log(item, 'Pressed')}
+      // onPress={() => console.log(item, 'Pressed')}
       btnHeight={90 * heightRef}>
       <>
         <View style={styles.iconCont}>
@@ -85,10 +98,8 @@ const Muqabla_2 = (props, {navigation}) => {
             colorheader={fontColorLight}
             fontSizeDesc={11}
             fontWeight={'500'}
-            Header={item.item.position}
-            Description={
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-            }
+            Header={`${item.item.position}st position`}
+            Description={item.item.prize_value}
           />
         </View>
       </>
@@ -237,7 +248,7 @@ const Muqabla_2 = (props, {navigation}) => {
     <FlatList
       style={{backgroundColor: BgColor}}
       contentContainerStyle={{backgroundColor: BgColor}}
-      data={Prizes}
+      data={prizes}
       keyExtractor={item => item.id}
       renderItem={renderItem}
     />
@@ -270,7 +281,9 @@ const Muqabla_2 = (props, {navigation}) => {
       renderItem={renderItem1}
     />
   );
-  return (
+  return loading ? (
+    <OnxLoading />
+  ) : (
     <View style={styles.rootContainer}>
       <OnxHeader
         borderWidth1

@@ -1,5 +1,11 @@
 import {StatusBar, StyleSheet} from 'react-native';
-import {BgColor, sliderColorOrange} from 'src/assets/Colors/colors';
+import {
+  BgColor,
+  BorderColor,
+  fontColorLight,
+  sliderColorOrange,
+  textBackColor,
+} from 'src/assets/Colors/colors';
 import {fullHeight, heightRef, widthRef} from 'src/config/screenSize';
 export default styles = StyleSheet.create({
   container: {
@@ -13,6 +19,12 @@ export default styles = StyleSheet.create({
     backgroundColor: BgColor,
     height: '100%',
   },
+  dropdownmain: {
+    width: '50%',
+    height: 90 * heightRef,
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+  },
   header: {
     flex: 1,
     flexDirection: 'row',
@@ -25,6 +37,37 @@ export default styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  dropdown3: {
+    fontWeight: 'bold',
+    color: fontColorLight,
+  },
+  dropdown1: {
+    borderRadius: 2,
+    borderColor: BorderColor,
+    backgroundColor: 'transparent',
+    alignSelf: 'flex-end',
+    width: '60%',
+  },
+  dropdown2: {
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+  },
+  discountinner1: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  discountinner: {
+    // flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  discountouter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: textBackColor,
+    height: 60 * heightRef,
   },
   gpsView: {
     flexDirection: 'row',

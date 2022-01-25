@@ -1,13 +1,17 @@
-import React from 'react';
-import {SafeAreaView, TextInput} from 'react-native';
+import React, {useState} from 'react';
+import {SafeAreaView, TextInput, TextInputProps} from 'react-native';
 import {styles} from './style';
 import Icon from 'react-native-dynamic-vector-icons';
 import {
   fontColorDark,
   mediumSizeFont,
   OnxGreen,
+  PickWatch,
 } from 'src/assets/Colors/colors';
-import {fontRef} from 'src/config/screenSize';
+import {fontRef, widthRef} from 'src/config/screenSize';
+import {Validations} from 'src/config/function';
+import Text from '../Text';
+import View from '../View';
 
 export const CustomInput = ({
   text,
@@ -20,37 +24,76 @@ export const CustomInput = ({
   IConSize,
   name,
   type,
-}) => {
+  value,
+  keyboardType,
+  validateType,
+  validateMessage = '',
+  editable,
+  ...rest
+}: TextInputProps) => {
+  const [showError, setShowError] = useState(false);
+  let error = Validations[validateType]?.(value) || false;
+  // console.log({error, validateType});
   return (
     <SafeAreaView
       style={{
         justifyContent: 'center',
-        alignItems: 'center',
+        // alignItems: 'center',
       }}>
-      <TextInput
-        t
-        style={[
-          styles.input,
-          {
-            borderBottomWidth: borderBottomWidth ? 1 : null,
-            borderBottomColor: OnxGreen,
-            fontSize: fontSize ? fontSize * fontRef : mediumSizeFont,
-            width: width ? width : '100%',
-          },
-        ]}
-        onChangeText={onChangeText}
-        value={text}
-        placeholder={placeholder}
-        placeholderTextColor={fontColorDark}
-        keyboardType={text}
-      />
-      <Icon
-        onPress={onPress}
-        style={styles.icon}
-        type={type ? type : 'MaterialIcons'}
-        size={IConSize ? IConSize : 30}
-        name={name ? name : 'cancel'}
-      />
+      <View
+        style={{
+          justifyContent: 'center',
+          // alignItems: 'center',
+        }}>
+        <TextInput
+          editable={editable}
+          style={[
+            styles.input,
+            {
+              borderBottomWidth: borderBottomWidth ? 1 : null,
+              borderBottomColor: showError
+                ? error
+                  ? PickWatch
+                  : OnxGreen
+                : OnxGreen,
+              fontSize: fontSize ? fontSize * fontRef : mediumSizeFont,
+              width: width ? width : '100%',
+            },
+          ]}
+          onChangeText={onChangeText}
+          onFocus={() => setShowError(true)}
+          value={value}
+          ref={rest.textRef}
+          placeholder={placeholder}
+          placeholderTextColor={fontColorDark}
+          keyboardType={keyboardType}
+          {...rest}
+        />
+        <Icon
+          onPress={onPress}
+          style={styles.icon}
+          type={type ? type : 'MaterialIcons'}
+          size={IConSize ? IConSize : 25}
+          name={name ? name : 'cancel'}
+        />
+      </View>
+      {showError && error && (
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <Icon
+            color={PickWatch}
+            type={'MaterialIcons'}
+            size={25}
+            name={'info'}
+          />
+          <Text color={PickWatch} marginLeft={5 * widthRef} fontSize={11.5}>
+            {validateMessage}
+          </Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };

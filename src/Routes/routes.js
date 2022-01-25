@@ -54,6 +54,7 @@ import {fullHeight} from 'src/config/screenSize';
 import {Transition} from 'react-native-reanimated';
 import ChapterComplete from 'src/screens/VideoBooksScreens/SeccessfullScreen';
 import NetworkError from 'src/screens/NetworkError';
+import FewInformationScreen from 'src/screens/FewInformationScreen.js';
 
 const Stack = createStackNavigator();
 const options = {
@@ -103,7 +104,7 @@ const bottomOptions = {
 function Route() {
   return (
     <Stack.Navigator
-      initialRouteName="SplashScreen"
+      initialRouteName="Home"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Splash" component={Muqabla_3} options={options} />
       <Stack.Screen
@@ -160,6 +161,11 @@ function Route() {
       <Stack.Screen
         name="QuizzesMainScreen"
         component={QuizzesMainScreen}
+        options={options}
+      />
+      <Stack.Screen
+        name="FewInformationScreen"
+        component={FewInformationScreen}
         options={options}
       />
       <Stack.Screen name="Search_22" component={Search_22} options={options} />

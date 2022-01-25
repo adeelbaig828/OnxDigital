@@ -21,7 +21,9 @@ export function OnboardingScreen1({navigation}) {
             <Text
               style={styles.login}
               onPress={() => {
-                navigation.navigate('OnBoardingScreen2');
+                navigation.navigate('OnBoardingScreen2', {
+                  from: 'UserLogin',
+                });
               }}>
               {' '}
               Login

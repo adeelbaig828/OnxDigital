@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
+import {useSelector} from 'react-redux';
 import {
   fontColorDark,
   fontColorLight,
@@ -27,6 +28,10 @@ import TextIcon from 'src/Components/TextIcon';
 import {heightRef, widthRef} from 'src/config/screenSize';
 import {styles} from './style';
 export function HomeScreen() {
+  const OtpResponce = useSelector(state => state.auth.verifyData);
+  const barearToken = OtpResponce?.data?.access_token;
+  // console.log('barearToken', barearToken);
+
   const navigation = useNavigation();
   const [show, setShow] = React.useState(false);
   const textData = [
@@ -45,12 +50,6 @@ export function HomeScreen() {
   ];
   return (
     <SafeAreaView style={styles.root}>
-      <AppHeader
-        onPressCoins={() => navigation.navigate('CoinsPageScreen')}
-        onPressSearch={() => navigation.navigate('SearchScreen_1')}
-        onPressGetPlus={() => navigation.navigate('PlusPageScreen')}
-        onPressDrawer={() => navigation.openDrawer()}
-      />
       <ScrollView style={styles.mainRoot} showsVerticalScrollIndicator={false}>
         <TextHeader
           fontWeight={'600'}

@@ -161,12 +161,6 @@ const Tournaments_1 = props => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <AppHeader
-        onPressCoins={() => navigation.navigate('CoinsPageScreen')}
-        onPressSearch={() => navigation.navigate('SearchScreen_1')}
-        onPressGetPlus={() => navigation.navigate('PlusPageScreen')}
-        onPressDrawer={() => navigation.openDrawer()}
-      />
       <View style={styles.mainRoot}>
         <TextHeader
           colorheader={fontColorLight}

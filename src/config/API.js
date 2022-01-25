@@ -33,3 +33,8 @@ export default {
   //translateX
   TRANSLATE: {method: 'POST', url: 'auth/translate'},
 };
+
+// let quiz = Array(60)
+//   .fill(null)
+//   .map((v, i) => i);
+let quiz = Array.from({length: 60}, (v, i) => i + 1);

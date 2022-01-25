@@ -145,13 +145,7 @@ const AddAdressScreen4 = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: textBackColor,
-          height: 60 * heightRef,
-        }}>
+      <View style={styles.textBack}>
         <CustomButton
           backColor={OnxGreen}
           btnRadius={5}
