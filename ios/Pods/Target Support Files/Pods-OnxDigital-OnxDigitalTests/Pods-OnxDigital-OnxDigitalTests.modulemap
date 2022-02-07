@@ -1,0 +1,6 @@
+module Pods_OnxDigital_OnxDigitalTests {
+  umbrella header "Pods-OnxDigital-OnxDigitalTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

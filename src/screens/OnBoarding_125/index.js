@@ -40,7 +40,7 @@ const OnBoarding_125 = ({navigation}) => {
               type={'MaterialCommunityIcons'}
             />
             <Text bold={'600'} paddingLeft={15} color={fontColorLight}>
-              Refer anf Earn
+              Refer and Earn
             </Text>
           </View>
         }

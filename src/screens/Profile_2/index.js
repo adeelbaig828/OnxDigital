@@ -20,9 +20,12 @@ import {heightRef, widthRef} from 'src/config/screenSize';
 import {Drawer3, Drawer4} from 'src/utils/JSON';
 import styles from './style';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
 const ProfileScreen_2 = () => {
   const navigation = useNavigation();
+
+  const Profile = useSelector(state => state.muqablas.studentProfile);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: BgColor}}>
@@ -41,10 +44,12 @@ const ProfileScreen_2 = () => {
             />
           </ImageBackground>
         </View>
-        <Text color={fontColorLight}>Profile Name</Text>
+        <Text color={fontColorLight}>
+          {Profile?.data?.first_name + ' ' + Profile?.data?.last_name}
+        </Text>
         <View style={styles.grade}>
           <Text fontSize={12} color={fontColorDark}>
-            5th Grade
+            {Profile?.data?.grade?.name_num_th} Grade
           </Text>
           <OnxIcon
             name={'dot-single'}
@@ -101,7 +106,7 @@ const ProfileScreen_2 = () => {
             color={fontColorGray}
             iconcolor={fontColorDark}
             fontSize={12}>
-            {'+91 9883490281'}
+            {Profile?.data?.phone_number}
           </TextIcon>
           <Separator marginVertical={15} width={'100%'} />
           <View style={styles.detail}>
@@ -125,7 +130,7 @@ const ProfileScreen_2 = () => {
               />
             </View>
           </View>
-          {Drawer4.map(i => (
+          {Drawer4.map((i, index) => (
             <TextIcon
               name={
                 i.id == 1
@@ -149,7 +154,13 @@ const ProfileScreen_2 = () => {
               color={fontColorDark}
               iconcolor={fontColorDark}
               fontSize={14}>
-              {i.name}
+              {index === 0
+                ? Profile?.data?.first_name + ' ' + Profile?.data?.last_name
+                : index === 1
+                ? Profile?.data?.email
+                : index === 2
+                ? Profile?.data?.address
+                : Profile?.data?.gender}
             </TextIcon>
           ))}
           <CustomButton

@@ -1,0 +1,9 @@
+com/onxdigital/MainActivity.java
+ com.onxdigital.MainActivity
+com/onxdigital/BuildConfig.java
+ com.onxdigital.BuildConfig
+com/onxdigital/MainApplication.java
+ com.onxdigital.MainApplication
+ com.onxdigital.MainApplication$1
+com/facebook/react/PackageList.java
+ com.facebook.react.PackageList

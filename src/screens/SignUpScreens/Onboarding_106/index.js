@@ -64,8 +64,7 @@ const OnBoarding_106 = ({navigation}) => {
     }
     return true;
   };
-  const OtpResponce = useSelector(state => state.auth.verifyData);
-  const barearToken = OtpResponce.data.access_token;
+  const barearToken = useSelector(state => state.auth.token);
   const handleFavSubject = () => {
     setButtonloading(true);
     if (!SubjectValidation()) {

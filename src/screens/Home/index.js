@@ -28,8 +28,7 @@ import TextIcon from 'src/Components/TextIcon';
 import {heightRef, widthRef} from 'src/config/screenSize';
 import {styles} from './style';
 export function HomeScreen() {
-  const OtpResponce = useSelector(state => state.auth.verifyData);
-  const barearToken = OtpResponce?.data?.access_token;
+  const barearToken = useSelector(state => state.auth.token);
   // console.log('barearToken', barearToken);
 
   const navigation = useNavigation();

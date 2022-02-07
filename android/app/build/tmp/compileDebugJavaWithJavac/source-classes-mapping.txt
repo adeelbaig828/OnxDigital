@@ -1,0 +1,14 @@
+com/onxdigital/MainActivity.java
+ com.onxdigital.MainActivity
+com/onxdigital/ReactNativeFlipper.java
+ com.onxdigital.ReactNativeFlipper
+ com.onxdigital.ReactNativeFlipper$1
+ com.onxdigital.ReactNativeFlipper$2
+ com.onxdigital.ReactNativeFlipper$2$1
+com/onxdigital/BuildConfig.java
+ com.onxdigital.BuildConfig
+com/onxdigital/MainApplication.java
+ com.onxdigital.MainApplication
+ com.onxdigital.MainApplication$1
+com/facebook/react/PackageList.java
+ com.facebook.react.PackageList

@@ -6,6 +6,9 @@ export default styles = StyleSheet.create({
     flex: 1,
     backgroundColor: BgColor,
   },
+  fullContainer: {
+    flex: 1,
+  },
   header: {
     // flex: 1,
     flexDirection: 'row',
@@ -13,13 +16,14 @@ export default styles = StyleSheet.create({
     alignItems: 'center',
   },
   bottomContainer: {
-    flex: 0.5,
+    flex: 0.8,
     paddingHorizontal: 10 * heightRef,
   },
   ButtonContainer: {
-    flex: 0.5,
-    paddingBottom: 20,
-    justifyContent: 'space-between',
+    flex: 1,
+    paddingBottom: 20 * heightRef,
+    paddingTop: 10 * heightRef,
+    justifyContent: 'space-evenly',
     paddingHorizontal: 10 * heightRef,
   },
   outerCard: {

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {FlatList} from 'react-native';
+import {useSelector} from 'react-redux';
 import {
   avgcolor,
   BgColor,
@@ -30,6 +31,13 @@ import {AttemptPersons} from 'src/utils/JSON';
 import styles from './style';
 
 const Successfull_2 = ({navigation}) => {
+  const QuestionAnswersRes = useSelector(
+    state => state.muqablas.submitAllQuestion,
+  );
+  console.log(
+    'QuestionAnswersRes',
+    JSON.stringify(QuestionAnswersRes, null, 3),
+  );
   const quizData = [
     {
       text: 'Correct',
@@ -105,9 +113,15 @@ const Successfull_2 = ({navigation}) => {
           <View style={styles.header3}>
             <Text color={fontColorLight}>Your Percentage</Text>
             <View style={styles.bar1}>
-              <View style={styles.bar1Inner}>
+              <View
+                style={[
+                  styles.bar1Inner,
+                  {width: QuestionAnswersRes.data.my_percentage},
+                ]}>
                 <View style={styles.percetage1}>
-                  <Text color={fontColorLight}> 58%</Text>
+                  <Text color={fontColorLight}>
+                    {QuestionAnswersRes.data.my_percentage}%
+                  </Text>
                 </View>
               </View>
             </View>
@@ -115,9 +129,15 @@ const Successfull_2 = ({navigation}) => {
           <View style={styles.avgPerc}>
             <Text color={fontColorLight}>Avg. Percentage</Text>
             <View style={styles.bar1Bottom}>
-              <View style={styles.bar1BottomInner}>
+              <View
+                style={[
+                  styles.bar1BottomInner,
+                  {width: QuestionAnswersRes.data.average_percentage},
+                ]}>
                 <View style={styles.percetage1}>
-                  <Text color={fontColorLight}> 78%</Text>
+                  <Text color={fontColorLight}>
+                    {QuestionAnswersRes.data.average_percentage}%
+                  </Text>
                 </View>
               </View>
             </View>
@@ -127,8 +147,8 @@ const Successfull_2 = ({navigation}) => {
               // color={fontColorLight}
               fontSize={11}
               highlightedColor={OnxGreen}
-              highlightedText={'28 Players'}
-              textArray={'Your performance was better than 28 Players'}
+              highlightedText={'players'}
+              textArray={`Your performance was better than ${QuestionAnswersRes.data.performance_better_than} players`}
             />
             {/* <Text fontSize={11} color={QuizTExtColor}>
               Your performance was better than 28 Players
@@ -147,7 +167,9 @@ const Successfull_2 = ({navigation}) => {
         right={
           <CustomButton
             onPress={() => {
-              navigation.navigate('Muqabla_3');
+              navigation.navigate('BottomNavigation', {
+                screen: 'Home',
+              });
             }}
             backColor={OnxGreen}
             btnRadius={5}
@@ -169,9 +191,9 @@ const Successfull_2 = ({navigation}) => {
             Summary
           </Text>
           <OnxIcon
-            onPress={() => {
-              navigation.navigate('Successfull_1');
-            }}
+            // onPress={() => {
+            //   navigation.navigate('Successfull_1');
+            // }}
             size={23}
             colorIcon={fontColorLight}
             type={'AntDesign'}

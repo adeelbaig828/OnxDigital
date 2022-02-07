@@ -1,0 +1,6 @@
+module Pods_OnxDigital {
+  umbrella header "Pods-OnxDigital-umbrella.h"
+
+  export *
+  module * { export * }
+}

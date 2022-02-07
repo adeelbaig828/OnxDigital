@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Image, ImageBackground} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   fontColorDark,
   fontColorLight,
@@ -16,8 +17,54 @@ import TextHeader from 'src/Components/TextHeader';
 import TextIcon from 'src/Components/TextIcon';
 import View from 'src/Components/View';
 import {fontRef, fullWidth, heightRef, widthRef} from 'src/config/screenSize';
+import {
+  QUESTIONS_BY_TOPICS,
+  QUESTIONS_BY_ZONE,
+} from "src/Redux/Reducers/Muqabla's/Muqabla'sActions";
 import styles from './style';
-const Muqabla_43 = (props, {navigation}) => {
+const Muqabla_43 = ({navigation}) => {
+  const token = useSelector(state => state.auth.token);
+  const dispatch = useDispatch();
+
+  // API call for next screen questions
+  useEffect(() => {
+    getQuestionsByZones();
+    getQuestionsByChapter();
+  }, []);
+  const getQuestionsByZones = () => {
+    //change the hardcoded grade when api working fine
+    QUESTIONS_BY_ZONE(
+      1,
+      token,
+    )(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+        } else {
+          console.log('then res', res);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+        setMainloading(false);
+      });
+  };
+  const getQuestionsByChapter = () => {
+    //change the hardcoded grade when api working fine
+    QUESTIONS_BY_TOPICS(
+      1,
+      token,
+    )(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+        } else {
+          console.log('then res', res);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+        setMainloading(false);
+      });
+  };
   const textData = [
     {
       text: 'Lorem ipsum dolor sit amet, consectetur',
@@ -42,9 +89,7 @@ const Muqabla_43 = (props, {navigation}) => {
         left={
           <OnxIcon
             onPress={() => {
-              props.navigation.navigate('BottomNavigation', {
-                screen: 'Tournaments_1',
-              });
+              navigation.goBack();
             }}
             colorIcon={fontColorLight}
             name={'arrow-left'}
@@ -139,7 +184,7 @@ const Muqabla_43 = (props, {navigation}) => {
       <View style={styles.bottomCon}>
         <CustomButton
           onPress={() => {
-            props.navigation.navigate('Muqabla_3');
+            navigation.navigate('Muqabla_3');
           }}
           backColor={OnxGreen}
           btnRadius={5}

@@ -79,7 +79,6 @@ const OnBoardingScreen4 = ({navigation}) => {
     };
     Email_LOGIN(Data)(dispatch)
       .then(res => {
-        console.log('res.code === ', res);
         if (res.code === 200) {
           showToast({
             type: 'success',

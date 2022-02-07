@@ -68,7 +68,7 @@ const PlansModal = ({onPress, perMonths, perYears}, ref) => {
     GET_PACKAGES(token)(dispatch)
       .then(res => {
         if (res.code === 200) {
-          console.log('then res', res);
+          // console.log('then res', res);
           setAllPackages(res.data.data);
           setTimeout(() => {
             setloading(false);

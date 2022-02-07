@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   BgColor,
   fontColorDark,
@@ -10,29 +12,125 @@ import {
 } from 'src/assets/Colors/colors';
 import {CustomButton} from 'src/Components/CustomButton';
 import OnxHeader from 'src/Components/Header';
+import OnxLoading from 'src/Components/OnxLoading';
 import TextHeader from 'src/Components/TextHeader';
 import View from 'src/Components/View';
 import {heightRef, widthRef} from 'src/config/screenSize';
+import {
+  CLEAR_QUESTION_ANSWERS,
+  QUESTIONS_BY_TOPICS,
+  QUESTIONS_BY_ZONE,
+  QUESTION_ANSWERS,
+  SUBMIT_ALL_ANSWERS,
+  SUBMIT_FORM_FUNCTION,
+} from "src/Redux/Reducers/Muqabla's/Muqabla'sActions";
 import {changelanguage, strings} from 'src/services/translation';
-import {quizDataFour} from 'src/utils/JSON';
+import {QuestionByZone} from 'src/utils/JSON';
 import styles from './style';
 const Muqabla_3 = ({navigation}) => {
+  const [mainloading, setMainloading] = useState(false);
+
+  //Fetching data from redux
+  const quizzesTopics = useSelector(state => state.muqablas.topicsQuestions);
+  const quizzesChapters = useSelector(state => state.muqablas.zonesQuestions);
+  const submitQ = useSelector(state => state.muqablas.submitQuestionAnswers);
+  const token = useSelector(state => state.auth.token);
+  const isSelectedquizzes = useSelector(
+    state => state.muqablas.isQuestionsSelected,
+  );
+  // console.log('submitQ', JSON.stringify(submitQ, null, 3));
   const [loading, setloading] = useState(true);
   const [selectedlanguage, setselectedlanguage] = useState(true);
+  const [selectIndex, setSelectIndex] = useState(null);
+  const [selectIndexs, setSelectIndexs] = useState(0);
+  const [whichQuizzes, setwhichQuizzes] = useState(null);
+  const [seconds, setSeconds] = useState(0);
+  const [startSeconds, setStartSeconds] = useState(
+    moment().format('YYYY-MM-DD h:mm:ss'),
+  );
+  const [endSeconds, setEndSeconds] = useState(null);
+  const [answersID, setAnswersID] = useState(null);
+  const start = new Date().getTime();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log('object start', startSeconds);
+    const interval = setInterval(() => {
+      setSeconds(seconds => seconds + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+  useEffect(() => {
+    checkQuizzes();
+  }, []);
+
   useEffect(() => {
     //change language function
     (async () => {
       const language = await AsyncStorage.getItem('language');
       setselectedlanguage(language);
-      console.log('language', language);
       language && changelanguage(language);
       setTimeout(() => {
         setloading(false);
       }, 1000);
     })();
   }, []);
-  const [selectIndex, setSelectIndex] = useState(null);
-  return loading ? (
+  //function to check which quizzes are going to display
+  const checkQuizzes = () => {
+    isSelectedquizzes.Data === 'Chapters'
+      ? setwhichQuizzes(quizzesChapters)
+      : setwhichQuizzes(quizzesTopics);
+    setMainloading(false);
+  };
+  const submitAllAnswerData = () => {
+    const _answersData = {
+      entity_type: isSelectedquizzes.Data === 'Chapters' ? 'Zone' : 'Topics',
+      entity_id: 1,
+      total_points: 90,
+      time_taken: seconds,
+      answers: submitQ,
+    };
+    SUBMIT_ALL_ANSWERS(
+      _answersData,
+      token,
+    )(dispatch)
+      .then(res => {
+        console.log('else then res', JSON.stringify(res, null, 3));
+        if (res.code === 200) {
+          clearData();
+          setTimeout(() => {
+            navigation.replace('Successfull_1', {
+              totalTime: seconds,
+            });
+            setMainloading(false);
+          }, 1100);
+        } else {
+          clearData();
+          console.log('else then res', res);
+        }
+      })
+      .catch(err => {
+        clearData();
+        console.log('catch err', err);
+      });
+  };
+  const clearData = () => {
+    CLEAR_QUESTION_ANSWERS()(dispatch);
+  };
+  const submitAnswers = () => {
+    const _NameData = {
+      question_id: whichQuizzes?.data?.data[selectIndexs].id,
+      // question_id: QuestionByZone[selectIndexs].id,
+      option_id: answersID,
+      question_started_at: startSeconds,
+      question_ended_at: moment().format('YYYY-MM-DD h:mm:ss'),
+    };
+    QUESTION_ANSWERS(_NameData)(dispatch);
+  };
+  return mainloading ? (
+    <OnxLoading />
+  ) : loading ? (
     <ActivityIndicator
       style={{backgroundColor: BgColor, flex: 1}}
       size={60}
@@ -41,34 +139,26 @@ const Muqabla_3 = ({navigation}) => {
   ) : (
     <View style={styles.rootContainer}>
       <OnxHeader
-        right={
-          <CustomButton
-            btnRadius={5}
-            textColor={fontColorDark}
-            textSize={10}
-            btnWidth={62 * widthRef}
-            onPress={async () => {
-              // navigation.navigate('Successfull_1');
-              try {
-                setloading(true);
-                await AsyncStorage.removeItem('language');
-                console.log('object OKk');
-                await setloading(false);
-              } catch (error) {
-                console.log('object error', error);
-              }
-            }}
-            btnHeight={24 * heightRef}
-            borderWidth={0.3}
-            text={'Submit'}
-            fontWeight={'bold'}
-            borderColor={fontColorDark}
-          />
-        }
+        // right={
+        //   <CustomButton
+        //     btnRadius={5}
+        //     textColor={fontColorDark}
+        //     textSize={10}
+        //     btnWidth={62 * widthRef}
+        //     onPress={async () => navigation.navigate('Successfull_1')}
+        //     btnHeight={24 * heightRef}
+        //     borderWidth={0.3}
+        //     text={'Submit'}
+        //     fontWeight={'bold'}
+        //     borderColor={fontColorDark}
+        //   />
+        // }
         titleColor={OnxGreen}
         borderBottomWidth2
         borderWidth1
-        title={'01:14'}
+        title={`${Math.floor(seconds / 60)}:${(seconds % 60)
+          .toString()
+          .padStart(2, '0')}`}
       />
       <View style={styles.quizContainer}>
         <TextHeader
@@ -79,15 +169,17 @@ const Muqabla_3 = ({navigation}) => {
           colorDesc={fontColorLight}
           fontSizeDesc={16}
           fontWeight={'600'}
-          Header={selectedlanguage === 'ur' ? '.1' : '1.'}
-          Description={
-            strings[
-              'Noble gases are inert because they have completed outer electron shells. Which of these elements is not a noble gas?'
-            ]
+          Header={
+            selectedlanguage === 'ur'
+              ? selectIndexs + 1
+              : `${selectIndexs + 1}.`
           }
+          Description={whichQuizzes?.data?.data[selectIndexs].title}
+          // Description={QuestionByZone[selectIndexs].explanation}
         />
         <View style={{width: '100%'}}>
-          {quizDataFour.map((data, index) => (
+          {whichQuizzes?.data?.data[selectIndexs].options.map((data, index) => (
+            // {QuestionByZone[selectIndexs].options.map((data, index) => (
             <CustomButton
               btnRadius={5}
               backColor={index === selectIndex ? 'white' : null}
@@ -97,10 +189,10 @@ const Muqabla_3 = ({navigation}) => {
               textSize={16}
               marginT={10}
               btnWidth={'100%'}
-              onPress={() => setSelectIndex(index)}
+              onPress={() => (setSelectIndex(index), setAnswersID(data.id))}
               btnHeight={43 * heightRef}
               borderWidth={1}
-              text={strings[`${data.text}`]}
+              text={data['Option Value']}
               fontWeight={'bold'}
               paddingVertical={10}
               borderColor={fontColorLight}
@@ -108,16 +200,36 @@ const Muqabla_3 = ({navigation}) => {
           ))}
         </View>
         {selectIndex != null ? (
+          // selectIndexs + 1 === whichQuizzes?.data?.data.length ? null : (
+
           <CustomButton
             onPress={() => {
-              navigation.navigate('Successfull_1');
+              if (selectIndexs + 1 === whichQuizzes?.data?.data.length) {
+                setMainloading(true);
+                submitAllAnswerData();
+                setEndSeconds(new Date());
+                submitAnswers();
+                setStartSeconds(moment().format('YYYY-MM-DD h:mm:ss'));
+                console.log('submit');
+              } else {
+                setSelectIndex(null);
+                setEndSeconds(new Date());
+                setSelectIndexs(selectIndexs + 1);
+                submitAnswers();
+                setStartSeconds(moment().format('YYYY-MM-DD h:mm:ss'));
+              }
+              // navigation.navigate('Muqabla_3');
             }}
             backColor={OnxGreen}
             btnRadius={5}
             textSize={16}
             btnWidth={'100%'}
             btnHeight={43 * heightRef}
-            text={'Next'}
+            text={
+              selectIndexs + 1 === whichQuizzes?.data?.data.length
+                ? 'Submit'
+                : 'Next'
+            }
             fontWeight={'600'}
             marginT={15 * heightRef}
             paddingVertical={10}

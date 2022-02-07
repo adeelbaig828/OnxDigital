@@ -31,8 +31,7 @@ const OnBoarding_103 = ({navigation}) => {
     }
     return true;
   };
-  const OtpResponce = useSelector(state => state.auth.verifyData);
-  const barearToken = OtpResponce.data.access_token;
+  const barearToken = useSelector(state => state.auth.token);
   const showToast = ({type, text1, text2}) => {
     Toast.show({
       position: 'bottom',
@@ -93,10 +92,11 @@ const OnBoarding_103 = ({navigation}) => {
             text1: res.code,
             text2: res.message,
           });
+          setButtonloading(false);
         }
       })
       .catch(err => {
-        console.log('catch err', err);
+        console.log('catch err err', err);
         showToast({
           type: 'error',
           text1: 'error',

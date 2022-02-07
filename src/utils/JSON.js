@@ -1,3 +1,118 @@
+export const QuestionByZone = [
+  {
+    id: 1,
+    title: 'Urdu Text',
+    explanation: 'Explanation Urdu',
+    hints: 'Urdu Hint 1, Urdu Hint 2',
+    question_type: 'text',
+    answer_type: 'Radio',
+    is_inactive: false,
+    points_correct: 6,
+    points_incorrect: -2,
+    max_selections: 1,
+    correct_answer_condition: 'match text with answer',
+    penalty_for_non_answering: 'pepsi',
+    difficulty_level: 'medium',
+    question_language_id: 2,
+    question_language_name: 'Urdu',
+    options: [
+      {
+        id: 1,
+        'Option Value': 'Explanation1',
+      },
+      {
+        id: 2,
+        'Option Value': 'Explanation2',
+      },
+      {
+        id: 3,
+        'Option Value': 'Explanation3',
+      },
+      {
+        id: 4,
+        'Option Value': 'Explanation4',
+      },
+    ],
+  },
+  {
+    id: 2,
+    title: 'Urdu Text',
+    explanation: 'Explanation Urdu',
+    hints: 'Urdu Hint 1, Urdu Hint 2',
+    question_type: 'text',
+    answer_type: 'Radio',
+    is_inactive: false,
+    points_correct: 6,
+    points_incorrect: -2,
+    max_selections: 1,
+    correct_answer_condition: 'match text with answer',
+    penalty_for_non_answering: 'pepsi',
+    difficulty_level: 'medium',
+    question_language_id: 2,
+    question_language_name: 'Urdu',
+    options: [
+      {
+        id: 1,
+        'Option Value': 'answer1',
+      },
+      {
+        id: 2,
+        'Option Value': 'answer2',
+      },
+      {
+        id: 3,
+        'Option Value': 'answer3',
+      },
+      {
+        id: 4,
+        'Option Value': 'answer4',
+      },
+    ],
+  },
+  {
+    id: 3,
+    title: 'Urdu Text',
+    explanation: 'Explanation Urdu',
+    hints: 'Urdu Hint 1, Urdu Hint 2',
+    question_type: 'text',
+    answer_type: 'Radio',
+    is_inactive: false,
+    points_correct: 6,
+    points_incorrect: -2,
+    max_selections: 1,
+    correct_answer_condition: 'match text with answer',
+    penalty_for_non_answering: 'pepsi',
+    difficulty_level: 'medium',
+    question_language_id: 2,
+    question_language_name: 'Urdu',
+    options: [
+      {
+        id: 1,
+        'Option Value': 'text_answer1',
+      },
+      {
+        id: 2,
+        'Option Value': 'text_answer2',
+      },
+      {
+        id: 3,
+        'Option Value': 'text_answer3',
+      },
+      {
+        id: 4,
+        'Option Value': 'text_answer4',
+      },
+    ],
+  },
+];
+export const QuizzesData = [
+  {
+    Data: 'Topics',
+  },
+  {
+    Data: 'Chapters',
+  },
+];
 export const languageData = [
   {
     id: '1',

@@ -35,8 +35,7 @@ const FewInformationScreen = ({navigation}) => {
       text2,
     });
   };
-  const OtpResponce = useSelector(state => state.auth.verifyData);
-  const barearToken = OtpResponce?.data?.access_token;
+  const barearToken = useSelector(state => state.auth.token);
   const inputsValidation = () => {
     if (!firstName) {
       showToast({

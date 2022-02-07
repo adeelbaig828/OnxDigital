@@ -17,9 +17,12 @@ import Text from '../Text';
 import TextIcon from '../TextIcon';
 import View from '../View';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
 const DrawerContent = () => {
   const navigation = useNavigation();
+
+  const Profile = useSelector(state => state.muqablas.studentProfile);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -32,10 +35,10 @@ const DrawerContent = () => {
             />
             <View>
               <Text bold={'500'} color={fontColorLight}>
-                Profile Name
+                {Profile?.data?.first_name + ' ' + Profile?.data?.last_name}
               </Text>
               <Text color={fontColorDark} fontSize={12}>
-                5th Grade
+                {Profile?.data?.grade?.name_num_th} Grade
               </Text>
               <Text marginTop={6 * heightRef} color={OnxGreen} fontSize={10}>
                 9% completed
@@ -44,7 +47,7 @@ const DrawerContent = () => {
           </View>
           <OnxIcon
             onPress={() => {
-              navigation.navigate('ProfileScreen');
+              navigation.navigate('ProfileScreen_2');
             }}
             colorIcon={OnxGreen}
             type={'AntDesign'}

@@ -30,7 +30,7 @@ import styles from './styles';
 let MARGINRIGHT = 25 * widthRef;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 export default function FlatListComponent({
-  data,
+  data = [],
   style,
   TextColor,
   contentContainerStyle,
@@ -194,7 +194,7 @@ export default function FlatListComponent({
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          {data.map((v, i) => (
+          {(data || []).map((v, i) => (
             <Animated.View
               style={[
                 {

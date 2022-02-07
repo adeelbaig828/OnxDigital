@@ -1,5 +1,7 @@
-import React, {useState} from 'react';
+import {useRoute} from '@react-navigation/core';
+import React, {useEffect, useState} from 'react';
 import {Image} from 'react-native';
+import {useSelector} from 'react-redux';
 import {
   Crosscolor,
   fontColorDark,
@@ -20,6 +22,34 @@ import {heightRef, widthRef} from 'src/config/screenSize';
 import styles from './style';
 
 const Successfull_1 = ({navigation}) => {
+  const [correctAns, setcorrectAns] = useState(null);
+  const [inCorrectAns, setinCorrectAns] = useState(null);
+  const route = useRoute();
+
+  const QuestionAnswersRes = useSelector(
+    state => state.muqablas.submitAllQuestion,
+  );
+
+  useEffect(() => {
+    checkResponse();
+  }, []);
+
+  const checkResponse = () => {
+    let correctOptions = 0;
+    let inCorrectOptions = 0;
+    QuestionAnswersRes.data.questions.map(item => {
+      item?.user_option?.id === item?.correct_option?.id
+        ? (correctOptions += 1)
+        : (inCorrectOptions += 1);
+    });
+    setcorrectAns(correctOptions);
+    setinCorrectAns(inCorrectOptions);
+  };
+  console.log(
+    'QuestionAnswersRes',
+    JSON.stringify(route.params.totalTime, null, 3),
+  );
+
   const [selectIndex, setSelectIndex] = useState(null);
   const quizData = [
     {
@@ -44,9 +74,9 @@ const Successfull_1 = ({navigation}) => {
       <OnxHeader
         right={
           <CustomButton
-            onPress={() => {
-              navigation.navigate('Muqabla_3');
-            }}
+            // onPress={() => {
+            //   navigation.navigate('Muqabla_3');
+            // }}
             backColor={OnxGreen}
             btnRadius={5}
             textSize={16}
@@ -190,8 +220,12 @@ const Successfull_1 = ({navigation}) => {
                     color={fontColorLight}
                     fontSize={10}>
                     {i.text == 'Duration'
-                      ? ('00:' + i.number).slice(-5)
-                      : ('0' + i.number).slice(-2)}
+                      ? ('00:0' + route.params.totalTime).slice(-5)
+                      : i.text == 'Correct'
+                      ? ('0' + correctAns).slice(-2)
+                      : i.text == 'Incorrect'
+                      ? ('0' + inCorrectAns).slice(-2)
+                      : ('0' + 0).slice(-2)}
                   </Text>
                 </View>
                 <Text color={fontColorLight} fontSize={10}>

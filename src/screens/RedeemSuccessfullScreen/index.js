@@ -33,6 +33,7 @@ const RedeemSuccessfull = ({navigation}) => {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </Text>
       </View>
+
       <View style={style.bottomCon}>
         <CustomButton
           backColor={OnxGreen}

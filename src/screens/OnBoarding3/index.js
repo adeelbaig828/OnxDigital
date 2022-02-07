@@ -23,7 +23,6 @@ const OnBoardingScreen3 = ({navigation}) => {
   const [otp, set_OTP] = useState(null);
   const [showError, setShowError] = useState(false);
   const [loading, setloading] = useState(false);
-
   const showToast = ({type, text1, text2}) => {
     Toast.show({
       position: 'bottom',
@@ -63,7 +62,6 @@ const OnBoardingScreen3 = ({navigation}) => {
     };
     GENERATE_OTP(Data)(dispatch)
       .then(res => {
-        console.log('then res', res);
         if (res.code === 200) {
           console.log('then res', res);
           showToast({
@@ -112,10 +110,13 @@ const OnBoardingScreen3 = ({navigation}) => {
           });
           setShowError(false);
           setTimeout(() => {
-            console.log('setTimeout');
-            navigation.replace('FewInformationScreen');
+            if (route.params.from && res.data.is_profile_complete) {
+              navigation.replace('Home');
+            } else {
+              navigation.replace('FewInformationScreen');
+            }
             setloading(false);
-          }, 2100);
+          }, 1100);
         } else {
           console.log('else res', res);
           setShowError(true);

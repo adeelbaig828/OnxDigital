@@ -42,8 +42,7 @@ const Muqabla_2 = (props, {navigation}) => {
     {label: 'Last Month', value: 'Last Month'},
   ]);
   const dispatch = useDispatch();
-  const OtpResponce = useSelector(state => state.auth.verifyData);
-  const barearToken = OtpResponce.data.access_token;
+  const barearToken = useSelector(state => state.auth.token);
   useEffect(() => {
     setloading(true);
     getAllPrizes();

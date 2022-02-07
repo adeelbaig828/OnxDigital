@@ -31,6 +31,7 @@ import {CustomCard} from 'src/Components/customCard';
 import OnxHeader from 'src/Components/Header';
 import MultiColorText from 'src/Components/HighlightedColorText';
 import OnxIcon from 'src/Components/OnxIcons';
+import OnxLoading from 'src/Components/OnxLoading';
 import PlansModal from 'src/Components/PlansModal';
 import Separator from 'src/Components/separator';
 import Text from 'src/Components/Text';
@@ -40,6 +41,7 @@ import {heightRef, widthRef} from 'src/config/screenSize';
 import {
   GET_LANGUAGES,
   ZONES_BY_ARENAS,
+  ZONES_BY_GRADE_AND_SUBJECTS,
 } from 'src/Redux/Reducers/Books/BooksActions';
 import {changelanguage, strings} from 'src/services/translation';
 import {languageData} from 'src/utils/JSON';
@@ -74,12 +76,15 @@ const VideoScreen_2 = () => {
   const [selectedIndex, setselectedIndex] = useState(null);
   const [loading, setloading] = useState(false);
   const [allzones, setAllzones] = useState([]);
+  const [videoId, setvideoId] = useState(null);
+  const [videoURL, setvideoURL] = useState(null);
   const [oops, setOops] = useState(false);
   const [headerData, setheaderData] = useState(null);
   const [discriptionData, setdiscriptionData] = useState(null);
+  console.log('videoId', videoId);
   useEffect(() => {
     setloading(true);
-    getAllZonesbyArenas();
+    getAllZonesbyGradesandsubjects();
   }, []);
   const dispatch = useDispatch();
   const token = useSelector(state => state.auth.token);
@@ -89,7 +94,7 @@ const VideoScreen_2 = () => {
         if (res.code === 200) {
           setlanguageData(res.data.data);
         } else {
-          console.log('then res', res);
+          console.log('then re', res);
         }
       })
       .catch(err => {
@@ -102,22 +107,24 @@ const VideoScreen_2 = () => {
         setheaderData(response.name), setdiscriptionData(response.description)
       ),
     );
-  const getAllZonesbyArenas = () => {
-    ZONES_BY_ARENAS(token)(dispatch)
+  const getAllZonesbyGradesandsubjects = () => {
+    ZONES_BY_GRADE_AND_SUBJECTS(token)(dispatch)
       .then(res => {
         if (res.code === 200) {
-          // setAllzones(res.data.data);
           assignData(res.data.data);
-          // console.log('object', JSON.stringify(res, null, 3));
+          console.log('object', JSON.stringify(res, null, 3));
+          setAllzones(res.data.data);
           setTimeout(() => {
             setloading(false);
           }, 500);
         } else {
-          console.log('then res', res);
+          console.log('then re', res);
+          setloading(false);
         }
       })
       .catch(err => {
         console.log('catch err', err);
+        setloading(false);
       });
   };
   const Subs = () => (
@@ -159,49 +166,65 @@ const VideoScreen_2 = () => {
       />
     </View>
   );
-  const renderItem = (item, index) => (
-    <CustomCard
-      // backColor={'red'}
-      marginV={7}
-      btnWidth={'100%'}
-      btnHeight={64 * heightRef}>
-      <>
-        <View style={styles.scndCont}>
-          <View style={styles.date}>
-            <Image style={styles.imageleft} source={item.item.image_url} />
-            <View style={styles.lock}>
-              <OnxIcon
-                left={1}
-                bottom={3 * heightRef}
-                size={25}
-                colorIcon={fontColorLight}
-                type={'MaterialIcons'}
-                name={'lock'}
-              />
-              <Text
-                color={fontColorLight}
-                fontSize={12}
-                padding={10}
-                backColor={'black'}>
-                10:00
-              </Text>
+  const renderItem = (item, index) =>
+    item.item.topics.map(k =>
+      k.id === videoId ? null : (
+        <CustomCard
+          onPress={() =>
+            item.item.topics.map(
+              j => (setvideoId(j.id), setvideoURL(j.video.video_url)),
+            )
+          }
+          marginV={7}
+          btnWidth={'100%'}
+          btnHeight={64 * heightRef}>
+          <>
+            <View style={styles.scndCont}>
+              <View style={styles.date}>
+                {item.item.topics.map(i => (
+                  <>
+                    <Image
+                      style={styles.imageleft}
+                      source={item.item.image_url}
+                    />
+                    <View style={styles.lock}>
+                      <OnxIcon
+                        left={1}
+                        bottom={3 * heightRef}
+                        size={25}
+                        colorIcon={fontColorLight}
+                        type={'MaterialIcons'}
+                        name={'lock'}
+                      />
+                      <Text
+                        color={fontColorLight}
+                        fontSize={12}
+                        padding={10}
+                        backColor={'black'}>
+                        {i.video.video_duration}
+                      </Text>
+                    </View>
+                  </>
+                ))}
+              </View>
+              <View style={styles.months}>
+                <TextHeader
+                  alignItemsMain={
+                    selectedIndex !== 1 ? 'flex-start' : 'flex-end'
+                  }
+                  width={'60%'}
+                  fontWeight={'600'}
+                  fontSizeHeader={11}
+                  marginTop={6 * heightRef}
+                  Header={item.item.name}
+                  Description={item.item.description}
+                />
+              </View>
             </View>
-          </View>
-          <View style={styles.months}>
-            <TextHeader
-              alignItemsMain={selectedIndex !== 1 ? 'flex-start' : 'flex-end'}
-              width={'60%'}
-              fontWeight={'600'}
-              fontSizeHeader={11}
-              marginTop={6 * heightRef}
-              Header={item.item.name}
-              Description={item.item.description}
-            />
-          </View>
-        </View>
-      </>
-    </CustomCard>
-  );
+          </>
+        </CustomCard>
+      ),
+    );
   const Chapters1 = () => (
     <FlatList
       style={{backgroundColor: BgColor}}
@@ -229,7 +252,9 @@ const VideoScreen_2 = () => {
       renderItem={renderItem}
     />
   );
-  return (
+  return loading ? (
+    <OnxLoading />
+  ) : (
     <View style={styles.mainContainer}>
       {fullScreenMode ? <StatusBar hidden /> : null}
       <PlansModal
@@ -252,7 +277,7 @@ const VideoScreen_2 = () => {
             <View style={styles.header}>
               <OnxIcon
                 onPress={() => {
-                  navigation.pop();
+                  navigation.goBack();
                 }}
                 colorIcon={fontColorLight}
                 name={'arrow-left'}
@@ -290,7 +315,8 @@ const VideoScreen_2 = () => {
           onExitFullscreen={() => fullScreen()}
           disableBack
           // repeat={true}
-          source={require('src/assets/hd1722.mov')}
+          source={{uri: videoURL}}
+          // source={require('src/assets/hd1722.mov')}
           style={styles.backgroundVideo}
         />
         {oops ? <Subs /> : null}

@@ -35,8 +35,7 @@ const OnBoarding_105 = ({navigation}) => {
   const searchRef = useRef();
   const [filterdData, setfilterdData] = useState([]);
   const route = useRoute();
-  const OtpResponce = useSelector(state => state.auth.verifyData);
-  const barearToken = OtpResponce.data.access_token;
+  const barearToken = useSelector(state => state.auth.token);
   const dispatch = useDispatch();
   const showToast = ({type, text1, text2}) => {
     Toast.show({

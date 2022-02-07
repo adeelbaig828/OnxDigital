@@ -18,16 +18,10 @@ import Text from 'src/Components/Text';
 import {useNavigation} from '@react-navigation/native';
 import TextHeader from 'src/Components/TextHeader';
 import View from 'src/Components/View';
-import {heightRef} from 'src/config/screenSize';
-import {interactiveBook} from 'src/utils/JSON';
 import styles from './style';
-import AppHeader from 'src/Components/AppHeader';
 import OnxLoading from 'src/Components/OnxLoading';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  GET_ARENA_BY_GRADE,
-  GET_ARENA_DETAIL,
-} from 'src/Redux/Reducers/Books/BooksActions';
+import {GET_SUBJECTS_BY_GRADE} from 'src/Redux/Reducers/Books/BooksActions';
 const VideoScreen_1 = props => {
   const navigation = useNavigation();
   const [loading, setloading] = useState(false);
@@ -40,12 +34,11 @@ const VideoScreen_1 = props => {
   const token = useSelector(state => state.auth.token);
   const getBooksByGrade = () => {
     //change the hardcoded grade when api working fine
-    GET_ARENA_BY_GRADE(
+    GET_SUBJECTS_BY_GRADE(
       3,
       token,
     )(dispatch)
       .then(res => {
-        // console.log('res', JSON.stringify(res, null, 3));
         if (res.code === 200) {
           setBooks(res?.data?.data);
           setTimeout(() => {

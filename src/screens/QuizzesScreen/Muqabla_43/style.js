@@ -32,7 +32,7 @@ export default styles = StyleSheet.create({
     width: widthRef * 328,
     height: 140 * heightRef,
     borderRadius: 10,
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
     overflow: 'hidden',
   },
   headercolor: {

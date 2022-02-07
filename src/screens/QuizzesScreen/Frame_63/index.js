@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -23,7 +23,7 @@ import Separator from 'src/Components/separator';
 import Text from 'src/Components/Text';
 import TextIcon from 'src/Components/TextIcon';
 import View from 'src/Components/View';
-import {heightRef, widthRef} from 'src/config/screenSize';
+import {fullWidth, heightRef, widthRef} from 'src/config/screenSize';
 import {Drawer3, Subjects} from 'src/utils/JSON';
 import styles from './style';
 import {useNavigation} from '@react-navigation/native';
@@ -31,11 +31,76 @@ import AppHeader from 'src/Components/AppHeader';
 import {CustomCard} from 'src/Components/customCard';
 import TextHeader from 'src/Components/TextHeader';
 import FlatListComponent from 'src/Components/FlatListComponent';
+import {useDispatch, useSelector} from 'react-redux';
+import {GET_STUDENT_PROFILE} from "src/Redux/Reducers/Muqabla's/Muqabla'sActions";
+import {GET_SUBJECTS_BY_GRADE} from 'src/Redux/Reducers/Books/BooksActions';
+import OnxLoading from 'src/Components/OnxLoading';
 
 const QuizzesMainScreen = () => {
-  const navigation = useNavigation();
+  const [loading, setloading] = useState(false);
 
-  return (
+  const navigation = useNavigation();
+  const token = useSelector(state => state.auth.token);
+  const Profile = useSelector(state => state.muqablas.studentProfile);
+  const subjects = useSelector(state => state.booksData.subjectsbyGraade);
+  // console.log('ProfileProfileProfile', JSON.stringify(Profile, null, 3));
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setloading(true);
+    handleProfile();
+    getSubjectsByGrade();
+  }, []);
+
+  const checkUser = token => {
+    if (!token) {
+      return false;
+    }
+    return true;
+  };
+  const handleProfile = () => {
+    if (!checkUser) {
+      setloading(false);
+      return;
+    }
+    GET_STUDENT_PROFILE(token)(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+          setloading(false);
+        } else {
+          console.log('then res', res);
+          setloading(false);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+        setloading(false);
+      });
+  };
+
+  const getSubjectsByGrade = () => {
+    //change the hardcoded grade when api working fine
+    GET_SUBJECTS_BY_GRADE(
+      3,
+      token,
+    )(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+          setloading(false);
+        } else {
+          console.log('then res', res);
+          setloading(false);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+        setloading(false);
+      });
+  };
+
+  return loading ? (
+    <OnxLoading />
+  ) : (
     <SafeAreaView style={{flex: 1, backgroundColor: BgColor}}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.mainContainer}>
@@ -45,7 +110,7 @@ const QuizzesMainScreen = () => {
               source={require('src/assets/ProfilePic.png')}></ImageBackground>
           </View>
           <Text bold={'500'} color={fontColorLight}>
-            Profile Name
+            {Profile?.data?.first_name + ' ' + Profile?.data?.last_name}
           </Text>
           <View style={styles.iconContHeader}>
             <Image
@@ -53,7 +118,7 @@ const QuizzesMainScreen = () => {
               source={require('src/assets/coin.png')}
             />
             <Text marginLeft={5} fontSize={12} color={fontColorLight}>
-              300 Points
+              {Profile?.data?.total_gold_coins} Gold Coins
             </Text>
             <Text marginHorizontal={10}>|</Text>
             <Image
@@ -64,7 +129,7 @@ const QuizzesMainScreen = () => {
               marginLeft={5 * heightRef}
               color={fontColorLight}
               fontSize={12}>
-              300 Silver Coins
+              {Profile?.data?.total_silver_coins} Silver Coins
             </Text>
           </View>
           <CustomCard
@@ -215,81 +280,47 @@ const QuizzesMainScreen = () => {
               style={{
                 flexDirection: 'row',
                 width: '100%',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}>
-              <View style={styles.grid}>
-                {Subjects.map((i, index) => (
-                  <CustomCard
-                    onPress={() => {
-                      navigation.navigate('Muqabla_44');
-                    }}
-                    justifyContent={'space-evenly'}
-                    btnRadius={10}
-                    marginV={7 * heightRef}
-                    backColor={textBackColor}
-                    marginHorizontal={5 * widthRef}
-                    btnWidth={156 * widthRef}
-                    btnHeight={108 * widthRef}
-                    style={{borderWidth: 1 * widthRef}}
-                    borderColor={BorderColor}>
-                    <>
+              {subjects?.data?.data?.map((i, index) => (
+                <CustomCard
+                  onPress={() => {
+                    navigation.navigate('Muqabla_44', {
+                      Name: i.name,
+                    });
+                  }}
+                  justifyContent={'space-evenly'}
+                  btnRadius={10}
+                  marginV={7 * heightRef}
+                  backColor={textBackColor}
+                  marginHorizontal={5 * widthRef}
+                  btnWidth={156 * widthRef}
+                  btnHeight={108 * widthRef}
+                  style={{borderWidth: 1 * widthRef}}
+                  borderColor={BorderColor}>
+                  <>
+                    <View style={styles.inner1}>
                       <View style={styles.inner1}>
-                        <View style={styles.inner1}>
-                          <Image
-                            style={styles.imagesSubj}
-                            source={require('src/assets/NumbersSubj.png')}
-                          />
-                        </View>
-                        <View style={styles.inner3}>
-                          <Text
-                            marginTop={10 * heightRef}
-                            color={fontColorLight}
-                            bold={'500'}
-                            fontSize={12}>
-                            {i.name}
-                          </Text>
-                        </View>
+                        <Image
+                          style={styles.imagesSubj}
+                          source={require('src/assets/NumbersSubj.png')}
+                        />
                       </View>
-                    </>
-                  </CustomCard>
-                ))}
-              </View>
-              <View style={styles.grid}>
-                {Subjects.map((i, index) => (
-                  <CustomCard
-                    onPress={() => {
-                      navigation.navigate('Muqabla_44');
-                    }}
-                    justifyContent={'space-evenly'}
-                    btnRadius={10}
-                    marginV={7 * heightRef}
-                    backColor={textBackColor}
-                    marginHorizontal={5 * widthRef}
-                    btnWidth={156 * widthRef}
-                    btnHeight={108 * widthRef}
-                    style={{borderWidth: 1 * widthRef}}
-                    borderColor={BorderColor}>
-                    <>
-                      <View style={styles.inner1}>
-                        <View style={styles.inner1}>
-                          <Image
-                            style={styles.imagesSubj}
-                            source={require('src/assets/NumbersSubj.png')}
-                          />
-                        </View>
-                        <View style={styles.inner3}>
-                          <Text
-                            marginTop={10 * heightRef}
-                            color={fontColorLight}
-                            bold={'500'}
-                            fontSize={12}>
-                            {i.name}
-                          </Text>
-                        </View>
+                      <View style={styles.inner3}>
+                        <Text
+                          marginTop={10 * heightRef}
+                          color={fontColorLight}
+                          bold={'500'}
+                          fontSize={12}>
+                          {i.name}
+                        </Text>
                       </View>
-                    </>
-                  </CustomCard>
-                ))}
-              </View>
+                    </View>
+                  </>
+                </CustomCard>
+              ))}
             </View>
           </View>
         </View>

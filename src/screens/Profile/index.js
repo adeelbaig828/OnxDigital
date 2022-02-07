@@ -19,9 +19,14 @@ import {heightRef, widthRef} from 'src/config/screenSize';
 import {Drawer3} from 'src/utils/JSON';
 import styles from './style';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
+
+  const Profile = useSelector(state => state.muqablas.studentProfile);
+
+  console.log('Prof in edit', JSON.stringify(Profile, null, 3));
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: BgColor}}>
@@ -40,10 +45,12 @@ const ProfileScreen = () => {
             />
           </ImageBackground>
         </View>
-        <Text color={fontColorLight}>Profile Name</Text>
+        <Text color={fontColorLight}>
+          {Profile?.data?.first_name + ' ' + Profile?.data?.last_name}
+        </Text>
         <View style={styles.grade}>
           <Text fontSize={12} color={fontColorDark}>
-            5th Grade
+            {Profile?.data?.grade?.name_num_th} Grade
           </Text>
           <OnxIcon
             name={'dot-single'}
@@ -100,7 +107,7 @@ const ProfileScreen = () => {
             color={fontColorGray}
             iconcolor={IconColorDark}
             fontSize={12}>
-            {'+91 9883490281'}
+            {Profile?.data?.phone_number}
           </TextIcon>
           <Separator marginVertical={15} width={'100%'} />
           <View style={styles.detail}>
@@ -117,7 +124,7 @@ const ProfileScreen = () => {
               type={'FontAwesome5'}
             />
           </View>
-          {Drawer3.map(i => (
+          {Drawer3.map((i, index) => (
             <TextIcon
               name={'checkbox-blank'}
               type={'MaterialCommunityIcons'}
@@ -125,7 +132,11 @@ const ProfileScreen = () => {
               color={IconColorDark}
               iconcolor={IconColorDark}
               fontSize={14}>
-              {i.name}
+              {index === 0
+                ? Profile?.data?.first_name + ' ' + Profile?.data?.last_name
+                : index === 1
+                ? Profile?.data?.email
+                : i.name}
             </TextIcon>
           ))}
         </View>

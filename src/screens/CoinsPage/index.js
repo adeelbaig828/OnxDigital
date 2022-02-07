@@ -41,8 +41,7 @@ const CoinsPageScreen = ({navigation}) => {
     getAllCoins();
   }, []);
   const dispatch = useDispatch();
-  const OtpResponce = useSelector(state => state.auth.verifyData);
-  const barearToken = OtpResponce.data.access_token;
+  const barearToken = useSelector(state => state.auth.token);
   const getAllCoins = () => {
     GET_ALL_COINS(barearToken)(dispatch)
       .then(res => {
