@@ -1,3 +1,4 @@
+import {useRoute} from '@react-navigation/core';
 import React, {useState} from 'react';
 import {
   BorderColor,
@@ -23,6 +24,9 @@ import styles from './style';
 const OnBoarding_98 = ({navigation}) => {
   // Actually 121 on XD
   const [selectIndex, setSelectIndex] = useState(null);
+  const route = useRoute();
+
+  console.log('route', route.params);
 
   return (
     <View style={styles.container}>
@@ -67,7 +71,9 @@ const OnBoarding_98 = ({navigation}) => {
           </Text>
           <CustomCard
             onPress={() => {
-              navigation.navigate('OnBoarding_123');
+              navigation.navigate('OnBoarding_123', {
+                gradeID: route.params.gradeID,
+              });
             }}
             marginV={7 * heightRef}
             backColor={textBackColor}

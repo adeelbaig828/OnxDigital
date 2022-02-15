@@ -57,7 +57,7 @@ const VideoScreen_2 = () => {
         setfullScreenMode(false);
       } else {
         Orientation.lockToLandscape();
-        console.log('lockToPortrait');
+        // console.log('lockToPortrait');
         setfullScreenMode(true);
       }
     });
@@ -81,7 +81,7 @@ const VideoScreen_2 = () => {
   const [oops, setOops] = useState(false);
   const [headerData, setheaderData] = useState(null);
   const [discriptionData, setdiscriptionData] = useState(null);
-  console.log('videoId', videoId);
+  // console.log('videoId', videoId);
   useEffect(() => {
     setloading(true);
     getAllZonesbyGradesandsubjects();
@@ -112,7 +112,7 @@ const VideoScreen_2 = () => {
       .then(res => {
         if (res.code === 200) {
           assignData(res.data.data);
-          console.log('object', JSON.stringify(res, null, 3));
+          // console.log('object', JSON.stringify(res, null, 3));
           setAllzones(res.data.data);
           setTimeout(() => {
             setloading(false);

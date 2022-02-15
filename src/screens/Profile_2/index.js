@@ -20,12 +20,23 @@ import {heightRef, widthRef} from 'src/config/screenSize';
 import {Drawer3, Drawer4} from 'src/utils/JSON';
 import styles from './style';
 import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {CLEAR_LOGOUT_TOKEN} from 'src/Redux/Reducers/Auth/AuthActions';
 
 const ProfileScreen_2 = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const Profile = useSelector(state => state.muqablas.studentProfile);
+  const handleLogout = () => {
+    try {
+      CLEAR_LOGOUT_TOKEN()(dispatch);
+      console.log('try');
+      navigation.navigate('OnboardingScreen1');
+    } catch (error) {
+      console.log('try', error);
+    }
+  };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: BgColor}}>
@@ -170,7 +181,7 @@ const ProfileScreen_2 = () => {
             textSize={16}
             marginT={10 * heightRef}
             btnWidth={'100%'}
-            //   onPress={() => setSelectIndex(index)}
+            onPress={() => handleLogout()}
             btnHeight={43 * heightRef}
             borderWidth={1}
             text={'Log Out'}

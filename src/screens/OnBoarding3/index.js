@@ -70,7 +70,7 @@ const OnBoardingScreen3 = ({navigation}) => {
             text2: res.data.message,
           });
           setTimeout(() => {
-            navigation.replace('OnBoarding_102');
+            // navigation.replace('OnBoarding_102');
           }, 1100);
         } else {
           console.log('then res', res);
@@ -97,7 +97,7 @@ const OnBoardingScreen3 = ({navigation}) => {
       return;
     }
     const Data = {
-      phone_number: '03001234567',
+      phone_number: route?.params?.phoneNumber,
       otp: otp,
     };
     VERIFY_OTP(Data)(dispatch)

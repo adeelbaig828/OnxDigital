@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList} from 'react-native';
 import {useSelector} from 'react-redux';
 import {
@@ -34,28 +34,6 @@ const Successfull_2 = ({navigation}) => {
   const QuestionAnswersRes = useSelector(
     state => state.muqablas.submitAllQuestion,
   );
-  console.log(
-    'QuestionAnswersRes',
-    JSON.stringify(QuestionAnswersRes, null, 3),
-  );
-  const quizData = [
-    {
-      text: 'Correct',
-      number: 1,
-    },
-    {
-      text: 'Incorrect',
-      number: 2,
-    },
-    {
-      text: 'Duration',
-      number: 3,
-    },
-    {
-      text: 'Skipped',
-      number: 4,
-    },
-  ];
   const renderItem1 = (item, index) => (
     <CustomCard
       btnRadius={5}
@@ -63,7 +41,6 @@ const Successfull_2 = ({navigation}) => {
       marginT={15}
       backColor={BgColor}
       paddinginner={-0.1}
-      onPress={() => console.log(item, 'Pressed')}
       btnHeight={164 * heightRef}>
       <View style={styles.questions}>
         <Text
@@ -71,30 +48,57 @@ const Successfull_2 = ({navigation}) => {
           marginLeft={15 * widthRef}
           fontSize={12}
           color={fontColorLight}>
-          {item.item.id}. Question number {item.item.id}
+          {item?.item?.title}
         </Text>
         <Separator marginVertical={10 * heightRef} width={339 * widthRef} />
-        {quizData.map(i => (
+        {item?.item?.options?.map(i => (
           <View style={{height: '18%', marginLeft: 15 * widthRef}}>
             <TextIcon
               iconBAckGroundColor={pureWhiteColor}
-              circle={i.number == 3 ? true : i.number == 4 ? true : false}
+              circle={
+                item?.item?.user_option?.id === i.id
+                  ? false
+                  : item?.item?.correct_option?.id === i.id
+                  ? false
+                  : true
+              }
               paddingVertical={0.1}
               // onPress={() => setSelectIndex(index)}
               color={fontColorLight}
               type={i.number == 1 ? 'AntDesign' : 'AntDesign'}
-              name={i.number == 1 ? 'closecircle' : 'checkcircle'}
-              iconcolor={i.number == 1 ? Crosscolor : OnxGreen}
+              name={
+                item?.item?.user_option?.id === item?.item?.correct_option?.id
+                  ? i.id === item?.item?.user_option?.id
+                    ? 'checkcircle'
+                    : null
+                  : i.id === item?.item?.correct_option?.id
+                  ? 'checkcircle'
+                  : i.id === item?.item?.user_option?.id
+                  ? 'closecircle'
+                  : null
+              }
+              iconcolor={
+                item?.item?.user_option?.id === item?.item?.correct_option?.id
+                  ? OnxGreen
+                  : i.id === item?.item?.user_option?.id
+                  ? Crosscolor
+                  : OnxGreen
+              }
               size={18}
               fontSize={12}>
-              Options {i.number}
+              {i['Option Value']}
             </TextIcon>
           </View>
         ))}
         <View
           style={[
             styles.leftErrorView,
-            {backgroundColor: item.item.id == 1 ? CrossQuizcolor : OnxGreen},
+            {
+              backgroundColor:
+                item?.item?.user_option?.id === item?.item?.correct_option?.id
+                  ? OnxGreen
+                  : CrossQuizcolor,
+            },
           ]}
         />
       </View>
@@ -107,7 +111,6 @@ const Successfull_2 = ({navigation}) => {
         btnRadius={15}
         paddinginner={-1}
         btnWidth={'100%'}
-        onPress={() => console.log('Pressed')}
         btnHeight={187 * heightRef}>
         <View style={styles.header2}>
           <View style={styles.header3}>
@@ -205,7 +208,7 @@ const Successfull_2 = ({navigation}) => {
           ListHeaderComponent={PositionsContainer_1}
           style={{backgroundColor: BgColor, marginTop: 15 * heightRef}}
           contentContainerStyle={{backgroundColor: textBackColor}}
-          data={AttemptPersons}
+          data={QuestionAnswersRes?.data?.questions}
           keyExtractor={item => item.id}
           renderItem={renderItem1}
         />

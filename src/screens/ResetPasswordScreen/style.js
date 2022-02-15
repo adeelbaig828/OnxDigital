@@ -1,10 +1,12 @@
 import {StyleSheet} from 'react-native';
 import {
   BgColor,
+  fontColorDark,
   fontColorLight,
   fontWeight400,
   fontWeight600,
   headerSizeFont,
+  mediumSizeFont,
   normalSizeFont,
   OnxGreen,
 } from 'src/assets/Colors/colors';
@@ -15,12 +17,19 @@ export const styles = StyleSheet.create({
     backgroundColor: BgColor,
     paddingVertical: 10,
   },
+  upperText: {
+    color: fontColorDark,
+    fontSize: mediumSizeFont,
+  },
+  login: {
+    color: OnxGreen,
+    fontSize: mediumSizeFont,
+  },
   main: {
     width: '100%',
     paddingHorizontal: 10,
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-
     // backgroundColor: 'red',
   },
   textStyleHeader: {
@@ -41,14 +50,7 @@ export const styles = StyleSheet.create({
     fontSize: normalSizeFont,
     paddingVertical: 20,
   },
-  otpResend: {
-    marginVertical: '2%',
-    color: OnxGreen,
-    fontSize: normalSizeFont,
-    paddingVertical: 20,
-  },
   ButtonContainer: {
-    flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
     paddingBottom: 10,

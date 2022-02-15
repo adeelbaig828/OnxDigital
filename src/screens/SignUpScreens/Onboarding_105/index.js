@@ -54,6 +54,7 @@ const OnBoarding_105 = ({navigation}) => {
     }
     GET_ALL_SCHOOL(barearToken)(dispatch)
       .then(res => {
+        console.log('then res', res);
         if (res.code === 200) {
           // const filteredData = res.data.data.filter(item => {
           //   if (item.name.includes(route.params.school)) {

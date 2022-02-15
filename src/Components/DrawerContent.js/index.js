@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Image, StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -17,12 +17,34 @@ import Text from '../Text';
 import TextIcon from '../TextIcon';
 import View from '../View';
 import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {GET_GRADE} from 'src/Redux/Reducers/Auth/AuthActions';
 
 const DrawerContent = () => {
+  //fetching data from redux
+  const barearToken = useSelector(state => state.auth.token);
+  const Profile = useSelector(state => state.muqablas.studentProfile);
+
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const Profile = useSelector(state => state.muqablas.studentProfile);
+  useEffect(() => {
+    getAllGrades();
+  }, []);
+
+  //fetching all grades
+  const getAllGrades = () => {
+    GET_GRADE(barearToken)(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+        } else {
+          console.log('then res', res);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+      });
+  };
 
   return (
     <SafeAreaView style={styles.container}>

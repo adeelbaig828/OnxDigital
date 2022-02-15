@@ -15,6 +15,7 @@ import {GENERATE_OTP} from 'src/Redux/Reducers/Auth/AuthActions';
 import {useRoute} from '@react-navigation/core';
 import {styles} from './style';
 import Toast from 'react-native-toast-message';
+import {Validations} from 'src/config/function';
 
 const OnBoardingScreen2 = ({navigation}) => {
   const route = useRoute();
@@ -30,7 +31,7 @@ const OnBoardingScreen2 = ({navigation}) => {
   };
   const dispatch = useDispatch();
   const invalidText = 'Invalid Number, Please enter your 11 digit number.';
-  const [otp, set_OTP] = useState('03001234567');
+  const [otp, set_OTP] = useState('');
   const numberValidation = () => {
     if (!otp) {
       console.log(invalidText);
@@ -41,7 +42,9 @@ const OnBoardingScreen2 = ({navigation}) => {
       });
       return false;
     }
-    if (otp.length < 11) {
+    let error = Validations['Phone']?.(otp) || false;
+    console.log('object', error);
+    if (!error) {
       console.log(invalidText);
       showToast({
         type: 'error',
@@ -50,9 +53,7 @@ const OnBoardingScreen2 = ({navigation}) => {
       });
       return false;
     }
-    //remove this after otp working fine from backEnd
-    if (otp !== '03001234567') {
-      console.log(invalidText);
+    if (otp.length < 11 || otp[0] != '0') {
       showToast({
         type: 'error',
         text1: 'Invalid Number',
@@ -69,7 +70,7 @@ const OnBoardingScreen2 = ({navigation}) => {
       return;
     }
     const Data = {
-      phone_number: otp,
+      phone_number: otp.replace(0, '+92'),
     };
     GENERATE_OTP(Data)(dispatch)
       .then(res => {
@@ -82,7 +83,7 @@ const OnBoardingScreen2 = ({navigation}) => {
           });
           setTimeout(() => {
             navigation.replace('OnBoardingScreen3', {
-              phoneNumber: otp,
+              phoneNumber: otp.replace(0, '+92'),
               from: CheckUser ? CheckUser : null,
             });
             setloading(false);

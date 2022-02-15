@@ -402,6 +402,20 @@ const OnBoarding_133 = ({navigation}) => {
                 </View>
               ))}
             </View>
+            <Text
+              marginTop={10 * heightRef}
+              marginHorizontal={10}
+              style={styles.upperText}>
+              Want to reset Password ?
+              <Text
+                style={styles.login}
+                onPress={() => {
+                  navigation.navigate('ResetPasswordScreen');
+                }}>
+                {' '}
+                reset
+              </Text>
+            </Text>
           </View>
           <CustomButton
             alignSelf={'center'}

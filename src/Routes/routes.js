@@ -55,6 +55,10 @@ import {Transition} from 'react-native-reanimated';
 import ChapterComplete from 'src/screens/VideoBooksScreens/SeccessfullScreen';
 import NetworkError from 'src/screens/NetworkError';
 import FewInformationScreen from 'src/screens/FewInformationScreen.js';
+import ResetPasswordScreen from 'src/screens/ResetPasswordScreen';
+import ForgotPasswordScreens_1 from 'src/screens/ForgotPasswordScreens/Forgot_Password _ 1';
+import ForgotPasswordScreens_2 from 'src/screens/ForgotPasswordScreens/Forgot_Password_2';
+import ForgotPasswordScreens_3 from 'src/screens/ForgotPasswordScreens/Forgot_Password_3';
 
 const Stack = createStackNavigator();
 const options = {
@@ -104,7 +108,7 @@ const bottomOptions = {
 function Route() {
   return (
     <Stack.Navigator
-      initialRouteName="SplashScreen"
+      initialRouteName="Home"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Splash" component={Muqabla_3} options={options} />
       <Stack.Screen
@@ -131,6 +135,21 @@ function Route() {
       <Stack.Screen
         name="OnBoardingScreen4"
         component={OnBoardingScreen4}
+        options={options}
+      />
+      <Stack.Screen
+        name="ForgotPasswordScreens_1"
+        component={ForgotPasswordScreens_1}
+        options={options}
+      />
+      <Stack.Screen
+        name="ForgotPasswordScreens_2"
+        component={ForgotPasswordScreens_2}
+        options={options}
+      />
+      <Stack.Screen
+        name="ForgotPasswordScreens_3"
+        component={ForgotPasswordScreens_3}
         options={options}
       />
       <Stack.Screen
@@ -262,6 +281,11 @@ function Route() {
       <Stack.Screen
         name="AddAdressScreen3"
         component={AddAdressScreen3}
+        options={options}
+      />
+      <Stack.Screen
+        name="ResetPasswordScreen"
+        component={ResetPasswordScreen}
         options={options}
       />
       <Stack.Screen

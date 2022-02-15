@@ -281,7 +281,7 @@ const QuizzesMainScreen = () => {
                 flexDirection: 'row',
                 width: '100%',
                 flexWrap: 'wrap',
-                justifyContent: 'center',
+                justifyContent: 'flex-start',
                 alignItems: 'center',
               }}>
               {subjects?.data?.data?.map((i, index) => (
@@ -296,7 +296,7 @@ const QuizzesMainScreen = () => {
                   marginV={7 * heightRef}
                   backColor={textBackColor}
                   marginHorizontal={5 * widthRef}
-                  btnWidth={156 * widthRef}
+                  btnWidth={159 * widthRef}
                   btnHeight={108 * widthRef}
                   style={{borderWidth: 1 * widthRef}}
                   borderColor={BorderColor}>

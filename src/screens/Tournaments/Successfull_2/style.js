@@ -109,5 +109,10 @@ export default styles = StyleSheet.create({
     backgroundColor: Trophycolor,
     borderRadius: 20,
   },
-  percetage1: {position: 'absolute', right: -20, top: -25},
+  percetage1: {
+    width: 40 * widthRef,
+    position: 'absolute',
+    right: -29,
+    top: -22,
+  },
 });

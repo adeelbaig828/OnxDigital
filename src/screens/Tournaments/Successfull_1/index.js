@@ -112,7 +112,6 @@ const Successfull_1 = ({navigation}) => {
             paddinginner={-10}
             btnRadius={5}
             btnWidth={328 * widthRef}
-            onPress={() => console.log('Pressed')}
             btnHeight={112 * heightRef}>
             <View>
               <Text color={fontColorLight} bold={'600'} fontSize={16}>
@@ -180,8 +179,7 @@ const Successfull_1 = ({navigation}) => {
               paddinginner={-10}
               btnRadius={5}
               btnHeight={64 * heightRef}
-              btnWidth={76 * widthRef}
-              onPress={() => console.log('Pressed')}>
+              btnWidth={76 * widthRef}>
               <View style={styles.btnCont}>
                 <View style={styles.quizTime}>
                   <OnxIcon
@@ -220,7 +218,11 @@ const Successfull_1 = ({navigation}) => {
                     color={fontColorLight}
                     fontSize={10}>
                     {i.text == 'Duration'
-                      ? ('00:0' + route.params.totalTime).slice(-5)
+                      ? `${Math.floor(route?.params?.totalTime / 60)}:${(
+                          route?.params?.totalTime % 60
+                        )
+                          .toString()
+                          .padStart(2, '0')}`
                       : i.text == 'Correct'
                       ? ('0' + correctAns).slice(-2)
                       : i.text == 'Incorrect'

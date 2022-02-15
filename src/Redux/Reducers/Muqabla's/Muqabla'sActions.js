@@ -134,7 +134,6 @@ export const ZONES_BY_SUBJECT = (grade, token) => dispatch => {
   });
 };
 export const SUBMIT_ALL_ANSWERS = (formData, token) => dispatch => {
-  console.log('object', JSON.stringify(formData, null, 3));
   return new Promise((resolve, reject) => {
     axios({
       headers: {Authorization: `Bearer ${token}`},
@@ -178,7 +177,6 @@ export const QUESTION_ANSWERS = data => dispatch => {
   });
 };
 export const CLEAR_QUESTION_ANSWERS = () => dispatch => {
-  console.log('CLEAR_QUESTION_ANSWERS_Redux');
   dispatch({
     type: CLEAR_USER_ANSWERS,
   });

@@ -28,12 +28,21 @@ export default styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  flatlistContainer: {
+    flexDirection: 'row',
+  },
+  contentStyle: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    // alignSelf: 'center',
+    width: '100%',
+  },
   bottomContainer: {
     flex: 1,
-    paddingHorizontal: 15 * heightRef,
+    paddingHorizontal: 13 * heightRef,
   },
   bottomCont: {
-    flex: 1,
+    flex: 0.9,
     justifyContent: 'center',
   },
 });

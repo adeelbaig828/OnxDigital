@@ -13,15 +13,17 @@ import {heightRef} from 'src/config/screenSize';
 import {styles} from './style';
 import TextFeild from 'src/Components/TextFeild';
 import Toast from 'react-native-toast-message';
-import {Email_LOGIN} from 'src/Redux/Reducers/Auth/AuthActions';
+import {
+  Email_LOGIN,
+  FORGOT_PASSWORD_EMAIL,
+} from 'src/Redux/Reducers/Auth/AuthActions';
 import {useDispatch} from 'react-redux';
 import {validateEmail} from 'src/config/function';
 
-const OnBoardingScreen4 = ({navigation}) => {
+const ForgotPasswordScreens_1 = ({navigation}) => {
   const inset = useSafeAreaInsets();
   const [loading, setloading] = useState(false);
   const [emailData, setEmail] = useState(null);
-  const [passwordData, setpassword] = useState(null);
 
   const dispatch = useDispatch();
   const invalidEmail = 'Invalid Email, Please enter your valid Email.';
@@ -54,15 +56,6 @@ const OnBoardingScreen4 = ({navigation}) => {
       });
       return false;
     }
-    if (!passwordData) {
-      console.log(invalidPassword);
-      showToast({
-        type: 'error',
-        text1: 'InvalidPassword',
-        text2: invalidPassword,
-      });
-      return false;
-    }
     return true;
   };
 
@@ -74,27 +67,23 @@ const OnBoardingScreen4 = ({navigation}) => {
     }
     const Data = {
       email: emailData,
-      password: passwordData,
     };
-    Email_LOGIN(Data)(dispatch)
+    FORGOT_PASSWORD_EMAIL(Data)(dispatch)
       .then(res => {
-        if (res.code === 200) {
+        if (res.data.code === 200) {
           showToast({
             type: 'success',
-            text1: res.message,
             text2: res.data.message,
           });
           setTimeout(() => {
-            navigation.replace('Home');
+            navigation.replace('ForgotPasswordScreens_2');
             setloading(false);
           }, 1100);
-          // navigation.replace('OnBoardingScreen3');
         } else {
-          console.log('else then res', res);
           showToast({
             type: 'error',
             text1: 'Error',
-            text2: res.message,
+            text2: res.data.message,
           });
           setloading(false);
         }
@@ -114,7 +103,7 @@ const OnBoardingScreen4 = ({navigation}) => {
       style={[styles.root]}>
       <SafeAreaView style={{flex: 1}}>
         <View style={styles.main}>
-          <Text style={styles.textStyleHeader}>Login with Email</Text>
+          <Text style={styles.textStyleHeader}>Forgot Password</Text>
           <Text style={styles.textStyleNormal}>
             Lorem ipsum dolor sit amet,consectetur adipiscing elit.
           </Text>
@@ -130,23 +119,6 @@ const OnBoardingScreen4 = ({navigation}) => {
             showPassword={false}
             hideValidation={false}
           />
-          <TextFeild
-            onChangeText={text => setpassword(text)}
-            title={'Password'}
-            password
-            titleSize={mediumSizeFont}
-            placeholder={'Enter your password'}
-            placeholderColor={fontColorDark}
-            showPassword={true}
-          />
-          <Text
-            onPress={() => {
-              navigation.replace('ForgotPasswordScreens_1');
-            }}
-            style={styles.otpResend}>
-            {' '}
-            Forgot Password ?
-          </Text>
         </View>
         <View style={styles.ButtonContainer}>
           <CustomButton
@@ -157,7 +129,7 @@ const OnBoardingScreen4 = ({navigation}) => {
             btnHeight={12 * heightRef}
             backColor={OnxGreen}
             disabled={loading}
-            text={'Log In'}
+            text={'Verify OTP'}
             btnWidth={'95%'}
             btnHeight={60}
             textColor={'white'}
@@ -173,4 +145,4 @@ const OnBoardingScreen4 = ({navigation}) => {
   );
 };
 
-export default OnBoardingScreen4;
+export default ForgotPasswordScreens_1;

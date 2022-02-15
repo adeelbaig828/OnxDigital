@@ -1,5 +1,10 @@
 import {StyleSheet} from 'react-native';
-import {BgColor} from 'src/assets/Colors/colors';
+import {
+  BgColor,
+  fontColorDark,
+  mediumSizeFont,
+  OnxGreen,
+} from 'src/assets/Colors/colors';
 import {heightRef} from 'src/config/screenSize';
 export default styles = StyleSheet.create({
   container: {
@@ -34,6 +39,14 @@ export default styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     height: 100 * heightRef,
+  },
+  upperText: {
+    color: fontColorDark,
+    fontSize: mediumSizeFont,
+  },
+  login: {
+    color: OnxGreen,
+    fontSize: mediumSizeFont,
   },
   imageView: {
     height: 40 * heightRef,

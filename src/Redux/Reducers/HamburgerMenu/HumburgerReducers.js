@@ -1,4 +1,5 @@
 import {
+  REQ_CHANGE_GRADE,
   STUDENT_PROFILE,
   UPDATE_ADDRESS,
   UPDATE_GENDER,
@@ -7,6 +8,7 @@ import {
 } from './HumburgerActions';
 
 const initialState = {
+  changeGradeState: null,
   updateGender: null,
   updateAddress: null,
   updateName: null,
@@ -34,6 +36,11 @@ const HumburgerReducers = (state = initialState, action) => {
       return {
         ...state,
         updateGender: action.payload,
+      };
+    case REQ_CHANGE_GRADE:
+      return {
+        ...state,
+        changeGradeState: action.payload,
       };
     default:
       return state;

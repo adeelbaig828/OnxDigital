@@ -19,6 +19,10 @@ import {
   ALL_BRANCHES,
   BRANCH_SELECTION,
   REGISTER_EMAIL,
+  CLEAR_LOGOUT_TOKEN,
+  CLEAR_TOKEN,
+  PASSWORD_RESET,
+  OTP_CHANGE_PASSWORD,
 } from './AuthActions';
 
 const initialState = {
@@ -34,6 +38,8 @@ const initialState = {
   loginData: '',
   userProfile: null,
   userRole: null,
+  changePassword: null,
+  resetPassword: null,
   allschool: null,
   allgrades: null,
   allSubject: null,
@@ -58,7 +64,7 @@ const apiReducer = (state = initialState, action) => {
       return {
         ...state,
         verifyData: action.payload,
-        token: action.payload.data.access_token,
+        token: action?.payload?.data?.access_token,
         loading: false,
       };
     case REGISTER_EMAIL:
@@ -122,6 +128,18 @@ const apiReducer = (state = initialState, action) => {
         allschool: action.payload,
         loading: false,
       };
+    case PASSWORD_RESET:
+      return {
+        ...state,
+        resetPassword: action.payload,
+        loading: false,
+      };
+    case OTP_CHANGE_PASSWORD:
+      return {
+        ...state,
+        changePassword: action.payload,
+        loading: false,
+      };
     case ALL_GRADES:
       return {
         ...state,
@@ -163,6 +181,11 @@ const apiReducer = (state = initialState, action) => {
         ...state,
         userRole: action.payload,
         loading: false,
+      };
+    case CLEAR_TOKEN:
+      return {
+        ...state,
+        token: [],
       };
     default:
       return state;

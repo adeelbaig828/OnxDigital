@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 import {
-  BorderColor,
   fontColorDark,
   fontColorLight,
   mediumSizeFont,
@@ -8,15 +9,11 @@ import {
 } from 'src/assets/Colors/colors';
 import {CustomButton} from 'src/Components/CustomButton';
 import MultiColorProgressBar from 'src/Components/ProgressBar';
-import Text from 'src/Components/Text';
-import TextHeader from 'src/Components/TextHeader';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import View from 'src/Components/View';
-import {fullWidth, heightRef, widthRef} from 'src/config/screenSize';
-import styles from './style';
-import {Grade_3, Grade_4} from 'src/utils/JSON';
 import TextFeild from 'src/Components/TextFeild';
-import Toast from 'react-native-toast-message';
+import TextHeader from 'src/Components/TextHeader';
+import View from 'src/Components/View';
+import {fullWidth, heightRef} from 'src/config/screenSize';
+import styles from './style';
 
 const OnBoarding_104 = ({navigation}) => {
   const [selectIndex, setSelectIndex] = useState(null);

@@ -6,7 +6,6 @@ import {
   fontWeight600,
   headerSizeFont,
   normalSizeFont,
-  OnxGreen,
 } from 'src/assets/Colors/colors';
 import {fontRef} from 'src/config/screenSize';
 export const styles = StyleSheet.create({
@@ -38,12 +37,6 @@ export const styles = StyleSheet.create({
   otpRecieve: {
     marginVertical: '2%',
     color: fontColorLight,
-    fontSize: normalSizeFont,
-    paddingVertical: 20,
-  },
-  otpResend: {
-    marginVertical: '2%',
-    color: OnxGreen,
     fontSize: normalSizeFont,
     paddingVertical: 20,
   },

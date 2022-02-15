@@ -25,7 +25,6 @@ import styles from './style';
 const Muqabla_43 = ({navigation}) => {
   const token = useSelector(state => state.auth.token);
   const dispatch = useDispatch();
-
   // API call for next screen questions
   useEffect(() => {
     getQuestionsByZones();
@@ -118,7 +117,6 @@ const Muqabla_43 = ({navigation}) => {
           paddinginner={-10}
           btnRadius={5}
           btnWidth={328 * widthRef}
-          onPress={() => console.log('Pressed')}
           btnHeight={112 * heightRef}>
           <View>
             <Text

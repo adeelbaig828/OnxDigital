@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {SERVER_URL} from 'src/Global/env';
 export const UPDATE_PROFILE_EMAIL = 'UPDATE_PROFILE_EMAIL';
+export const REQ_CHANGE_GRADE = 'REQ_CHANGE_GRADE';
 export const UPDATE_GENDER = 'UPDATE_GENDER';
 export const UPDATE_ADDRESS = 'UPDATE_ADDRESS';
 export const UPDATE_NAME = 'UPDATE_NAME';
@@ -91,6 +92,30 @@ export const UPDATE_PROFILE_GENDER = (formData, token) => dispatch => {
       .then(response => {
         dispatch({
           type: UPDATE_GENDER,
+          payload: response.data,
+        });
+        resolve(response.data);
+      })
+      .catch(error => {
+        dispatch({
+          type: API_ERROR,
+          error: error.response.data.message,
+        });
+        reject(error.response.data.message);
+      });
+  });
+};
+export const REQUEST_FOR_GRADE_CHANGE = (formData, token) => dispatch => {
+  return new Promise((resolve, reject) => {
+    axios({
+      headers: {Authorization: `Bearer ${token}`},
+      method: 'post',
+      url: `${BASE_URL}/student/request-grade-change`,
+      data: formData,
+    })
+      .then(response => {
+        dispatch({
+          type: REQ_CHANGE_GRADE,
           payload: response.data,
         });
         resolve(response.data);

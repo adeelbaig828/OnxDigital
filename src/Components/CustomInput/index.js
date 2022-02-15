@@ -52,7 +52,7 @@ export const CustomInput = ({
             {
               borderBottomWidth: borderBottomWidth ? 1 : null,
               borderBottomColor: showError
-                ? error
+                ? !error
                   ? PickWatch
                   : OnxGreen
                 : OnxGreen,
@@ -77,7 +77,7 @@ export const CustomInput = ({
           name={name ? name : 'cancel'}
         />
       </View>
-      {showError && error && (
+      {showError && !error && (
         <View
           style={{
             flexDirection: 'row',

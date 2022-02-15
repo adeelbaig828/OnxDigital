@@ -17,9 +17,9 @@ export default styles = StyleSheet.create({
     paddingHorizontal: 15 * heightRef,
   },
   ButtonContainer: {
-    flex: 1,
+    flex: 0.3,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    paddingBottom: 10,
+    paddingBottom: 20 * heightRef,
   },
 });

@@ -7,26 +7,31 @@ import {
   fontColorLight,
   mediumSizeFont,
   OnxGreen,
+  PickWatch,
 } from 'src/assets/Colors/colors';
 import {CustomButton} from 'src/Components/CustomButton';
-import {heightRef} from 'src/config/screenSize';
+import {heightRef, widthRef} from 'src/config/screenSize';
 import {styles} from './style';
 import TextFeild from 'src/Components/TextFeild';
 import Toast from 'react-native-toast-message';
-import {Email_LOGIN} from 'src/Redux/Reducers/Auth/AuthActions';
+import {
+  Email_LOGIN,
+  VERIFY_OTP_EMAIL,
+} from 'src/Redux/Reducers/Auth/AuthActions';
 import {useDispatch} from 'react-redux';
+import OTPTextInput from 'react-native-otp-textinput';
 import {validateEmail} from 'src/config/function';
 
-const OnBoardingScreen4 = ({navigation}) => {
+const ForgotPasswordScreens_2 = ({navigation}) => {
   const inset = useSafeAreaInsets();
   const [loading, setloading] = useState(false);
   const [emailData, setEmail] = useState(null);
-  const [passwordData, setpassword] = useState(null);
+  const [showError, setShowError] = useState(false);
+  const [otp, set_OTP] = useState(null);
 
   const dispatch = useDispatch();
   const invalidEmail = 'Invalid Email, Please enter your valid Email.';
-  const invalidPassword =
-    'Invalid Password, Please enter correct your password.';
+  const invalid_OTP = 'Invalid OTP, Please enter OTP.';
 
   const showToast = ({type, text1, text2}) => {
     Toast.show({
@@ -54,19 +59,19 @@ const OnBoardingScreen4 = ({navigation}) => {
       });
       return false;
     }
-    if (!passwordData) {
-      console.log(invalidPassword);
+    if (!otp) {
+      console.log(invalid_OTP);
       showToast({
         type: 'error',
-        text1: 'InvalidPassword',
-        text2: invalidPassword,
+        text1: 'Invalid_OTP',
+        text2: invalid_OTP,
       });
       return false;
     }
     return true;
   };
 
-  const handleLogin = () => {
+  const handleForgot = () => {
     // setloading(true);
     if (!emailValidation()) {
       setloading(false);
@@ -74,9 +79,9 @@ const OnBoardingScreen4 = ({navigation}) => {
     }
     const Data = {
       email: emailData,
-      password: passwordData,
+      otp: otp,
     };
-    Email_LOGIN(Data)(dispatch)
+    VERIFY_OTP_EMAIL(Data)(dispatch)
       .then(res => {
         if (res.code === 200) {
           showToast({
@@ -85,7 +90,7 @@ const OnBoardingScreen4 = ({navigation}) => {
             text2: res.data.message,
           });
           setTimeout(() => {
-            navigation.replace('Home');
+            navigation.replace('ForgotPasswordScreens_3');
             setloading(false);
           }, 1100);
           // navigation.replace('OnBoardingScreen3');
@@ -114,7 +119,7 @@ const OnBoardingScreen4 = ({navigation}) => {
       style={[styles.root]}>
       <SafeAreaView style={{flex: 1}}>
         <View style={styles.main}>
-          <Text style={styles.textStyleHeader}>Login with Email</Text>
+          <Text style={styles.textStyleHeader}>Forgot Password</Text>
           <Text style={styles.textStyleNormal}>
             Lorem ipsum dolor sit amet,consectetur adipiscing elit.
           </Text>
@@ -130,34 +135,54 @@ const OnBoardingScreen4 = ({navigation}) => {
             showPassword={false}
             hideValidation={false}
           />
-          <TextFeild
-            onChangeText={text => setpassword(text)}
-            title={'Password'}
-            password
-            titleSize={mediumSizeFont}
-            placeholder={'Enter your password'}
-            placeholderColor={fontColorDark}
-            showPassword={true}
-          />
-          <Text
-            onPress={() => {
-              navigation.replace('ForgotPasswordScreens_1');
-            }}
-            style={styles.otpResend}>
-            {' '}
-            Forgot Password ?
-          </Text>
+          <Text style={styles.textStyleOTPHeader}>Enter OTP</Text>
+          <View>
+            <OTPTextInput
+              inputCount={6}
+              tintColor={showError ? PickWatch : OnxGreen}
+              offTintColor={showError ? PickWatch : fontColorLight}
+              handleTextChange={text => {
+                set_OTP(text);
+              }}
+              containerStyle={{
+                justifyContent: 'flex-start',
+              }}
+              textInputStyle={{
+                color: 'white',
+                marginRight: 6 * widthRef,
+              }}
+              ref={e => (otpInput = e)}
+            />
+          </View>
+          {showError && (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Icon
+                color={PickWatch}
+                type={'MaterialIcons'}
+                size={25}
+                name={'info'}
+              />
+              <Text color={PickWatch} marginLeft={5 * widthRef} fontSize={11.5}>
+                {invalidText}
+              </Text>
+            </View>
+          )}
         </View>
         <View style={styles.ButtonContainer}>
           <CustomButton
             onPress={() => {
               setloading(true);
-              handleLogin();
+              handleForgot();
+              // navigation.replace('ForgotPasswordScreens_3');
             }}
             btnHeight={12 * heightRef}
             backColor={OnxGreen}
             disabled={loading}
-            text={'Log In'}
+            text={'Reset Password'}
             btnWidth={'95%'}
             btnHeight={60}
             textColor={'white'}
@@ -173,4 +198,4 @@ const OnBoardingScreen4 = ({navigation}) => {
   );
 };
 
-export default OnBoardingScreen4;
+export default ForgotPasswordScreens_2;

@@ -2,6 +2,10 @@ import axios from 'axios';
 import {SERVER_URL} from 'src/Global/env';
 export const API_PENDING = 'API_PENDING';
 export const OTP_GENERATE = 'OTP_GENERATE';
+export const OTP_CHANGE_PASSWORD = 'OTP_CHANGE_PASSWORD';
+export const EMAIL_OTP_VERIFY = 'EMAIL_OTP_VERIFY';
+export const FORGOT_PASS_EMAIL = 'FORGOT_PASS_EMAIL';
+export const PASSWORD_RESET = 'PASSWORD_RESET';
 export const LOGIN_EMAIL = 'LOGIN_EMAIL';
 export const OTP_VERIFY = 'OTP_VERIFY';
 export const GRADE_SELECTION = 'GRADE_SELECTION';
@@ -20,6 +24,7 @@ export const USER_LOGIN = 'USER_LOGIN';
 export const EDIT_USER_PROFILE = 'EDIT_USER_PROFILE';
 export const LOG_OUT = 'LOG_OUT';
 export const ROLE = 'ROLE';
+export const CLEAR_TOKEN = 'CLEAR_TOKEN';
 
 const BASE_URL = SERVER_URL;
 
@@ -72,6 +77,102 @@ export const Email_LOGIN = formData => dispatch => {
       });
   });
 };
+export const RESET_PASSWORD = (formData, token) => dispatch => {
+  return new Promise((resolve, reject) => {
+    axios({
+      headers: {Authorization: `Bearer ${token}`},
+      method: 'post',
+      url: `${BASE_URL}/student/reset-password`,
+      data: formData,
+    })
+      .then(response => {
+        dispatch({
+          type: PASSWORD_RESET,
+          payload: response.data,
+        });
+        resolve(response.data);
+      })
+      .catch(error => {
+        dispatch({
+          type: API_ERROR,
+          error: error,
+        });
+        reject(error);
+      });
+  });
+};
+export const FORGOT_PASSWORD_EMAIL = (formData, token) => dispatch => {
+  return new Promise((resolve, reject) => {
+    axios({
+      headers: {Authorization: `Bearer ${token}`},
+      method: 'post',
+      url: `${BASE_URL}/forgot-password/enter-email`,
+      data: formData,
+    })
+      .then(response => {
+        dispatch({
+          type: FORGOT_PASS_EMAIL,
+          payload: response.data,
+        });
+        resolve(response);
+      })
+      .catch(error => {
+        dispatch({
+          type: API_ERROR,
+          error: error,
+        });
+        reject(error);
+      });
+  });
+};
+export const VERIFY_OTP_EMAIL = (formData, token) => dispatch => {
+  return new Promise((resolve, reject) => {
+    axios({
+      headers: {Authorization: `Bearer ${token}`},
+      method: 'post',
+      url: `${BASE_URL}/forgot-password/otp-verify`,
+      data: formData,
+    })
+      .then(response => {
+        dispatch({
+          type: EMAIL_OTP_VERIFY,
+          payload: response.data,
+        });
+        resolve(response.data);
+      })
+      .catch(error => {
+        dispatch({
+          type: API_ERROR,
+          error: error,
+        });
+        reject(error);
+      });
+  });
+};
+export const CHANGE_PASSWORD = (formData, token) => dispatch => {
+  return new Promise((resolve, reject) => {
+    axios({
+      headers: {Authorization: `Bearer ${token}`},
+      method: 'post',
+      url: `${BASE_URL}/forgot-password/change-password`,
+      data: formData,
+    })
+      .then(response => {
+        dispatch({
+          type: OTP_CHANGE_PASSWORD,
+          payload: response.data,
+        });
+        resolve(response.data);
+      })
+      .catch(error => {
+        dispatch({
+          type: API_ERROR,
+          error: error,
+        });
+        reject(error);
+      });
+  });
+};
 export const VERIFY_OTP = formData => dispatch => {
   return new Promise((resolve, reject) => {
     axios({
@@ -87,11 +188,11 @@ export const VERIFY_OTP = formData => dispatch => {
         resolve(response.data);
       })
       .catch(error => {
+        reject(error.response.data.message);
         dispatch({
           type: API_ERROR,
           error: error.response.data.message,
         });
-        reject(error.response.data.message);
       });
   });
 };
@@ -360,142 +461,9 @@ export const GET_FAV_SUBJECT = token => dispatch => {
       });
   });
 };
-export const LOGIN = formData => dispatch => {
-  return new Promise((resolve, reject) => {
-    axios({
-      method: 'post',
-      url: `${BASE_URL}/api/auth/login`,
-      data: formData,
-    })
-      .then(response => {
-        dispatch({
-          type: USER_LOGIN,
-          user: response.data.user,
-        });
-        resolve(response.data);
-      })
-      .catch(error => {
-        dispatch({
-          type: API_ERROR,
-          error: error.response.data.message,
-        });
-        console.log('LOGIN API err', error.response.data.message);
-        reject(error.response.data.message);
-      });
-  });
-};
-
-export const SIGNUP = formData => dispatch => {
-  return new Promise((resolve, reject) => {
-    axios({
-      method: 'post',
-      url: `${BASE_URL}/api/users`,
-      data: formData,
-    })
-      .then(response => {
-        dispatch({
-          type: USER_LOGIN,
-          user: response.data.user,
-        });
-        resolve(response.data);
-      })
-      .catch(error => {
-        dispatch({
-          type: API_ERROR,
-          error: error.response.data.message,
-        });
-        console.log('SIGNUP API err', error.response.data.message);
-        reject(error.response.data.message);
-      });
-  });
-};
-
-export const FORGET_PASSWORD = email => dispatch => {
-  return new Promise((resolve, reject) => {
-    axios({
-      method: 'put',
-      url: `${BASE_URL}/api/auth/forgot/${email}`,
-    })
-      .then(response => {
-        dispatch({
-          type: API_SUCCESS,
-          payload: response.data,
-        });
-        resolve(response.data);
-      })
-      .catch(error => {
-        dispatch({
-          type: API_ERROR,
-          error: error.response.data.message,
-        });
-        console.log('FORGET_PASSWORD API err', error.response.data.message);
-        reject(error.response.data.message);
-      });
-  });
-};
-
-export const EDIT_PROFILE = (Data, params) => dispatch => {
-  return new Promise((resolve, reject) => {
-    axios({
-      method: 'put',
-      url: `${BASE_URL}/api/users/${params}`,
-      data: Data,
-    })
-      .then(response => {
-        dispatch({
-          type: EDIT_USER_PROFILE,
-          data: response.data.user,
-        });
-        resolve(response.data);
-      })
-      .catch(error => {
-        dispatch({
-          type: API_ERROR,
-          error: error.response.data.message,
-        });
-        console.log('EDIT_PROFILE API err', error.response.data.message);
-        reject(error.response.data.message);
-      });
-  });
-};
-
-export const CHANGE_PASSWORD = (Data, params) => dispatch => {
-  return new Promise((resolve, reject) => {
-    axios({
-      method: 'put',
-      url: `${BASE_URL}/api/auth/password/${params}`,
-      data: Data,
-    })
-      .then(response => {
-        dispatch({
-          type: API_SUCCESS,
-          payload: response.data,
-        });
-        resolve(response.data);
-      })
-      .catch(error => {
-        dispatch({
-          type: API_ERROR,
-          error: error.response.data.message,
-        });
-        console.log('CHANGE_PASSWORD API err', error.response.data.message);
-        reject(error.response.data.message);
-      });
-  });
-};
-
-export const LOGOUT = () => dispatch => {
-  return new Promise((resolve, reject) => {
-    try {
-      dispatch({
-        type: API_PENDING,
-      });
-      dispatch({
-        type: LOG_OUT,
-      });
-      resolve({success: true});
-    } catch (error) {
-      reject({success: false});
-    }
+export const CLEAR_LOGOUT_TOKEN = () => dispatch => {
+  console.log('CLEAR_LOGOUT_TOKEN');
+  dispatch({
+    type: CLEAR_TOKEN,
   });
 };

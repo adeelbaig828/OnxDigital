@@ -5,7 +5,6 @@ import {ActivityIndicator} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   BgColor,
-  fontColorDark,
   fontColorLight,
   OnxGreen,
   pureBlackColor,
@@ -15,17 +14,13 @@ import OnxHeader from 'src/Components/Header';
 import OnxLoading from 'src/Components/OnxLoading';
 import TextHeader from 'src/Components/TextHeader';
 import View from 'src/Components/View';
-import {heightRef, widthRef} from 'src/config/screenSize';
+import {heightRef} from 'src/config/screenSize';
 import {
   CLEAR_QUESTION_ANSWERS,
-  QUESTIONS_BY_TOPICS,
-  QUESTIONS_BY_ZONE,
   QUESTION_ANSWERS,
   SUBMIT_ALL_ANSWERS,
-  SUBMIT_FORM_FUNCTION,
 } from "src/Redux/Reducers/Muqabla's/Muqabla'sActions";
-import {changelanguage, strings} from 'src/services/translation';
-import {QuestionByZone} from 'src/utils/JSON';
+import {changelanguage} from 'src/services/translation';
 import styles from './style';
 const Muqabla_3 = ({navigation}) => {
   const [mainloading, setMainloading] = useState(false);
@@ -54,7 +49,6 @@ const Muqabla_3 = ({navigation}) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('object start', startSeconds);
     const interval = setInterval(() => {
       setSeconds(seconds => seconds + 1);
     }, 1000);
@@ -85,7 +79,7 @@ const Muqabla_3 = ({navigation}) => {
   };
   const submitAllAnswerData = () => {
     const _answersData = {
-      entity_type: isSelectedquizzes.Data === 'Chapters' ? 'Zone' : 'Topics',
+      entity_type: isSelectedquizzes.Data === 'Chapters' ? 'Zone' : 'Zone',
       entity_id: 1,
       total_points: 90,
       time_taken: seconds,
@@ -96,7 +90,6 @@ const Muqabla_3 = ({navigation}) => {
       token,
     )(dispatch)
       .then(res => {
-        console.log('else then res', JSON.stringify(res, null, 3));
         if (res.code === 200) {
           clearData();
           setTimeout(() => {
@@ -210,7 +203,6 @@ const Muqabla_3 = ({navigation}) => {
                 setEndSeconds(new Date());
                 submitAnswers();
                 setStartSeconds(moment().format('YYYY-MM-DD h:mm:ss'));
-                console.log('submit');
               } else {
                 setSelectIndex(null);
                 setEndSeconds(new Date());
