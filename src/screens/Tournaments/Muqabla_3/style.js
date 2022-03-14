@@ -17,7 +17,7 @@ export default styles = StyleSheet.create({
   quizContainer: {
     flex: 0.9,
     width: '100%',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     alignItems: 'flex-end',
   },
 });

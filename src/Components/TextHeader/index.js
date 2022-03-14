@@ -22,6 +22,7 @@ const TextHeader = ({
   textAlignDes,
   marginVerticalDes,
   height,
+  minHeight,
   textAlignHeader,
 }) => {
   return (
@@ -30,7 +31,8 @@ const TextHeader = ({
         styles.container,
         {
           alignItems: alignItemsMain ? alignItemsMain : 'flex-start',
-          height: height ? height : null,
+          height: height ? height * heightRef : null,
+          minHeight: minHeight ? minHeight * heightRef : null,
           marginTop: marginTop ? marginTop * heightRef : null,
           width: width ? width : '100%',
           marginLeft: marginL ? marginL * widthRef : null,

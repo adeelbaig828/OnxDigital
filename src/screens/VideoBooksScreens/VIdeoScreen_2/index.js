@@ -1,7 +1,7 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/core';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   FlatList,
@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import Orientation from 'react-native-orientation';
 import RNRestart from 'react-native-restart';
-import VP from 'react-native-video-controls';
+import VideoPlayer from 'react-native-video-controls';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   BgColor,
@@ -50,6 +50,7 @@ import styles from './style';
 const Tab = createMaterialTopTabNavigator();
 
 const VideoScreen_2 = () => {
+  const token = useSelector(state => state.auth.token);
   const fullScreen = () => {
     Orientation.getOrientation((err, orientation) => {
       if (orientation == 'LANDSCAPE') {
@@ -81,13 +82,32 @@ const VideoScreen_2 = () => {
   const [oops, setOops] = useState(false);
   const [headerData, setheaderData] = useState(null);
   const [discriptionData, setdiscriptionData] = useState(null);
-  // console.log('videoId', videoId);
+  const [videoUrl, setVideoUrl] = useState(null);
   useEffect(() => {
     setloading(true);
     getAllZonesbyGradesandsubjects();
+    // fetchVideo();
   }, []);
   const dispatch = useDispatch();
-  const token = useSelector(state => state.auth.token);
+  const fetchVideo = id => {
+    const VIMEO_ID = '268440741';
+    fetch(`https://player.vimeo.com/video/${id}/config`)
+      .then(res => res.json())
+      .then(
+        res =>
+          setVideoUrl(
+            res.request.files.hls.cdns[res.request.files.hls.default_cdn].url,
+          ),
+        // this.setState({
+        // thumbnailUrl: res.video.thumbs['640'],
+        //   videoUrl:
+        //     res.request.files.hls.cdns[res.request.files.hls.default_cdn].url,
+        //   // video: res.video,
+        // }),
+        setloading(false),
+      );
+  };
+  console.log('videoUrl', JSON.stringify(videoUrl, null, 3));
   const getLanguages = () => {
     GET_LANGUAGES(token)(dispatch)
       .then(res => {
@@ -111,9 +131,9 @@ const VideoScreen_2 = () => {
     ZONES_BY_GRADE_AND_SUBJECTS(token)(dispatch)
       .then(res => {
         if (res.code === 200) {
-          assignData(res.data.data);
+          assignData(res?.data?.data);
           // console.log('object', JSON.stringify(res, null, 3));
-          setAllzones(res.data.data);
+          setAllzones(res?.data?.data);
           setTimeout(() => {
             setloading(false);
           }, 500);
@@ -167,12 +187,16 @@ const VideoScreen_2 = () => {
     </View>
   );
   const renderItem = (item, index) =>
-    item.item.topics.map(k =>
+    item?.item?.topics?.map(k =>
       k.id === videoId ? null : (
         <CustomCard
           onPress={() =>
             item.item.topics.map(
-              j => (setvideoId(j.id), setvideoURL(j.video.video_url)),
+              j => (
+                fetchVideo(k?.video?.trailer_id),
+                setvideoURL(j.video.video_url),
+                console.log('object')
+              ),
             )
           }
           marginV={7}
@@ -201,7 +225,10 @@ const VideoScreen_2 = () => {
                         fontSize={12}
                         padding={10}
                         backColor={'black'}>
-                        {i.video.video_duration}
+                        {k?.video?.trailer_duration
+                          .split(':')
+                          .slice(0, 2)
+                          .join(':')}
                       </Text>
                     </View>
                   </>
@@ -277,7 +304,7 @@ const VideoScreen_2 = () => {
             <View style={styles.header}>
               <OnxIcon
                 onPress={() => {
-                  navigation.goBack();
+                  navigation.replace('Home');
                 }}
                 colorIcon={fontColorLight}
                 name={'arrow-left'}
@@ -308,14 +335,18 @@ const VideoScreen_2 = () => {
             minWidth: fullScreenMode ? '100%' : '20%',
           },
         ]}>
-        <VP
+        <VideoPlayer
           resizeMode={fullScreenMode ? 'contain' : 'cover'}
           disableVolume
           onEnterFullscreen={() => fullScreen()}
           onExitFullscreen={() => fullScreen()}
+          r
+          onError={err => console.log('err', JSON.stringify(err, null, 3))}
           disableBack
-          // repeat={true}
-          source={{uri: videoURL}}
+          repeat={true}
+          source={{
+            uri: videoUrl,
+          }}
           // source={require('src/assets/hd1722.mov')}
           style={styles.backgroundVideo}
         />

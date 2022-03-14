@@ -1,5 +1,8 @@
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import React, {useEffect, useState} from 'react';
-import {FlatList, Image, ImageBackground} from 'react-native';
+import {FlatList, Image} from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   BgColor,
   BorderColor,
@@ -13,22 +16,17 @@ import {
   Trophycolor,
 } from 'src/assets/Colors/colors';
 import {CustomButton} from 'src/Components/CustomButton';
+import {CustomCard} from 'src/Components/customCard';
 import OnxHeader from 'src/Components/Header';
 import OnxIcon from 'src/Components/OnxIcons';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import Text from 'src/Components/Text';
-import Dropdown from 'src/Components/DropDownPicker';
-import TextHeader from 'src/Components/TextHeader';
-import TextIcon from 'src/Components/TextIcon';
-import View from 'src/Components/View';
-import DropDownPicker from 'react-native-dropdown-picker';
-import {fontRef, fullWidth, heightRef, widthRef} from 'src/config/screenSize';
-import styles from './style';
-import {AttemptPersons, AttemptsPersons, Prizes, Videos} from 'src/utils/JSON';
-import {CustomCard} from 'src/Components/customCard';
-import {GET_ALL_PRIZES} from 'src/Redux/Reducers/Tournaments/TournamentsActions';
-import {useDispatch, useSelector} from 'react-redux';
 import OnxLoading from 'src/Components/OnxLoading';
+import Text from 'src/Components/Text';
+import TextHeader from 'src/Components/TextHeader';
+import View from 'src/Components/View';
+import {fullWidth, heightRef} from 'src/config/screenSize';
+import {GET_ALL_PRIZES} from 'src/Redux/Reducers/Tournaments/TournamentsActions';
+import {AttemptPersons} from 'src/utils/JSON';
+import styles from './style';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -52,9 +50,7 @@ const Muqabla_2 = (props, {navigation}) => {
       .then(res => {
         if (res.code === 200) {
           setprizes(res.data.data);
-          setTimeout(() => {
-            setloading(false);
-          }, 100);
+          setloading(false);
         } else {
           console.log('then res', res);
         }

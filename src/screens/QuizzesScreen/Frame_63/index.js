@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
   Image,
@@ -6,35 +7,33 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   BgColor,
   BorderColor,
   fontColorDark,
-  fontColorGray,
   fontColorLight,
-  IconColorDark,
   OnxGreen,
   textBackColor,
-  Trophycolor,
 } from 'src/assets/Colors/colors';
-import {CustomButton} from 'src/Components/CustomButton';
+import {CustomCard} from 'src/Components/customCard';
+import FlatListComponent from 'src/Components/FlatListComponent';
 import OnxIcon from 'src/Components/OnxIcons';
+import OnxLoading from 'src/Components/OnxLoading';
 import Separator from 'src/Components/separator';
 import Text from 'src/Components/Text';
-import TextIcon from 'src/Components/TextIcon';
-import View from 'src/Components/View';
-import {fullWidth, heightRef, widthRef} from 'src/config/screenSize';
-import {Drawer3, Subjects} from 'src/utils/JSON';
-import styles from './style';
-import {useNavigation} from '@react-navigation/native';
-import AppHeader from 'src/Components/AppHeader';
-import {CustomCard} from 'src/Components/customCard';
 import TextHeader from 'src/Components/TextHeader';
-import FlatListComponent from 'src/Components/FlatListComponent';
-import {useDispatch, useSelector} from 'react-redux';
-import {GET_STUDENT_PROFILE} from "src/Redux/Reducers/Muqabla's/Muqabla'sActions";
+import View from 'src/Components/View';
+import {heightRef, widthRef} from 'src/config/screenSize';
 import {GET_SUBJECTS_BY_GRADE} from 'src/Redux/Reducers/Books/BooksActions';
-import OnxLoading from 'src/Components/OnxLoading';
+import {
+  GET_POPULAR_TOPICS_SUBJECT,
+  GET_STUDENT_PROFILE,
+  SELECTED_QUESTIONS,
+} from "src/Redux/Reducers/Muqabla's/Muqabla'sActions";
+import {GET_ALL_TOURNAMENTS} from 'src/Redux/Reducers/Tournaments/TournamentsActions';
+import {QuizzesData} from 'src/utils/JSON';
+import styles from './style';
 
 const QuizzesMainScreen = () => {
   const [loading, setloading] = useState(false);
@@ -42,16 +41,21 @@ const QuizzesMainScreen = () => {
   const navigation = useNavigation();
   const token = useSelector(state => state.auth.token);
   const Profile = useSelector(state => state.muqablas.studentProfile);
+  const POPULAR_TOPICS = useSelector(state => state.muqablas.getpopularTopics);
   const subjects = useSelector(state => state.booksData.subjectsbyGraade);
-  // console.log('ProfileProfileProfile', JSON.stringify(Profile, null, 3));
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setloading(true);
-    handleProfile();
-    getSubjectsByGrade();
+    (async () => {
+      setloading(true);
+      await handleProfile();
+      await handlePlayingTournaments();
+      await handlePopularQuizzes();
+      await getAllTournaments();
+      await getSubjectsByGrade();
+      setloading(false);
+    })();
   }, []);
-
   const checkUser = token => {
     if (!token) {
       return false;
@@ -60,44 +64,101 @@ const QuizzesMainScreen = () => {
   };
   const handleProfile = () => {
     if (!checkUser) {
-      setloading(false);
+      //     setloading(true);
+      return;
+    }
+    return GET_STUDENT_PROFILE(token)(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+          //     setloading(true);
+        } else {
+          console.log('then res', res);
+          //     setloading(true);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+        //     setloading(true);
+      });
+  };
+  const handlePopularQuizzes = () => {
+    if (!token) {
+      //     setloading(true);
+      return;
+    }
+    return GET_POPULAR_TOPICS_SUBJECT(token)(dispatch)
+      .then(res => {
+        // console.log('then res', res);
+        if (res.code === 200) {
+          //     setloading(true);
+        } else {
+          console.log('then res', res);
+          //     setloading(true);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+        //     setloading(true);
+      });
+  };
+  const handlePlayingTournaments = () => {
+    if (!token) {
+      //     setloading(true);
       return;
     }
     GET_STUDENT_PROFILE(token)(dispatch)
       .then(res => {
         if (res.code === 200) {
-          setloading(false);
+          //     setloading(true);
         } else {
           console.log('then res', res);
-          setloading(false);
+          //     setloading(true);
         }
       })
       .catch(err => {
         console.log('catch err', err);
-        setloading(false);
+        //     setloading(true);
       });
   };
 
   const getSubjectsByGrade = () => {
     //change the hardcoded grade when api working fine
-    GET_SUBJECTS_BY_GRADE(
+    return GET_SUBJECTS_BY_GRADE(
       3,
       token,
     )(dispatch)
       .then(res => {
         if (res.code === 200) {
-          setloading(false);
+          //     setloading(true);
         } else {
           console.log('then res', res);
-          setloading(false);
+          //     setloading(true);
         }
       })
       .catch(err => {
         console.log('catch err', err);
-        setloading(false);
+        //     setloading(true);
       });
   };
-
+  const getAllTournaments = () => {
+    //change the hardcoded grade when api working fine
+    return GET_ALL_TOURNAMENTS(token)(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+          //     setloading(true);
+        } else {
+          console.log('then res', res);
+          //     setloading(true);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+        //     setloading(true);
+      });
+  };
+  const setQuizzes = data => {
+    SELECTED_QUESTIONS(data)(dispatch);
+  };
   return loading ? (
     <OnxLoading />
   ) : (
@@ -247,26 +308,27 @@ const QuizzesMainScreen = () => {
                 return (
                   <TouchableOpacity
                     onPress={() => {
+                      setQuizzes(QuizzesData[1]);
                       navigation.navigate('Muqabla_43');
                     }}
                     style={[styles.quizzes, container]}>
                     <Image source={require('src/assets/MaskGroup.png')} />
                     <View style={styles.right}>
                       <Text color={fontColorLight} width={150 * widthRef}>
-                        Respect for Public Property
+                        {item.name}
                       </Text>
                       <Text
                         fontSize={12}
                         color={fontColorDark}
                         marginTop={7 * heightRef}
                         width={150 * widthRef}>
-                        Class 9 • English
+                        Class{item?.grade ? item?.grade : ' No data '}• English
                       </Text>
                     </View>
                   </TouchableOpacity>
                 );
               }}
-              data={[1, 1, 1, 1]}
+              data={POPULAR_TOPICS ? POPULAR_TOPICS.data : [1, 1, 1, 1]}
             />
             <TextHeader
               fontWeight={'600'}

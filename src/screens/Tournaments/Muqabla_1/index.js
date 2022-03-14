@@ -1,5 +1,7 @@
-import React from 'react';
+import {useRoute} from '@react-navigation/core';
+import React, {useEffect, useState} from 'react';
 import {Image, ImageBackground} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   fontColorDark,
   fontColorLight,
@@ -9,13 +11,22 @@ import {
 import {CustomButton} from 'src/Components/CustomButton';
 import OnxHeader from 'src/Components/Header';
 import OnxIcon from 'src/Components/OnxIcons';
+import OnxLoading from 'src/Components/OnxLoading';
 import Text from 'src/Components/Text';
 import TextHeader from 'src/Components/TextHeader';
 import TextIcon from 'src/Components/TextIcon';
 import View from 'src/Components/View';
 import {fontRef, fullWidth, heightRef} from 'src/config/screenSize';
+import {GET_SINGLE_TOURNAMENTS} from 'src/Redux/Reducers/Tournaments/TournamentsActions';
 import styles from './style';
 const Muqabla_1 = (props, {navigation}) => {
+  const isSelectedquizzes = useSelector(
+    state => state.muqablas.isQuestionsSelected,
+  );
+  const token = useSelector(state => state.auth.token);
+  const dispatch = useDispatch();
+  const route = useRoute();
+  const [loading, setloading] = useState(false);
   const textData = [
     {
       text: 'Lorem ipsum dolor sit amet, consectetur',
@@ -30,7 +41,32 @@ const Muqabla_1 = (props, {navigation}) => {
       text: 'Lorem ipsum dolor sit amet, consectetur',
     },
   ];
-  return (
+  useEffect(() => {
+    setloading(true);
+    getQuizzesbyTournaments();
+  }, []);
+  const getQuizzesbyTournaments = () => {
+    GET_SINGLE_TOURNAMENTS(
+      route.params.id,
+      token,
+    )(dispatch)
+      .then(res => {
+        // console.log('res', JSON.stringify(res, null, 3));
+        if (res.code === 200) {
+          setloading(false);
+        } else {
+          console.log('then res', res);
+          setloading(false);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+        setloading(false);
+      });
+  };
+  return loading ? (
+    <OnxLoading />
+  ) : (
     <View style={styles.rootContainer}>
       <OnxHeader
         borderWidth1
@@ -58,10 +94,8 @@ const Muqabla_1 = (props, {navigation}) => {
           colorheader={fontColorLight}
           marginTop={20}
           fontWeight={'500'}
-          Header={'Tournament Name'}
-          Description={
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quam massa eget est sit blandit purus.'
-          }
+          Header={route.params.name}
+          Description={route.params.Description}
         />
         <Text
           marginTop={18 * heightRef}

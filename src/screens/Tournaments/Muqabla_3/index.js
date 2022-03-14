@@ -28,12 +28,14 @@ const Muqabla_3 = ({navigation}) => {
   //Fetching data from redux
   const quizzesTopics = useSelector(state => state.muqablas.topicsQuestions);
   const quizzesChapters = useSelector(state => state.muqablas.zonesQuestions);
+  const quizzesTournamnets = useSelector(
+    state => state.tournaments.getSingleTournament,
+  );
   const submitQ = useSelector(state => state.muqablas.submitQuestionAnswers);
   const token = useSelector(state => state.auth.token);
   const isSelectedquizzes = useSelector(
     state => state.muqablas.isQuestionsSelected,
   );
-  // console.log('submitQ', JSON.stringify(submitQ, null, 3));
   const [loading, setloading] = useState(true);
   const [selectedlanguage, setselectedlanguage] = useState(true);
   const [selectIndex, setSelectIndex] = useState(null);
@@ -58,7 +60,6 @@ const Muqabla_3 = ({navigation}) => {
   useEffect(() => {
     checkQuizzes();
   }, []);
-
   useEffect(() => {
     //change language function
     (async () => {
@@ -73,8 +74,16 @@ const Muqabla_3 = ({navigation}) => {
   //function to check which quizzes are going to display
   const checkQuizzes = () => {
     isSelectedquizzes.Data === 'Chapters'
-      ? setwhichQuizzes(quizzesChapters)
-      : setwhichQuizzes(quizzesTopics);
+      ? setwhichQuizzes(quizzesChapters?.data?.data)
+      : isSelectedquizzes.Data === 'Topics'
+      ? setwhichQuizzes(quizzesTopics?.data?.data)
+      : isSelectedquizzes.Data === 'Upcoming'
+      ? setwhichQuizzes(quizzesTournamnets?.data?.questions?.data)
+      : isSelectedquizzes.Data === 'Running'
+      ? setwhichQuizzes(quizzesTournamnets?.data?.questions?.data)
+      : isSelectedquizzes.Data === 'Completed'
+      ? setwhichQuizzes(quizzesTournamnets?.data?.questions?.data)
+      : null;
     setMainloading(false);
   };
   const submitAllAnswerData = () => {
@@ -92,12 +101,10 @@ const Muqabla_3 = ({navigation}) => {
       .then(res => {
         if (res.code === 200) {
           clearData();
-          setTimeout(() => {
-            navigation.replace('Successfull_1', {
-              totalTime: seconds,
-            });
-            setMainloading(false);
-          }, 1100);
+          navigation.replace('Successfull_1', {
+            totalTime: seconds,
+          });
+          setMainloading(false);
         } else {
           clearData();
           console.log('else then res', res);
@@ -113,7 +120,7 @@ const Muqabla_3 = ({navigation}) => {
   };
   const submitAnswers = () => {
     const _NameData = {
-      question_id: whichQuizzes?.data?.data[selectIndexs].id,
+      question_id: whichQuizzes[selectIndexs].id,
       // question_id: QuestionByZone[selectIndexs].id,
       option_id: answersID,
       question_started_at: startSeconds,
@@ -155,6 +162,8 @@ const Muqabla_3 = ({navigation}) => {
       />
       <View style={styles.quizContainer}>
         <TextHeader
+          marginTop={50}
+          height={126}
           widthHeaderText={'100%'}
           widthDesText={'100%'}
           textAlignHeader={selectedlanguage === 'ur' ? 'right' : 'left'}
@@ -167,11 +176,11 @@ const Muqabla_3 = ({navigation}) => {
               ? selectIndexs + 1
               : `${selectIndexs + 1}.`
           }
-          Description={whichQuizzes?.data?.data[selectIndexs].title}
+          Description={whichQuizzes[selectIndexs].title}
           // Description={QuestionByZone[selectIndexs].explanation}
         />
         <View style={{width: '100%'}}>
-          {whichQuizzes?.data?.data[selectIndexs].options.map((data, index) => (
+          {whichQuizzes[selectIndexs].options.map((data, index) => (
             // {QuestionByZone[selectIndexs].options.map((data, index) => (
             <CustomButton
               btnRadius={5}
@@ -193,11 +202,10 @@ const Muqabla_3 = ({navigation}) => {
           ))}
         </View>
         {selectIndex != null ? (
-          // selectIndexs + 1 === whichQuizzes?.data?.data.length ? null : (
-
+          // selectIndexs + 1 === whichQuizzes.length ? null : (
           <CustomButton
             onPress={() => {
-              if (selectIndexs + 1 === whichQuizzes?.data?.data.length) {
+              if (selectIndexs + 1 === whichQuizzes.length) {
                 setMainloading(true);
                 submitAllAnswerData();
                 setEndSeconds(new Date());
@@ -217,13 +225,9 @@ const Muqabla_3 = ({navigation}) => {
             textSize={16}
             btnWidth={'100%'}
             btnHeight={43 * heightRef}
-            text={
-              selectIndexs + 1 === whichQuizzes?.data?.data.length
-                ? 'Submit'
-                : 'Next'
-            }
+            text={selectIndexs + 1 === whichQuizzes.length ? 'Submit' : 'Next'}
             fontWeight={'600'}
-            marginT={15 * heightRef}
+            marginT={55 * heightRef}
             paddingVertical={10}
           />
         ) : null}

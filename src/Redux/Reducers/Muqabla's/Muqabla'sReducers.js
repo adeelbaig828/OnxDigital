@@ -9,6 +9,7 @@ import {
   USER_ANSWERS,
   ZONE_QUESTIONS,
   CLEAR_USER_ANSWERS,
+  POPULAR_TOPICS,
 } from "./Muqabla'sActions";
 
 const initialState = {
@@ -20,6 +21,7 @@ const initialState = {
   zonesQuestions: {},
   topicsQuestions: {},
   submitQuestionAnswers: [],
+  getpopularTopics: [],
   submitQuestion: [],
   submitAllQuestion: {},
 };
@@ -75,6 +77,11 @@ const MuqablasReducers = (state = initialState, action) => {
       return {
         ...state,
         submitQuestionAnswers: [],
+      };
+    case POPULAR_TOPICS:
+      return {
+        ...state,
+        getpopularTopics: action.payload,
       };
     default:
       return state;

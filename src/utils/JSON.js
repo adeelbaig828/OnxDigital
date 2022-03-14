@@ -112,6 +112,15 @@ export const QuizzesData = [
   {
     Data: 'Chapters',
   },
+  {
+    Data: 'Upcoming',
+  },
+  {
+    Data: 'Running',
+  },
+  {
+    Data: 'Completed',
+  },
 ];
 export const languageData = [
   {

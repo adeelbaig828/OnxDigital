@@ -3,6 +3,7 @@ import {SERVER_URL} from 'src/Global/env';
 export const STUDENT_PROFILE = 'STUDENT_PROFILE';
 export const ZONE_QUESTIONS = 'ZONE_QUESTIONS';
 export const TOPIC_QUESTIONS = 'TOPIC_QUESTIONS';
+export const POPULAR_TOPICS = 'POPULAR_TOPICS';
 export const SUBJECT_ZONES = 'SUBJECT_ZONES';
 export const SUBJECT_TOPICS = 'SUBJECT_TOPICS';
 export const IS_SELECTED = 'IS_SELECTED';
@@ -29,10 +30,10 @@ export const GET_STUDENT_PROFILE = token => dispatch => {
       })
       .catch(error => {
         console.log('console error ', error);
-        dispatch({
-          type: API_ERROR,
-          error: error.response.data.message,
-        });
+        // dispatch({
+        //   type: API_ERROR,
+        //   error: error.response.data.message,
+        // });
         reject(error.response.data.message);
       });
   });
@@ -53,10 +54,10 @@ export const QUESTIONS_BY_ZONE = (grade, token) => dispatch => {
       })
       .catch(error => {
         console.log('console error ', error);
-        dispatch({
-          type: API_ERROR,
-          error: error.response.data.message,
-        });
+        // dispatch({
+        //   type: API_ERROR,
+        //   error: error.response.data.message,
+        // });
         reject(error.response.data.message);
       });
   });
@@ -77,10 +78,10 @@ export const QUESTIONS_BY_TOPICS = (grade, token) => dispatch => {
       })
       .catch(error => {
         console.log('console error ', error);
-        dispatch({
-          type: API_ERROR,
-          error: error.response.data.message,
-        });
+        // dispatch({
+        //   type: API_ERROR,
+        //   error: error.response.data.message,
+        // });
         reject(error.response.data.message);
       });
   });
@@ -101,10 +102,10 @@ export const TOPICS_BY_SUBJECT = (grade, token) => dispatch => {
       })
       .catch(error => {
         console.log('console error ', error);
-        dispatch({
-          type: API_ERROR,
-          error: error.response.data.message,
-        });
+        // dispatch({
+        //   type: API_ERROR,
+        //   error: error.response.data.message,
+        // });
         reject(error.response.data.message);
       });
   });
@@ -125,10 +126,34 @@ export const ZONES_BY_SUBJECT = (grade, token) => dispatch => {
       })
       .catch(error => {
         console.log('console error ', error);
+        // dispatch({
+        //   type: API_ERROR,
+        //   error: error.response.data.message,
+        // });
+        reject(error.response.data.message);
+      });
+  });
+};
+export const GET_POPULAR_TOPICS_SUBJECT = token => dispatch => {
+  return new Promise((resolve, reject) => {
+    axios({
+      headers: {Authorization: `Bearer ${token}`},
+      method: 'get',
+      url: `${BASE_URL}/subjects/1/topics`,
+    })
+      .then(response => {
         dispatch({
-          type: API_ERROR,
-          error: error.response.data.message,
+          type: POPULAR_TOPICS,
+          payload: response.data,
         });
+        resolve(response.data);
+      })
+      .catch(error => {
+        console.log('console error ', error);
+        // dispatch({
+        //   type: API_ERROR,
+        //   error: error.response.data.message,
+        // });
         reject(error.response.data.message);
       });
   });
@@ -150,10 +175,10 @@ export const SUBMIT_ALL_ANSWERS = (formData, token) => dispatch => {
       })
       .catch(error => {
         console.log('console error ', error);
-        dispatch({
-          type: API_ERROR,
-          error: error.response.data.message,
-        });
+        // dispatch({
+        //   type: API_ERROR,
+        //   error: error.response.data.message,
+        // });
         reject(error.response.data.message);
       });
   });
@@ -171,10 +196,11 @@ export const SUBMIT_FORM_FUNCTION = data => dispatch => {
   });
 };
 export const QUESTION_ANSWERS = data => dispatch => {
-  dispatch({
-    type: USER_ANSWERS,
-    payload: data,
-  });
+  console.log('QUESTION_ANSWERS', data),
+    dispatch({
+      type: USER_ANSWERS,
+      payload: data,
+    });
 };
 export const CLEAR_QUESTION_ANSWERS = () => dispatch => {
   dispatch({
