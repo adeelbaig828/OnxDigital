@@ -10,6 +10,7 @@ export function CustomCard({
   btnWidth,
   btnHeight,
   btnRadius,
+  maxHight,
   backColor,
   paddingH,
   padding,
@@ -31,6 +32,7 @@ export function CustomCard({
       <TouchableOpacity
         style={[
           {
+            maxHeight: maxHight,
             marginVertical: marginV,
             padding: padding,
             alignItems: alignItems,

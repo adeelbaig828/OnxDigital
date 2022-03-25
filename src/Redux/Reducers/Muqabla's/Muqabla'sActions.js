@@ -196,11 +196,10 @@ export const SUBMIT_FORM_FUNCTION = data => dispatch => {
   });
 };
 export const QUESTION_ANSWERS = data => dispatch => {
-  console.log('QUESTION_ANSWERS', data),
-    dispatch({
-      type: USER_ANSWERS,
-      payload: data,
-    });
+  dispatch({
+    type: USER_ANSWERS,
+    payload: data,
+  });
 };
 export const CLEAR_QUESTION_ANSWERS = () => dispatch => {
   dispatch({

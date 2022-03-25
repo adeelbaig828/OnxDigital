@@ -17,7 +17,10 @@ import TextHeader from 'src/Components/TextHeader';
 import TextIcon from 'src/Components/TextIcon';
 import View from 'src/Components/View';
 import {fontRef, fullWidth, heightRef} from 'src/config/screenSize';
-import {GET_SINGLE_TOURNAMENTS} from 'src/Redux/Reducers/Tournaments/TournamentsActions';
+import {
+  GET_SINGLE_TOURNAMENTS,
+  GET_TOURNAMENTS_PROGRESS,
+} from 'src/Redux/Reducers/Tournaments/TournamentsActions';
 import styles from './style';
 const Muqabla_1 = (props, {navigation}) => {
   const isSelectedquizzes = useSelector(
@@ -51,7 +54,25 @@ const Muqabla_1 = (props, {navigation}) => {
       token,
     )(dispatch)
       .then(res => {
-        // console.log('res', JSON.stringify(res, null, 3));
+        if (res.code === 200) {
+          getProgressOfTournaments(route.params.id);
+          setloading(false);
+        } else {
+          console.log('then res', res);
+          setloading(false);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+        setloading(false);
+      });
+  };
+  const getProgressOfTournaments = id => {
+    GET_TOURNAMENTS_PROGRESS(
+      id,
+      token,
+    )(dispatch)
+      .then(res => {
         if (res.code === 200) {
           setloading(false);
         } else {

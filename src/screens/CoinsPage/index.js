@@ -42,6 +42,11 @@ const CoinsPageScreen = ({navigation}) => {
   }, []);
   const dispatch = useDispatch();
   const barearToken = useSelector(state => state.auth.token);
+  const Profile = useSelector(state => state.muqablas.studentProfile);
+  console.log(
+    'Profile',
+    JSON.stringify(Profile.data.total_silver_coins, null, 3),
+  );
   const getAllCoins = () => {
     GET_ALL_COINS(barearToken)(dispatch)
       .then(res => {
@@ -107,7 +112,11 @@ const CoinsPageScreen = ({navigation}) => {
                     </Text>
                   </View>
                   <View style={style.coinView}>
-                    <Text color={'white'}>{data.coins}</Text>
+                    <Text color={'white'}>
+                      {index == 0
+                        ? Profile.data.total_gold_coins
+                        : Profile.data.total_silver_coins}
+                    </Text>
                     <OnxIcon
                       position={'absolute'}
                       right={0 * widthRef}

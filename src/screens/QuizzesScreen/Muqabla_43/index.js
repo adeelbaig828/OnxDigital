@@ -166,7 +166,7 @@ const Muqabla_43 = ({navigation}) => {
           bold={'500'}
           color={fontColorLight}
           fontSize={12 * fontRef}>
-          Instruction
+          Instructio
         </Text>
         {textData.map(text => (
           <TextIcon

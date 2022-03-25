@@ -34,7 +34,6 @@ const PaymentGatewayScreen = ({navigation}) => {
       .then(res => {
         if (res.code === 200) {
           setpaymentsMethod(res.data.data);
-          console.log('object', JSON.stringify(res.data.data, null, 3));
           setTimeout(() => {
             setloading(false);
           }, 500);
@@ -75,14 +74,13 @@ const PaymentGatewayScreen = ({navigation}) => {
               marginV={5}
               btnWidth={'100%'}
               btnHeight={
-                index === selectIndex ? 89 * heightRef : 49 * heightRef
+                index === selectIndex ? 139 * heightRef : 49 * heightRef
               }
               paddingVertical={10}
               paddingHorizontalInner={-9}
               style={{borderBottomWidth: 0.2}}
               borderColor={fontColorLight}>
               <>
-                {console.log('object', data)}
                 <View style={styles.innerCard}>
                   <TextIcon
                     onPress={() => setSelectIndex(index)}

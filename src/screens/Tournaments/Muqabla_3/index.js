@@ -20,6 +20,7 @@ import {
   QUESTION_ANSWERS,
   SUBMIT_ALL_ANSWERS,
 } from "src/Redux/Reducers/Muqabla's/Muqabla'sActions";
+import {GET_ATTEMPT_SCORE} from 'src/Redux/Reducers/Tournaments/TournamentsActions';
 import {changelanguage} from 'src/services/translation';
 import styles from './style';
 const Muqabla_3 = ({navigation}) => {
@@ -88,19 +89,26 @@ const Muqabla_3 = ({navigation}) => {
   };
   const submitAllAnswerData = () => {
     const _answersData = {
-      entity_type: isSelectedquizzes.Data === 'Chapters' ? 'Zone' : 'Zone',
+      entity_type:
+        isSelectedquizzes.Data === 'Chapters' ? 'Zone' : 'Tournament',
       entity_id: 1,
       total_points: 90,
       time_taken: seconds,
       answers: submitQ,
     };
+    // console.log('_answersData', JSON.stringify(_answersData, null, 3));
     SUBMIT_ALL_ANSWERS(
       _answersData,
       token,
     )(dispatch)
       .then(res => {
+        // console.log(
+        //   'else then res',
+        //   JSON.stringify(res.data.attempt_id, null, 3),
+        // );
         if (res.code === 200) {
           clearData();
+          getAttemptScore(res.data.attempt_id);
           navigation.replace('Successfull_1', {
             totalTime: seconds,
           });
@@ -113,6 +121,25 @@ const Muqabla_3 = ({navigation}) => {
       .catch(err => {
         clearData();
         console.log('catch err', err);
+      });
+  };
+  const getAttemptScore = id => {
+    GET_ATTEMPT_SCORE(
+      id,
+      token,
+    )(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+          console.log('then res', res);
+          setloading(false);
+        } else {
+          console.log('then res', res);
+          setloading(false);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+        setloading(false);
       });
   };
   const clearData = () => {

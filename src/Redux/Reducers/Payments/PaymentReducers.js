@@ -1,4 +1,4 @@
-import {GET_ALL_PACKAGES, GET_PAYMENTS} from './PaymentActions';
+import {ADD_ADDRESS, GET_ALL_PACKAGES, GET_PAYMENTS} from './PaymentActions';
 
 const initialState = {
   methods: null,
@@ -13,6 +13,11 @@ const PaymentReducer = (state = initialState, action) => {
         methods: action.payload,
       };
     case GET_ALL_PACKAGES:
+      return {
+        ...state,
+        packages: action.payload,
+      };
+    case ADD_ADDRESS:
       return {
         ...state,
         packages: action.payload,

@@ -41,6 +41,9 @@ const Muqabla_2 = (props, {navigation}) => {
   ]);
   const dispatch = useDispatch();
   const barearToken = useSelector(state => state.auth.token);
+  const ProgressData = useSelector(
+    state => state.tournaments.getTournamentprogress,
+  );
   useEffect(() => {
     setloading(true);
     getAllPrizes();
@@ -100,7 +103,7 @@ const Muqabla_2 = (props, {navigation}) => {
       </>
     </CustomCard>
   );
-  const PositionsContainer = () => (
+  const PositionsContainer = item => (
     <View
       style={{
         borderBottomWidth: 1,
@@ -226,12 +229,12 @@ const Muqabla_2 = (props, {navigation}) => {
             fontWeight={'600'}
             fontSizeHeader={14}
             marginTop={6 * heightRef}
-            Header={'Jhon Doe'}
+            Header={item.item.name}
             Description={'Pakistan'}
           />
         </View>
         <View style={styles.rightCont}>
-          <Text color={sliderColorOrange}>{item.item.points}</Text>
+          <Text color={sliderColorOrange}>{item.item.total_points}</Text>
           <Text fontSize={14} color={fontColorDark}>
             Points
           </Text>
@@ -258,7 +261,7 @@ const Muqabla_2 = (props, {navigation}) => {
       ListHeaderComponent={PositionsContainer}
       style={{backgroundColor: BgColor}}
       contentContainerStyle={{backgroundColor: BgColor}}
-      data={AttemptPersons}
+      data={ProgressData?.data?.data}
       keyExtractor={item => item.id}
       renderItem={renderItem1}
     />

@@ -42,6 +42,7 @@ const InputField = (
     paddingLeft,
     validateMessage,
     validateType,
+    maxLength,
     emailValid,
     SearchIcon, // add search icon on right side
     password, /// Defines if the text field is for password.
@@ -112,6 +113,7 @@ const InputField = (
             </Text>
           ) : null}
           <TextInput
+            maxLength={maxLength ? maxLength : null}
             style={[
               styles.textField(inner !== undefined),
               {

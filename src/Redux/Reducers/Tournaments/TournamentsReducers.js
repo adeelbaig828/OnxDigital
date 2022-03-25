@@ -1,13 +1,17 @@
 import {
   GET_ALL_TOURNAMNETS,
   GET_PRIZES,
+  GET_SCORE,
   GET_TOURNAMNET,
+  GET_TOURNAMNET_PROGRESS,
 } from './TournamentsActions';
 
 const initialState = {
   allTournaments: null,
   methods: null,
   getSingleTournament: {},
+  getScore: {},
+  getTournamentprogress: {},
 };
 
 const TournamentReducers = (state = initialState, action) => {
@@ -26,6 +30,16 @@ const TournamentReducers = (state = initialState, action) => {
       return {
         ...state,
         getSingleTournament: action.payload,
+      };
+    case GET_TOURNAMNET_PROGRESS:
+      return {
+        ...state,
+        getTournamentprogress: action.payload,
+      };
+    case GET_SCORE:
+      return {
+        ...state,
+        getScore: action.payload,
       };
     default:
       return state;

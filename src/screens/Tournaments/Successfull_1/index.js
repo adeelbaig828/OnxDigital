@@ -1,4 +1,5 @@
 import {useRoute} from '@react-navigation/core';
+import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import {Image} from 'react-native';
 import {useSelector} from 'react-redux';
@@ -29,7 +30,7 @@ const Successfull_1 = ({navigation}) => {
   const QuestionAnswersRes = useSelector(
     state => state.muqablas.submitAllQuestion,
   );
-
+  const _Score = useSelector(state => state.tournaments.getScore);
   useEffect(() => {
     checkResponse();
   }, []);
@@ -45,12 +46,6 @@ const Successfull_1 = ({navigation}) => {
     setcorrectAns(correctOptions);
     setinCorrectAns(inCorrectOptions);
   };
-  console.log(
-    'QuestionAnswersRes',
-    JSON.stringify(route.params.totalTime, null, 3),
-  );
-
-  const [selectIndex, setSelectIndex] = useState(null);
   const quizData = [
     {
       text: 'Correct',
@@ -136,7 +131,7 @@ const Successfull_1 = ({navigation}) => {
                     colorDesc={fontColorLight}
                     colorheader={fontColorLight}
                     Header={'Points earned'}
-                    Description={'3 Points'}
+                    Description={`${_Score?.data?.gold_coins} Point`}
                   />
                 </View>
                 <View
@@ -158,7 +153,7 @@ const Successfull_1 = ({navigation}) => {
                     fontSizeDesc={16}
                     colorheader={fontColorLight}
                     Header={'Silver coins earned'}
-                    Description={'1 Silver Coin'}
+                    Description={`${_Score?.data?.siver_coins} Silver Coin`}
                   />
                 </View>
               </View>
@@ -170,7 +165,6 @@ const Successfull_1 = ({navigation}) => {
             </Text>
           </View>
         </View>
-
         <View style={styles.rewardCon}>
           {quizData.map(i => (
             <CustomCard
@@ -217,17 +211,16 @@ const Successfull_1 = ({navigation}) => {
                     bold={'600'}
                     color={fontColorLight}
                     fontSize={10}>
-                    {i.text == 'Duration'
-                      ? `${Math.floor(route?.params?.totalTime / 60)}:${(
-                          route?.params?.totalTime % 60
-                        )
-                          .toString()
-                          .padStart(2, '0')}`
-                      : i.text == 'Correct'
-                      ? ('0' + correctAns).slice(-2)
-                      : i.text == 'Incorrect'
-                      ? ('0' + inCorrectAns).slice(-2)
-                      : ('0' + 0).slice(-2)}
+                    {
+                      {
+                        Duration: moment(
+                          '2011/11/11 ' + _Score.data.time_taken,
+                        ).format('mm:ss'),
+                        Correct: _Score.data.total_correct,
+                        Incorrect: _Score.data.total_incorrect,
+                        Skipped: _Score.data.total_skipped,
+                      }[i.text]
+                    }
                   </Text>
                 </View>
                 <Text color={fontColorLight} fontSize={10}>

@@ -1,14 +1,10 @@
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
 import React, {useState} from 'react';
-import {
-  FlatList,
-  Image,
-  ImageBackground,
-  SafeAreaView,
-  TouchableOpacity,
-} from 'react-native';
+import {FlatList, Image, ImageBackground, SafeAreaView} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   BgColor,
   BorderColor,
@@ -16,29 +12,21 @@ import {
   fontColorLight,
   OnxGreen,
 } from 'src/assets/Colors/colors';
-import {CustomCard} from 'src/Components/customCard';
+import {CustomButton} from 'src/Components/CustomButton';
 import OnxIcon from 'src/Components/OnxIcons';
+import OnxLoading from 'src/Components/OnxLoading';
 import Text from 'src/Components/Text';
 import TextHeader from 'src/Components/TextHeader';
-import View from 'src/Components/View';
-import {fontRef, heightRef, widthRef} from 'src/config/screenSize';
-import {
-  QuizzesData,
-  TournamentsJson,
-  TournamentsJson3,
-  Videos,
-} from 'src/utils/JSON';
 import TextIcon from 'src/Components/TextIcon';
-
-import styles from './style';
-import {CustomButton} from 'src/Components/CustomButton';
-import AppHeader from 'src/Components/AppHeader';
-import {useDispatch, useSelector} from 'react-redux';
-import moment from 'moment';
+import View from 'src/Components/View';
+import {heightRef, widthRef} from 'src/config/screenSize';
 import {SELECTED_QUESTIONS} from "src/Redux/Reducers/Muqabla's/Muqabla'sActions";
-import {GET_SINGLE_TOURNAMENTS} from 'src/Redux/Reducers/Tournaments/TournamentsActions';
-import OnxLoading from 'src/Components/OnxLoading';
-import FlatListComponent from 'src/Components/FlatListComponent';
+import {
+  GET_SINGLE_TOURNAMENTS,
+  GET_TOURNAMENTS_PROGRESS,
+} from 'src/Redux/Reducers/Tournaments/TournamentsActions';
+import {QuizzesData} from 'src/utils/JSON';
+import styles from './style';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -55,6 +43,24 @@ const Tournaments_1 = props => {
   };
   const getQuizzesbyTournaments = id => {
     GET_SINGLE_TOURNAMENTS(
+      id,
+      token,
+    )(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+          getProgressOfTournaments(id);
+        } else {
+          console.log('then res', res);
+          setloading(false);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+        setloading(false);
+      });
+  };
+  const getProgressOfTournaments = id => {
+    GET_TOURNAMENTS_PROGRESS(
       id,
       token,
     )(dispatch)
