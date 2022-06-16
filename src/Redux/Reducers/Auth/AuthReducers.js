@@ -23,6 +23,7 @@ import {
   CLEAR_TOKEN,
   PASSWORD_RESET,
   OTP_CHANGE_PASSWORD,
+  ALL_SLIDER,
 } from './AuthActions';
 
 const initialState = {
@@ -42,6 +43,7 @@ const initialState = {
   resetPassword: null,
   allschool: null,
   allgrades: null,
+  allSliderImages: null,
   allSubject: null,
   selectschool: null,
   token: null,
@@ -114,6 +116,12 @@ const apiReducer = (state = initialState, action) => {
       return {
         ...state,
         allSubject: action.payload,
+        loading: false,
+      };
+    case ALL_SLIDER:
+      return {
+        ...state,
+        allSliderImages: action.payload,
         loading: false,
       };
     case GRADE_SELECTION:

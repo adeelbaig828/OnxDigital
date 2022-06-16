@@ -132,3 +132,67 @@ export const GET_ATTEMPT_SCORE = (ID, token) => dispatch => {
       });
   });
 };
+export const GLOBAL_SEARCH = (query, token) => dispatch => {
+  return new Promise((resolve, reject) => {
+    axios({
+      headers: {Authorization: `Bearer ${token}`},
+      method: 'get',
+      url: `${BASE_URL}/search?q=${query}`,
+    })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        console.log('console error ', error);
+        reject(error.response.data.message);
+      });
+  });
+};
+export const SEARCH_ZONE = (query, token) => dispatch => {
+  return new Promise((resolve, reject) => {
+    axios({
+      headers: {Authorization: `Bearer ${token}`},
+      method: 'get',
+      url: `${BASE_URL}/search/zones?q=${query}`,
+    })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        console.log('console error ', error);
+        reject(error.response.data.message);
+      });
+  });
+};
+export const SEARCH_TOURNAMENTS = (query, token) => dispatch => {
+  return new Promise((resolve, reject) => {
+    axios({
+      headers: {Authorization: `Bearer ${token}`},
+      method: 'get',
+      url: `${BASE_URL}/search/tournaments?q=${query}`,
+    })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        console.log('console error ', error);
+        reject(error.response.data.message);
+      });
+  });
+};
+export const SEARCH_TOPICS = (query, token) => dispatch => {
+  return new Promise((resolve, reject) => {
+    axios({
+      headers: {Authorization: `Bearer ${token}`},
+      method: 'get',
+      url: `${BASE_URL}/search/topics?q=${query}`,
+    })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        console.log('console error ', error);
+        reject(error.response.data.message);
+      });
+  });
+};

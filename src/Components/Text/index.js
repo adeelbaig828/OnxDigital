@@ -26,11 +26,15 @@ const Text = ({
   paddingLeft,
   marginVertical,
   marginHorizontal,
+  numberOfLines,
+  adjustsFontSizeToFit,
   ...rest
 }: TextProps) => {
   return (
     <TouchableOpacity disabled={!onPress} onPress={onPress}>
       <RNText
+        adjustsFontSizeToFit={adjustsFontSizeToFit ?? null}
+        numberOfLines={numberOfLines ?? null}
         style={[
           {
             marginLeft: marginLeft ? marginLeft * widthRef : null,

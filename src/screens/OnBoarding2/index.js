@@ -1,21 +1,16 @@
+import {useRoute} from '@react-navigation/core';
 import React, {useState} from 'react';
-import {Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Platform, SafeAreaView, Text, View} from 'react-native';
+import Toast from 'react-native-toast-message';
 import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  fontColorLight,
-  fontWeight600,
-  OnxGreen,
-} from 'src/assets/Colors/colors';
+import {useDispatch} from 'react-redux';
+import {fontWeight600, OnxGreen} from 'src/assets/Colors/colors';
 import {CustomButton} from 'src/Components/CustomButton';
 import {CustomInput} from 'src/Components/CustomInput';
+import {Validations} from 'src/config/function';
 import {heightRef} from 'src/config/screenSize';
 import {GENERATE_OTP} from 'src/Redux/Reducers/Auth/AuthActions';
-import {useRoute} from '@react-navigation/core';
 import {styles} from './style';
-import Toast from 'react-native-toast-message';
-import {Validations} from 'src/config/function';
 
 const OnBoardingScreen2 = ({navigation}) => {
   const route = useRoute();
@@ -70,7 +65,8 @@ const OnBoardingScreen2 = ({navigation}) => {
       return;
     }
     const Data = {
-      phone_number: otp.replace(0, '+92'),
+      // phone_number: otp.replace(0, '+92'),
+      phone_number: otp,
     };
     GENERATE_OTP(Data)(dispatch)
       .then(res => {
@@ -83,7 +79,8 @@ const OnBoardingScreen2 = ({navigation}) => {
           });
           setTimeout(() => {
             navigation.replace('OnBoardingScreen3', {
-              phoneNumber: otp.replace(0, '+92'),
+              phoneNumber: otp,
+              // phoneNumber: otp.replace(0, '+92'),
               from: CheckUser ? CheckUser : null,
             });
             setloading(false);
@@ -106,6 +103,7 @@ const OnBoardingScreen2 = ({navigation}) => {
           text1: 'error',
           text2: 'error',
         });
+        setloading(false);
       });
   };
   return (

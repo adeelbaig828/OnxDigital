@@ -37,7 +37,6 @@ import styles from './style';
 
 const QuizzesMainScreen = () => {
   const [loading, setloading] = useState(false);
-
   const navigation = useNavigation();
   const token = useSelector(state => state.auth.token);
   const Profile = useSelector(state => state.muqablas.studentProfile);

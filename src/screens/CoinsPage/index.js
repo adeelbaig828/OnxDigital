@@ -16,8 +16,10 @@ import OnxLoading from 'src/Components/OnxLoading';
 import Text from 'src/Components/Text';
 import TextHeader from 'src/Components/TextHeader';
 import View from 'src/Components/View';
+import {print} from 'src/config/function';
 import {heightRef, widthRef} from 'src/config/screenSize';
-import {GET_ALL_COINS} from 'src/Redux/Reducers/Coins/CoinsActions';
+import {GET_ALL_COINS, GET_COINS_PURCHASED_HISTORY} from 'src/Redux/Reducers/Coins/CoinsActions';
+import {SUBMIT_USERS_CARD_DATA} from 'src/Redux/Reducers/Payments/PaymentActions';
 import style from './style';
 
 const coinsData = [
@@ -39,14 +41,23 @@ const CoinsPageScreen = ({navigation}) => {
   useEffect(() => {
     setloading(true);
     getAllCoins();
+    handleHistory();
   }, []);
   const dispatch = useDispatch();
   const barearToken = useSelector(state => state.auth.token);
   const Profile = useSelector(state => state.muqablas.studentProfile);
-  console.log(
-    'Profile',
-    JSON.stringify(Profile.data.total_silver_coins, null, 3),
-  );
+  const handleHistory = () => {
+    GET_COINS_PURCHASED_HISTORY(barearToken)(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+        } else {
+          console.log('else then res', res);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+      });
+  };
   const getAllCoins = () => {
     GET_ALL_COINS(barearToken)(dispatch)
       .then(res => {
@@ -62,6 +73,19 @@ const CoinsPageScreen = ({navigation}) => {
       .catch(err => {
         console.log('catch err', err);
       });
+  };
+  const submitCoinsDetail = (name, price) => {
+    try {
+      const _UsersData = {
+        selectedCoins: name,
+        prices: price,
+      };
+      print({_UsersData});
+      SUBMIT_USERS_CARD_DATA(_UsersData)(dispatch);
+      navigation.navigate('PaymentGatewayScreen');
+    } catch (error) {
+      print('error', error);
+    }
   };
   return loading ? (
     <OnxLoading />
@@ -188,6 +212,9 @@ const CoinsPageScreen = ({navigation}) => {
               marginV={10}
               backColor={textBackColor}
               btnRadius={5}
+              onPress={() => {
+                submitCoinsDetail(data.name, data.price);
+              }}
               btnWidth={'100%'}
               btnHeight={64 * heightRef}>
               <>

@@ -82,7 +82,7 @@ const OnBoarding_103 = ({navigation}) => {
           });
           setTimeout(() => {
             console.log('setTimeout');
-            navigation.replace('OnBoarding_104');
+            navigation.replace('OnBoarding_105');
             setButtonloading(false);
           }, 2100);
         } else {

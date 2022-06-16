@@ -204,11 +204,9 @@ const Muqabla_3 = ({navigation}) => {
               : `${selectIndexs + 1}.`
           }
           Description={whichQuizzes[selectIndexs].title}
-          // Description={QuestionByZone[selectIndexs].explanation}
         />
         <View style={{width: '100%'}}>
           {whichQuizzes[selectIndexs].options.map((data, index) => (
-            // {QuestionByZone[selectIndexs].options.map((data, index) => (
             <CustomButton
               btnRadius={5}
               backColor={index === selectIndex ? 'white' : null}
@@ -229,7 +227,6 @@ const Muqabla_3 = ({navigation}) => {
           ))}
         </View>
         {selectIndex != null ? (
-          // selectIndexs + 1 === whichQuizzes.length ? null : (
           <CustomButton
             onPress={() => {
               if (selectIndexs + 1 === whichQuizzes.length) {

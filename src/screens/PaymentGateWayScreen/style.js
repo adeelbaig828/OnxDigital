@@ -14,6 +14,13 @@ export default styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  cardMain: {
+    height: '100%',
+    width: '100%',
+    marginVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   mainContainr: {
     width: '100%',
     paddingHorizontal: 18,

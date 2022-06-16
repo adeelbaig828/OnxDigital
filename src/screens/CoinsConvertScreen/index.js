@@ -1,14 +1,13 @@
 import React, {useState} from 'react';
-import {FlatList, Image, Modal, StyleSheet} from 'react-native';
+import {FlatList, Image, Modal} from 'react-native';
+import Toast from 'react-native-toast-message';
+import {useDispatch, useSelector} from 'react-redux';
 import {
-  BgColor,
   BorderColor,
   fontColorDark,
   fontColorLight,
   mediumSizeFont,
   OnxGreen,
-  sliderBackColor,
-  sliderBAckColorOrange,
   sliderColorOrange,
   textBackColor,
 } from 'src/assets/Colors/colors';
@@ -17,17 +16,24 @@ import {CustomCard} from 'src/Components/customCard';
 import OnxHeader from 'src/Components/Header';
 import MultiColorText from 'src/Components/HighlightedColorText';
 import OnxIcon from 'src/Components/OnxIcons';
+import OnxLoading from 'src/Components/OnxLoading';
 import Separator from 'src/Components/separator';
 import Text from 'src/Components/Text';
 import TextFeild from 'src/Components/TextFeild';
 import TextHeader from 'src/Components/TextHeader';
-import TextIcon from 'src/Components/TextIcon';
 import View from 'src/Components/View';
-import {fontRef, heightRef, widthRef} from 'src/config/screenSize';
+import {heightRef} from 'src/config/screenSize';
+import {CONVERT_SILVER_COINS_TO_GOLD} from 'src/Redux/Reducers/Coins/CoinsActions';
 import styles from './style';
 
 const CoinsConvertScreen = (props, {navigation}) => {
   const [showModal, setShowModal] = useState(false);
+  const [_silver_coins, set_silver_coins] = useState('');
+  const [loading, setloading] = useState(false);
+  const Profile = useSelector(state => state.muqablas.studentProfile);
+  const barearToken = useSelector(state => state.auth.token);
+  const invalidText = 'Please enter silver coins.';
+  const dispatch = useDispatch();
   const convertData = [
     {
       id: 1,
@@ -40,7 +46,68 @@ const CoinsConvertScreen = (props, {navigation}) => {
       silverCoins: '5000',
     },
   ];
-
+  const showToast = ({type, text1, text2}) => {
+    Toast.show({
+      position: 'bottom',
+      type,
+      text1,
+      text2,
+    });
+  };
+  const numberValidation = () => {
+    if (!_silver_coins) {
+      console.log(invalidText);
+      showToast({
+        type: 'error',
+        text1: 'Invalid Number',
+        text2: invalidText,
+      });
+      return false;
+    }
+    return true;
+  };
+  const convertCoins = () => {
+    setloading(true);
+    if (!numberValidation()) {
+      setloading(false);
+      return;
+    }
+    const Data = {
+      // phone_number: otp.replace(0, '+92'),
+      silver_coins: _silver_coins,
+    };
+    CONVERT_SILVER_COINS_TO_GOLD(
+      Data,
+      barearToken,
+    )(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+          console.log('then res', res);
+          showToast({
+            type: 'success',
+            text1: res.message,
+            text2: res.data.message,
+          });
+        } else {
+          console.log('then res', res);
+          showToast({
+            type: 'error',
+            text1: res.code,
+            text2: res.message,
+          });
+          setloading(false);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+        showToast({
+          type: 'error',
+          text1: 'error',
+          text2: 'error',
+        });
+        setloading(false);
+      });
+  };
   const renderItem = (item, index) => (
     <CustomCard
       marginV={7}
@@ -72,7 +139,9 @@ const CoinsConvertScreen = (props, {navigation}) => {
       </>
     </CustomCard>
   );
-  return (
+  return loading ? (
+    <OnxLoading />
+  ) : (
     <View style={styles.mainContainer}>
       <OnxHeader
         left={
@@ -169,7 +238,9 @@ const CoinsConvertScreen = (props, {navigation}) => {
                     style={styles.image}
                     source={require('src/assets/Group.png')}
                   />
-                  <Text style={styles.goldCoin}>20,000</Text>
+                  <Text style={styles.goldCoin}>
+                    {Profile.data.total_silver_coins}
+                  </Text>
                 </View>
                 <View style={styles.downSide}>
                   <Text
@@ -196,7 +267,10 @@ const CoinsConvertScreen = (props, {navigation}) => {
           Enter silver coins
         </Text>
         <TextFeild
-          onChangeText={() => {}}
+          keyboardType={'number-pad'}
+          onChangeText={text => {
+            set_silver_coins(text);
+          }}
           titleSize={mediumSizeFont}
           placeholder={'2000'}
           textAlign="center"
@@ -216,11 +290,12 @@ const CoinsConvertScreen = (props, {navigation}) => {
           btnRadius={5}
           textSize={16}
           onPress={() => {
-            props.navigation.navigate('SilverToGoldSuccessfull', {
-              from: props?.route?.params?.from,
-              gold: 5,
-              silver: 2000,
-            });
+            convertCoins();
+            // props.navigation.navigate('SilverToGoldSuccessfull', {
+            //   from: props?.route?.params?.from,
+            //   gold: 5,
+            //   silver: 2000,
+            // });
           }}
           btnWidth={'100%'}
           btnHeight={48 * heightRef}

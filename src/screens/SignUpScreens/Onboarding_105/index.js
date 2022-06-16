@@ -49,9 +49,6 @@ const OnBoarding_105 = ({navigation}) => {
     getAllSchool();
   }, []);
   const getAllSchool = () => {
-    if (!route.params.school) {
-      return;
-    }
     GET_ALL_SCHOOL(barearToken)(dispatch)
       .then(res => {
         console.log('then res', res);
@@ -251,7 +248,7 @@ const OnBoarding_105 = ({navigation}) => {
           <View style={styles.header}>
             <OnxIcon
               onPress={() => {
-                navigation.navigate('OnBoarding_104');
+                navigation.navigate('OnBoarding_103');
               }}
               colorIcon={fontColorDark}
               name={'arrow-left'}
@@ -266,7 +263,7 @@ const OnBoarding_105 = ({navigation}) => {
               name={'close'}
               IConSize={24}
               width={310 * widthRef}
-              placeholder={route.params.school}
+              placeholder={'Search School'}
               onPress={() => searchRef.current?.clear()}
             />
           </View>

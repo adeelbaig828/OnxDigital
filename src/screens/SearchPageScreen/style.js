@@ -61,6 +61,7 @@ export default styles = StyleSheet.create({
     backgroundColor: '#C8C8C8',
   },
   flatlistContainer: {
+    flex: 1,
     width: 360 * widthRef,
     paddingHorizontal: 20,
   },
@@ -79,6 +80,7 @@ export default styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
+    overflow: 'hidden',
   },
   rightCont: {
     height: '100%',
@@ -88,7 +90,22 @@ export default styles = StyleSheet.create({
     alignSelf: 'center',
   },
   imageleft: {
-    height: 48 * heightRef,
-    width: 48 * heightRef,
+    height: 56 * heightRef,
+    width: 56 * heightRef,
+  },
+  imageleft2: {
+    height: 22 * heightRef,
+    width: 22 * heightRef,
+  },
+  rowStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 50 * heightRef,
+  },
+  emptyMain: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

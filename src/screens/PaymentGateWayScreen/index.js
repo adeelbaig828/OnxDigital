@@ -15,8 +15,12 @@ import OnxLoading from 'src/Components/OnxLoading';
 import Text from 'src/Components/Text';
 import TextIcon from 'src/Components/TextIcon';
 import View from 'src/Components/View';
+import {print} from 'src/config/function';
 import {heightRef, widthRef} from 'src/config/screenSize';
-import {GET_PAYMENT_METHODS} from 'src/Redux/Reducers/Payments/PaymentActions';
+import {
+  GET_PAYMENT_METHODS,
+  SUBMIT_USERS_CARD_DATA,
+} from 'src/Redux/Reducers/Payments/PaymentActions';
 import styles from './style';
 const PaymentGatewayScreen = ({navigation}) => {
   const [selectIndex, setSelectIndex] = useState(null);
@@ -29,6 +33,7 @@ const PaymentGatewayScreen = ({navigation}) => {
   }, []);
   const dispatch = useDispatch();
   const barearToken = useSelector(state => state.auth.token);
+  const selectedData = useSelector(state => state.payment.submitUsersData);
   const getAllPaymentmethods = () => {
     GET_PAYMENT_METHODS(barearToken)(dispatch)
       .then(res => {
@@ -44,6 +49,17 @@ const PaymentGatewayScreen = ({navigation}) => {
       .catch(err => {
         console.log('catch err', err);
       });
+  };
+  const submitCoinsDetail = name => {
+    try {
+      const _UsersData = {
+        paymentMethod: name,
+        ...selectedData,
+      };
+      SUBMIT_USERS_CARD_DATA(_UsersData)(dispatch);
+    } catch (error) {
+      print('error', error);
+    }
   };
   return loading ? (
     <OnxLoading />
@@ -70,7 +86,9 @@ const PaymentGatewayScreen = ({navigation}) => {
         <View style={styles.mainContainr}>
           {paymentsMethod.map((data, index) => (
             <CustomCard
-              onPress={() => setSelectIndex(index)}
+              onPress={() => (
+                setSelectIndex(index), submitCoinsDetail(data.name)
+              )}
               marginV={5}
               btnWidth={'100%'}
               btnHeight={
@@ -101,7 +119,8 @@ const PaymentGatewayScreen = ({navigation}) => {
                     <Text
                       marginLeft={49}
                       paddingVertical={5}
-                      padding={10}
+                      numberOfLines={6}
+                      adjustsFontSizeToFit
                       fontSize={12}
                       color={fontColorDark}
                       backColor={textBackColor}>
@@ -120,19 +139,12 @@ const PaymentGatewayScreen = ({navigation}) => {
         btnHeight={45 * heightRef + inset.bottom}
         paddingVertical={10}>
         <>
-          <View
-            style={{
-              height: '100%',
-              width: '100%',
-              marginVertical: 10,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
+          <View style={styles.cardMain}>
             <View>
               <View
                 style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-start',
                 }}>
                 <Text
                   onPress={() => {
@@ -140,10 +152,10 @@ const PaymentGatewayScreen = ({navigation}) => {
                   }}
                   color={OnxGreen}
                   fontSize={14}>
-                  $270{' '}
-                  <Text textDecorationLine={'line-through'} fontSize={13}>
+                  ${selectedData.prices}
+                  {/* <Text textDecorationLine={'line-through'} fontSize={13}>
                     $5000
-                  </Text>
+                  </Text> */}
                 </Text>
               </View>
               <Text fontSize={12}>Amount to pay</Text>

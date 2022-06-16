@@ -12,6 +12,7 @@ export default styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: BgColor,
+    width: '100%',
   },
   header: {
     flex: 1,
@@ -19,10 +20,14 @@ export default styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  emptyMain: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   root: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
     marginHorizontal: 13 * widthRef,
   },
   scndCont: {

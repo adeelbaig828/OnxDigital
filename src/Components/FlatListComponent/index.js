@@ -29,6 +29,47 @@ import Text from '../Text';
 import styles from './styles';
 let MARGINRIGHT = 25 * widthRef;
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const DOTS=({TotalWidth,translateX,i})=>{
+  const style= useAnimatedStyle(() => ({
+    width:15,
+    transform:[{scaleX:interpolate(
+      translateX.value,
+      [
+        TotalWidth * i - TotalWidth,
+        TotalWidth * i - TotalWidth / 2,
+        TotalWidth * i,
+        TotalWidth * i + TotalWidth / 2,
+        TotalWidth * i + TotalWidth,
+      ],
+      // [15, 1.5 * 15, 2 * 15, 1.5 * 1.5, 15],
+      [1, 1.2  , 1.5  , 1.2 , 1],
+      Extrapolate.CLAMP,
+    )}],
+   
+    backgroundColor: interpolateColor(
+      translateX.value,
+      [
+        TotalWidth * i - TotalWidth,
+        TotalWidth * i,
+        TotalWidth * i + TotalWidth,
+      ],
+      [BorderColor, OnxGreen, BorderColor],
+    ),
+  }),[])
+  return (
+    <Animated.View
+      style={[
+        {
+          height: 3 * heightRef,
+          width: 14 * widthRef,
+          borderRadius: 10,
+          margin: 5,
+        },style
+       ,
+      ]}
+    />
+  )
+}
 export default function FlatListComponent({
   data = [],
   style,
@@ -148,7 +189,7 @@ export default function FlatListComponent({
                     justifyContent: config.justifyContent,
                     padding: 20,
                   }}
-                  source={imageSource || require('./newbottomback.png')}
+                  source={{uri:item.image_url} || require('./newbottomback.png')}
                   resizeMode="cover">
                   <Text
                     color={TextColor}
@@ -157,7 +198,7 @@ export default function FlatListComponent({
                       fontWeight: config.title.fontWeight,
                       marginBottom: 5 * heightRef,
                     }}>
-                    {contentTitle}
+                    {item.name ?? contentTitle}
                   </Text>
                   <Text
                     color={TextColorDesc}
@@ -194,41 +235,7 @@ export default function FlatListComponent({
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          {(data || []).map((v, i) => (
-            <Animated.View
-              style={[
-                {
-                  height: 3 * heightRef,
-                  width: 14 * widthRef,
-                  borderRadius: 10,
-                  margin: 5,
-                },
-                useAnimatedStyle(() => ({
-                  width: interpolate(
-                    translateX.value,
-                    [
-                      TotalWidth * i - TotalWidth,
-                      TotalWidth * i - TotalWidth / 2,
-                      TotalWidth * i,
-                      TotalWidth * i + TotalWidth / 2,
-                      TotalWidth * i + TotalWidth,
-                    ],
-                    [15, 1.5 * 15, 2 * 15, 1.5 * 1.5, 15],
-                    Extrapolate.CLAMP,
-                  ),
-                  backgroundColor: interpolateColor(
-                    translateX.value,
-                    [
-                      TotalWidth * i - TotalWidth,
-                      TotalWidth * i,
-                      TotalWidth * i + TotalWidth,
-                    ],
-                    [BorderColor, OnxGreen, BorderColor],
-                  ),
-                })),
-              ]}
-            />
-          ))}
+          {(data || []).map((v, i) => <DOTS {...{i,TotalWidth,translateX}}  />)}
         </View>
       )}
     </View>

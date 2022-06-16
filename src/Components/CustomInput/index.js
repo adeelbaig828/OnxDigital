@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {SafeAreaView, TextInput, TextInputProps} from 'react-native';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  TextInput,
+  TextInputProps,
+  TouchableOpacity,
+} from 'react-native';
 import {styles} from './style';
 import Icon from 'react-native-dynamic-vector-icons';
 import {
@@ -12,10 +18,12 @@ import {fontRef, widthRef} from 'src/config/screenSize';
 import {Validations} from 'src/config/function';
 import Text from '../Text';
 import View from '../View';
+import OnxLoading from '../OnxLoading';
 
 export const CustomInput = ({
   text,
   onChangeText,
+  loading,
   width,
   onPress,
   placeholder,
@@ -29,6 +37,7 @@ export const CustomInput = ({
   validateType,
   validateMessage = '',
   editable,
+  disableError,
   ...rest
 }: TextInputProps) => {
   const [showError, setShowError] = useState(false);
@@ -61,7 +70,7 @@ export const CustomInput = ({
             },
           ]}
           onChangeText={onChangeText}
-          onFocus={() => setShowError(true)}
+          onFocus={() => (disableError ? null : setShowError(true))}
           value={value}
           ref={rest.textRef}
           placeholder={placeholder}
@@ -69,13 +78,17 @@ export const CustomInput = ({
           keyboardType={keyboardType}
           {...rest}
         />
-        <Icon
-          onPress={onPress}
-          style={styles.icon}
-          type={type ? type : 'MaterialIcons'}
-          size={IConSize ? IConSize : 25}
-          name={name ? name : 'cancel'}
-        />
+        {loading ? (
+          <ActivityIndicator size="small" color="white" style={styles.icon} />
+        ) : (
+          <TouchableOpacity style={styles.icon} onPress={onPress}>
+            <Icon
+              type={type ? type : 'MaterialIcons'}
+              size={IConSize ? IConSize : 25}
+              name={name ? name : 'cancel'}
+            />
+          </TouchableOpacity>
+        )}
       </View>
       {showError && !error && (
         <View

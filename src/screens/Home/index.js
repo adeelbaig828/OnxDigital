@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import * as React from 'react';
+import  React, { useEffect, useState } from 'react';
 import {
   Image,
   ImageBackground,
@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   fontColorDark,
   fontColorLight,
@@ -26,13 +26,36 @@ import Text from 'src/Components/Text';
 import TextHeader from 'src/Components/TextHeader';
 import TextIcon from 'src/Components/TextIcon';
 import {heightRef, widthRef} from 'src/config/screenSize';
+import { GET_HOMESCREEN_SLIDER } from 'src/Redux/Reducers/Auth/AuthActions';
 import {styles} from './style';
 export function HomeScreen() {
   const barearToken = useSelector(state => state.auth.token);
-  // console.log('barearToken', barearToken);
-
   const navigation = useNavigation();
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
+  const [SliderData, setSliderData] = useState([]);
+  const [loading, setloading] = useState(false);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    handleSlider();
+  }, []);
+  const handleSlider = () => {
+    GET_HOMESCREEN_SLIDER(barearToken)(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+          setSliderData(res.data.slides.data)
+        } else {
+          console.log('else then res', res);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+        showToast({
+          type: 'error',
+          text1: 'error',
+          text2: 'error',
+        });
+      });
+  };
   const textData = [
     {
       text: 'Get access to interactive books',
@@ -49,7 +72,7 @@ export function HomeScreen() {
   ];
   return (
     <SafeAreaView style={styles.root}>
-      <ScrollView style={styles.mainRoot} showsVerticalScrollIndicator={false}>
+      <ScrollView  style={styles.mainRoot} showsVerticalScrollIndicator={false}>
         <TextHeader
           fontWeight={'600'}
           Header={'Hey, John Doe'}
@@ -64,7 +87,7 @@ export function HomeScreen() {
 whole new way of playing`}
           // configs={{title: {fontSize:}}}
           type={1}
-          data={[1, 1, 1, 1]}
+          data={SliderData}
         />
         <TextHeader
           fontWeight={'600'}
@@ -79,7 +102,9 @@ whole new way of playing`}
           TextColorDesc={fontColorDark}
           contentTitle="The Matrix"
           contentDescription="Lorem ipsum dolor sit amet."
-          data={[1, 1, 1, 1]}
+          // data={[1, 1, 1, 1]}
+          data={SliderData}
+
         />
         <Animated.View
           exiting={FadeIn}

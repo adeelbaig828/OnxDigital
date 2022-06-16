@@ -40,7 +40,8 @@ export function OnboardingScreen1({navigation}) {
               <Text style={styles.textSlider}>Illustration</Text>
             </View>
             <View style={styles.bottomText}>
-              <Text style={styles.textSliderHeader}>
+              <Text
+              adjustsFontSizeToFit font style={styles.textSliderHeader}>
                 Play Tournamnets, Win Prizes!
               </Text>
               <Text style={styles.textSliderNormal}>
@@ -53,7 +54,9 @@ export function OnboardingScreen1({navigation}) {
               <Text style={styles.textSlider}>Illustration</Text>
             </View>
             <View style={styles.bottomText}>
-              <Text style={styles.textSliderHeader}>
+              <Text
+              adjustsFontSizeToFit
+              style={styles.textSliderHeader}>
                 Play Tournamnets, Win Prizes!
               </Text>
               <Text style={styles.textSliderNormal}>
@@ -66,7 +69,9 @@ export function OnboardingScreen1({navigation}) {
               <Text style={styles.textSlider}>Illustration</Text>
             </View>
             <View style={styles.bottomText}>
-              <Text style={styles.textSliderHeader}>
+              <Text
+              adjustsFontSizeToFit
+              style={styles.textSliderHeader}>
                 Play Tournamnets, Win Prizes!
               </Text>
               <Text style={styles.textSliderNormal}>
@@ -79,7 +84,9 @@ export function OnboardingScreen1({navigation}) {
               <Text style={styles.textSlider}>Illustration</Text>
             </View>
             <View style={styles.bottomText}>
-              <Text style={styles.textSliderHeader}>
+              <Text
+              adjustsFontSizeToFit
+              style={styles.textSliderHeader}>
                 Play Tournamnets, Win Prizes!
               </Text>
               <Text style={styles.textSliderNormal}>

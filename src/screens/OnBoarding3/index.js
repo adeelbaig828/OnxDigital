@@ -1,23 +1,25 @@
-import React, {useRef, useState} from 'react';
-import {Platform, SafeAreaView, StyleSheet} from 'react-native';
+import {useRoute} from '@react-navigation/core';
+import React, {useState} from 'react';
+import {Platform, SafeAreaView} from 'react-native';
+import Icon from 'react-native-dynamic-vector-icons';
+import OTPTextInput from 'react-native-otp-textinput';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
+import {useDispatch} from 'react-redux';
 import {fontColorLight, OnxGreen, PickWatch} from 'src/assets/Colors/colors';
 import {CustomButton} from 'src/Components/CustomButton';
-import {heightRef, widthRef} from 'src/config/screenSize';
-import OTPTextInput from 'react-native-otp-textinput';
-import {styles} from './style';
 import OnxIcon from 'src/Components/OnxIcons';
-import {useDispatch} from 'react-redux';
-import {GENERATE_OTP, VERIFY_OTP} from 'src/Redux/Reducers/Auth/AuthActions';
-import Toast from 'react-native-toast-message';
-import View from 'src/Components/View';
-import Icon from 'react-native-dynamic-vector-icons';
 import Text from 'src/Components/Text';
-import {useRoute} from '@react-navigation/core';
+import View from 'src/Components/View';
+import {print} from 'src/config/function';
+import {heightRef, widthRef} from 'src/config/screenSize';
+import {GENERATE_OTP, VERIFY_OTP} from 'src/Redux/Reducers/Auth/AuthActions';
+import {styles} from './style';
 
 const OnBoardingScreen3 = ({navigation}) => {
   const route = useRoute();
+  print(route.params.phoneNumber);
   const inset = useSafeAreaInsets();
   const dispatch = useDispatch();
   const [otp, set_OTP] = useState(null);

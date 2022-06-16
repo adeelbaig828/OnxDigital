@@ -23,7 +23,7 @@ import styles from './style';
 import Toast from 'react-native-toast-message';
 import {ADD_USER_ADDRESS} from 'src/Redux/Reducers/Payments/PaymentActions';
 import {useDispatch, useSelector} from 'react-redux';
-import {Validations} from 'src/config/function';
+import {print, Validations} from 'src/config/function';
 
 const AddAdressScreen = ({navigation}) => {
   const barearToken = useSelector(state => state.auth.token);
@@ -36,6 +36,7 @@ const AddAdressScreen = ({navigation}) => {
   const [City, setCity] = useState('');
   const [Address, setAddress] = useState('');
   const [Country, setCountry] = useState('');
+  const selectedData = useSelector(state => state.payment.submitUsersData);
   const [loading, setloading] = useState(false);
   const showToast = ({type, text1, text2}) => {
     Toast.show({
@@ -160,7 +161,6 @@ const AddAdressScreen = ({navigation}) => {
       city: City,
       country: Country,
     };
-    console.log('_gradeData', JSON.stringify(_gradeData, null, 3));
     setloading(false);
 
     ADD_USER_ADDRESS(

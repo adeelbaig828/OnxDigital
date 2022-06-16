@@ -14,6 +14,7 @@ export const ALL_SCHOOL = 'ALL_SCHOOL';
 export const ALL_GRADES = 'ALL_GRADES';
 export const ALL_SECTIONS = 'ALL_SECTIONS';
 export const ALL_BRANCHES = 'ALL_BRANCHES';
+export const ALL_SLIDER = 'ALL_SLIDER';
 export const ALL_SUBJECT = 'ALL_SUBJECT';
 export const SELECT_SCHOOL = 'SELECT_SCHOOL';
 export const REGISTER_EMAIL = 'REGISTER_EMAIL';
@@ -55,7 +56,7 @@ export const Email_LOGIN = formData => dispatch => {
   return new Promise((resolve, reject) => {
     axios({
       method: 'post',
-      url: `${BASE_URL}/student/login`,
+      url: `${BASE_URL}/student/email-login`,
       data: formData,
     })
       .then(response => {
@@ -447,6 +448,30 @@ export const GET_FAV_SUBJECT = token => dispatch => {
       .then(response => {
         dispatch({
           type: ALL_SUBJECT,
+          payload: response.data,
+        });
+        resolve(response.data);
+      })
+      .catch(error => {
+        console.log('object error', error);
+        dispatch({
+          type: API_ERROR,
+          error: error.response.data.message,
+        });
+        reject(error.response.data.message);
+      });
+  });
+};
+export const GET_HOMESCREEN_SLIDER = token => dispatch => {
+  return new Promise((resolve, reject) => {
+    axios({
+      headers: {Authorization: `Bearer ${token}`},
+      method: 'get',
+      url: `${BASE_URL}/sliders/homepage`,
+    })
+      .then(response => {
+        dispatch({
+          type: ALL_SLIDER,
           payload: response.data,
         });
         resolve(response.data);

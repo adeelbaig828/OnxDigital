@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, ScrollView} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import {useSelector} from 'react-redux';
 import {
   BgColor,
   BorderColor,
@@ -20,15 +21,19 @@ import Separator from 'src/Components/separator';
 import Text from 'src/Components/Text';
 import TextFeild from 'src/Components/TextFeild';
 import TextHeader from 'src/Components/TextHeader';
+import {useRoute} from '@react-navigation/core';
 import View from 'src/Components/View';
+import {print} from 'src/config/function';
 import {fullWidth, heightRef, widthRef} from 'src/config/screenSize';
 import styles from './style';
 const AddAdressScreen2 = ({navigation}) => {
   const [open, setOpen] = useState(false);
+  const route = useRoute();
   const [value, setValue] = useState('last week');
+  const selectedData = useSelector(state => state.payment.submitUsersData);
   const [items, setItems] = useState([
-    {label: 'Last Week', value: 'Last Week'},
-    {label: 'Last Month', value: 'Last Month'},
+    {label: '1', value: 'Last Week'},
+    {label: '2', value: 'Last Month'},
   ]);
   return (
     <View style={styles.container}>
@@ -71,17 +76,17 @@ const AddAdressScreen2 = ({navigation}) => {
               <TextHeader
                 fontWeight={'600'}
                 marginTop={16 * heightRef}
-                Header={'Jhon'}
-                Description={'Address Sentence'}
+                Header={`${route?.params?.addresses.first_name} ${route?.params?.addresses.last_name}`}
+                Description={`${route?.params?.addresses.address_1}`}
               />
               <Text fontSize={12} color={fontColorDark}>
-                Address sentence and all
+                {`${route?.params?.addresses.city} ${route?.params?.addresses.state} ${route?.params?.addresses.country}`}
               </Text>
               <Text
                 marginTop={7 * heightRef}
                 fontSize={12}
                 color={fontColorDark}>
-                Phone Number
+                {route?.params?.addresses.phone}
               </Text>
               <CustomButton
                 borderColor={OnxGreen}
@@ -112,7 +117,7 @@ const AddAdressScreen2 = ({navigation}) => {
                     fontWeight={'600'}
                     fontSizeHeader={14}
                     colorheader={fontColorLight}
-                    Header={'10 Gold Coins'}
+                    Header={selectedData.selectedCoins}
                     Description={'Some info about the card'}
                   />
                   <View>
@@ -126,15 +131,15 @@ const AddAdressScreen2 = ({navigation}) => {
                         paddingRight={10}
                         color={fontColorLight}
                         bold={'600'}>
-                        $260
+                        ${selectedData.prices}
                       </Text>
-                      <Text
+                      {/* <Text
                         fontSize={12}
                         marginTop={15}
                         paddingRight={10}
                         textDecorationLine={'line-through'}>
                         $5000
-                      </Text>
+                      </Text> */}
                       <Text
                         fontSize={12}
                         marginTop={15}
@@ -201,7 +206,7 @@ const AddAdressScreen2 = ({navigation}) => {
                   Price (1 item)
                 </Text>
                 <Text fontSize={12} color={fontColorLight} bold={'400'}>
-                  $260
+                  ${selectedData.prices}
                 </Text>
               </View>
               <View
@@ -225,15 +230,15 @@ const AddAdressScreen2 = ({navigation}) => {
         <View style={styles.discountinner}>
           <View style={styles.discountinner1}>
             <Text paddingLeft={10} fontSize={14} color={OnxGreen} bold={'600'}>
-              $270
+              ${selectedData.prices}
             </Text>
-            <Text
+            {/* <Text
               fontSize={12}
               paddingLeft={10}
               textDecorationLine={'line-through'}
               bold={'400'}>
               $5000
-            </Text>
+            </Text> */}
           </View>
           <Text fontSize={12} paddingLeft={10} bold={'400'}>
             Amount to pay

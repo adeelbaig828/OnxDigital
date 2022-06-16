@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, SectionList, StyleSheet} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   fontColorDark,
   fontColorLight,
@@ -10,13 +11,51 @@ import {CustomInput} from 'src/Components/CustomInput';
 import FlatListComponent from 'src/Components/FlatListComponent';
 import OnxHeader from 'src/Components/Header';
 import OnxIcon from 'src/Components/OnxIcons';
+import OnxLoading from 'src/Components/OnxLoading';
 import Text from 'src/Components/Text';
 import TextHeader from 'src/Components/TextHeader';
 import View from 'src/Components/View';
+import {print} from 'src/config/function';
 import {heightRef, widthRef} from 'src/config/screenSize';
+import {GLOBAL_SEARCH} from 'src/Redux/Reducers/Tournaments/TournamentsActions';
 import {Chapters, Muqablas, Topics, Tournaments} from 'src/utils/JSON';
 import styles from './style';
 const SearchScreen_1 = (props, {navigation}) => {
+  const token = useSelector(state => state.auth.token);
+  const [MuqablaSearch, setMuqablaSearch] = useState({});
+  const [search, setSearch] = useState('');
+  const [loading, setloading] = useState(false);
+
+  const dispatch = useDispatch();
+  print({MuqablaSearch});
+
+  useEffect(() => {
+    let id = setTimeout(() => {
+      getAttemptScore(search);
+    }, 300);
+    return () => clearTimeout(id);
+  }, [search]);
+
+  const getAttemptScore = text => {
+    setloading(true);
+    GLOBAL_SEARCH(
+      text,
+      token,
+    )(dispatch)
+      .then(res => {
+        if (res.code === 200) {
+          setloading(false);
+          setMuqablaSearch(res.data);
+        } else {
+          console.log('then res', res);
+          setloading(false);
+        }
+      })
+      .catch(err => {
+        console.log('catch err', err);
+        setloading(false);
+      });
+  };
   const renderItem = ({item, section}) =>
     section.horizontal ? (
       <FlatListComponent
@@ -27,9 +66,9 @@ const SearchScreen_1 = (props, {navigation}) => {
         TextColor={fontColorLight}
         TextColorDesc={fontColorDark}
         dots
-        contentTitle="The Matrix"
+        contentTitle={MuqablaSearch.tournaments}
         contentDescription="Lorem ipsum dolor sit amet."
-        data={[1, 1, 1, 1]}
+        data={MuqablaSearch.tournaments || []}
       />
     ) : (
       // Item for the FlatListItems
@@ -42,14 +81,18 @@ const SearchScreen_1 = (props, {navigation}) => {
         <>
           <View style={styles.leftCont}>
             <View style={styles.date}>
-              <Image style={styles.imageleft} source={item.image} />
+              <Image
+                resizeMode={'cover'}
+                style={styles.imageleft}
+                source={require('../../assets/no-image.png')}
+              />
             </View>
             <TextHeader
               fontWeight={'400'}
               fontSizeHeader={13}
               fontSizeDesc={12}
               marginTop={6 * heightRef}
-              Header={item.Header}
+              Header={item.name}
               Description={item.Disc}
             />
           </View>
@@ -78,13 +121,20 @@ const SearchScreen_1 = (props, {navigation}) => {
               type={'MaterialCommunityIcons'}
             />
             <CustomInput
+              disableError
               fontSize={14}
               type={'AntDesign'}
               name={'close'}
+              loading={loading}
+              value={search}
               IConSize={24}
               width={310 * widthRef}
               placeholder={'Search for subject, topic etc'}
-              onPress={() => {}}
+              onChangeText={text => {
+                setSearch(text);
+                // print(text);
+              }}
+              onPress={() => setSearch('')}
             />
           </View>
         }
@@ -102,30 +152,47 @@ const SearchScreen_1 = (props, {navigation}) => {
             />
           }
           sections={[
-            {title: 'Muqablas', titleEnd: 'See all', data: Muqablas},
+            {
+              title: 'Muqablas',
+              titleEnd: 'See all',
+              data: MuqablaSearch.muqablas || [],
+            },
             {
               title: 'Tournaments',
               titleEnd: 'See all',
               horizontal: true,
               data: [1],
             },
-            {title: 'Chapters', titleEnd: 'See all', data: Chapters},
-            {title: 'Topics', titleEnd: 'See all', data: Topics},
-          ]}
-          renderSectionHeader={({section}) => (
-            <View style={styles.sectionHeaderStyle}>
-              <Text style={styles.sectionHeaderfontStyle}>{section.title}</Text>
-              <Text
-                onPress={() => {
-                  props.navigation.navigate('SeeAllScreen_1', {
-                    from: section.title,
-                  });
-                }}
-                style={styles.sectionHeaderfontend}>
-                {section.titleEnd}
-              </Text>
-            </View>
-          )}
+            {
+              title: 'Chapters',
+              titleEnd: 'See all',
+              data: MuqablaSearch.zones || [],
+            },
+            {
+              title: 'Topics',
+              titleEnd: 'See all',
+              data: MuqablaSearch.zones || [],
+            },
+          ].filter(v => v.data.length > 0)}
+          renderSectionHeader={({section}) =>
+            section.title === 'Tournaments' &&
+            MuqablaSearch?.tournaments?.length === 0 ? null : (
+              <View style={styles.sectionHeaderStyle}>
+                <Text style={styles.sectionHeaderfontStyle}>
+                  {section.title}
+                </Text>
+                <Text
+                  onPress={() => {
+                    props.navigation.navigate('SeeAllScreen_1', {
+                      from: section.title,
+                    });
+                  }}
+                  style={styles.sectionHeaderfontend}>
+                  {section.titleEnd}
+                </Text>
+              </View>
+            )
+          }
           renderItem={renderItem}
           keyExtractor={(item, index) => index}
         />

@@ -1,30 +1,35 @@
 import React from 'react';
-import {FlatList, Image, StyleSheet} from 'react-native';
+import { FlatList, Image } from 'react-native';
+import { useSelector } from 'react-redux';
 import {
   fontColorDark,
   fontColorGray,
   fontColorLight,
   OnxGreen,
   sliderColorOrange,
-  textBackColor,
+  textBackColor
 } from 'src/assets/Colors/colors';
-import {CustomButton} from 'src/Components/CustomButton';
-import {CustomCard} from 'src/Components/customCard';
+import { CustomButton } from 'src/Components/CustomButton';
+import { CustomCard } from 'src/Components/customCard';
 import OnxHeader from 'src/Components/Header';
 import OnxIcon from 'src/Components/OnxIcons';
 import Text from 'src/Components/Text';
 import TextHeader from 'src/Components/TextHeader';
-import TextIcon from 'src/Components/TextIcon';
 import View from 'src/Components/View';
 import {
-  fullHeight,
-  fullWidth,
   heightRef,
-  widthRef,
+  widthRef
 } from 'src/config/screenSize';
-import {historyData} from 'src/utils/JSON';
+import { historyData } from 'src/utils/JSON';
 import styles from './style';
 const CoinHistoryScreens = ({navigation}) => {
+  const _coins_history = useSelector(state => state.CoinsData._coins_history);
+  console.log('_coins_history', _coins_history.data.data);
+  const EmptyComponent = () => (
+    <View style={styles.emptyMain}>
+      <Text>No History</Text>
+    </View>
+  );
   const renderItem = item => (
     <CustomCard
       marginV={6}
@@ -116,9 +121,16 @@ const CoinHistoryScreens = ({navigation}) => {
           Description={'All the golden coins history avialbale here'}
         />
         <FlatList
-          data={historyData}
+          data={_coins_history.data.data}
+        contentContainerStyle={{
+          flex:1
+        }}
+          style={{
+            flex:1
+          }}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
+          ListEmptyComponent={()=><EmptyComponent/>}
           renderItem={renderItem}
         />
       </View>

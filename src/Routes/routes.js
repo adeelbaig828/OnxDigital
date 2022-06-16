@@ -109,7 +109,6 @@ const bottomOptions = {
 function Route() {
   return (
     <Stack.Navigator
-      // initialRouteName="SplashScreen"
       initialRouteName="SplashScreen"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Splash" component={Muqabla_3} options={options} />
